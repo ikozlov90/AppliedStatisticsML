@@ -1,0 +1,1875 @@
+\documentclass[9pt]{beamer}
+
+
+
+
+\usepackage{beamerthemesplit}
+\usetheme{Boadilla}
+\usecolortheme{orchid}
+
+
+
+
+
+ % \usepackage[cp866]{inputenc}                %%% Є®¤Ёа®ўЄ  DOS
+  \usepackage[cp1251]{inputenc}
+%  \usepackage[T2A]{fontenc}                %%% ???
+%\usepackage[english,russian]{babel}
+%\usepackage[russian]{babel}
+ \usepackage[OT1]{fontenc}
+%\usepackage[english]{babel}
+\usepackage[russian]{babel}
+
+\usepackage{amssymb,latexsym, amsmath, mathdots}
+
+\usepackage{amscd}
+\usepackage{multirow}
+\usepackage{comment}
+
+\usepackage{epstopdf}
+
+
+
+%\usepackage[table]{xcolor} %colored cells
+
+%\usepackage{tikz}
+%\usetikzlibrary{tikzmark} %arrows in tables
+
+
+\usepackage{mnsymbol} % udots in matrices
+
+
+ \usepackage{pgfpages}
+%\setbeameroption{show notes}
+%\setbeameroption{show notes on second screen=bottom}
+%% \setbeameroption{show notes on second screen}
+
+%\setbeamercolor{alerted text}{fg=red!80!black}
+
+
+% \setbeamercolor{alerted text}{fg=blue!50!green}
+% \setbeamercolor{fortheorem}{bg=blue!15!white}
+% \setbeamercolor{EMPF}{bg=blue!25!white}
+% \setbeamercolor{EMPF2}{bg=blue!35!white}
+
+%\setbeamersize{text margin left=5.mm, text margin right=5.mm}
+
+
+%---------------------------------------------------------------------------------------------------------------------------
+
+%\def\emphbox#1#2#3{\begin{beamercolorbox}[wd=#2, ht=#1, center, colsep=1.mm]{EMPF} #3 \end{beamercolorbox}}
+
+%---------------------------------------------------------------------------------------------------------------------------
+
+
+%\advance\leftskip-5.mm
+
+
+
+%***************************************************************************************************************************
+
+\theoremstyle{theorem}
+\newtheorem{mytheorem}[theorem]{Теорема}
+\newtheorem{mylemma}[theorem]{Лемма}
+\newtheorem{mycorollary}[theorem]{Следствие}
+
+\newtheorem{proposition}[theorem]{Предложение}
+\newtheorem{assertion}[theorem]{Утверждение}
+\newtheorem{remark}[theorem]{Замечание}
+\newtheorem{assumption}[theorem]{Предположение}
+
+\newtheorem{convention}[theorem]{Договорённость}
+\newtheorem{question}[theorem]{Вопрос}
+%\newtheorem{mydefinition}{mydefinition}
+
+\theoremstyle{definition}
+\newtheorem{mydefinition}[theorem]{Определение}
+\newtheorem{myexample}[theorem]{Пример}
+
+
+
+%***************************************************************************************************************************
+
+\chardef\No=194
+\newcommand{\bd}{{\rm bd}}
+\newcommand{\cl}{{\rm cl}}
+\newcommand{\ind}{{\rm ind}}
+\newcommand{\id}{{\rm id}}
+\newcommand{\inj}{{\sl in}}
+\newcommand{\pr}{{\rm pr}}
+\newcommand{\st}{{\rm St}}
+
+
+\DeclareMathOperator{\sgrad}{sgrad}
+
+\DeclareMathOperator{\cnt}{const}
+
+\DeclareMathOperator{\Aut}{Aut}
+
+
+\DeclareMathOperator{\sgn}{sgn}
+
+\DeclareMathOperator{\Int}{Int}
+
+
+\DeclareMathOperator{\tr}{tr}
+
+\DeclareMathOperator{\Mat}{Mat}
+
+
+
+
+
+
+
+%****************************************************************************
+\newcommand{\Ker}{\mathrm{Ker}\,\,}
+\newcommand{\Ann}{\mathrm{Ann}\,\,}
+
+\newcommand{\Imm}{\mathrm{Im}\,\,}
+
+\newcommand{\rk}{\mathrm{rk}\,\,}
+
+\newcommand{\const}{\mathrm{const}}
+
+
+
+\DeclareMathOperator{\Pen}{\mathcal{P}}
+
+
+\DeclareMathOperator{\Core}{K}
+
+
+\DeclareMathOperator{\BLG}{\operatorname{BLG}}
+
+\DeclareMathOperator{\AutBP}{\operatorname{Aut}(V, \mathcal{P})}
+
+
+\def\minus{\hbox{-}}   %Sign of minus in big matrices
+
+\usepackage{multirow}  %Columns spanning multiple rows
+
+\usepackage[normalem]{ulem} %underline that can break lines
+
+%\usepackage[normalem]{ulem}
+
+%****************************************************************************
+
+
+
+\title% [] (optional, only for long titles)
+{Прикладная статистика в машинном обучении \\ Лекция 10 \\ Метод релевантных векторов}
+%\subtitle{}
+\author [И. \,К.~Козлов] %(optional, for multiple authors)
+{И. \,К.~Козлов \\ {\footnotesize(\textit{Мехмат МГУ})}}
+
+
+\date % [](optional)
+{2022}
+%\subject{Mathematics}
+
+
+
+
+
+
+
+
+\usepackage{hyperref}
+\hypersetup{unicode=true}
+
+
+
+\begin{document}
+
+%\includeonlyframes{}
+\frame{\titlepage}
+
+
+
+%----------------------------------------------------------
+\begin{frame}[plain]\frametitle{PTSD}
+%----------------------------------------------------------
+
+
+\begin{center}
+\Large Настало время вспомнить {\color{red} Лекцию 2} \\ \vspace{3mm} про вероятностный подход к регрессии. 
+\end{center}
+
+\begin{figure}[h!]
+\center{\includegraphics[width=0.4\textwidth]{Pic/War}}
+\caption{\Large Hello darkness, my old friend} \label{Fig:}
+\end{figure}
+
+
+
+%----------------------------------------------------------
+\end{frame}
+%----------------------------------------------------------
+
+
+
+%----------------------------------------------------------
+\begin{frame}[plain]\frametitle{Иногда они возвращаются}
+%----------------------------------------------------------
+
+
+\begin{center}
+\Large Нужно выполнить данное обещание:
+\end{center}
+
+\begin{figure}[h!]
+\center{\includegraphics[width=\textwidth]{Pic/Promise}}
+%\caption{\Large Hello darkness, my old friend} \label{Fig:}
+\end{figure}
+
+
+
+%----------------------------------------------------------
+\end{frame}
+%----------------------------------------------------------
+
+
+
+%----------------------------------------------------------
+\begin{frame}[plain]\frametitle{Литература}
+%----------------------------------------------------------
+
+
+Байесовская линейная регрессия и Метод релевантных векторов (RVM) обсуждаются в Главах 3.4 и 7.2
+
+\vspace{5mm}
+
+\begin{thebibliography}{10}
+
+    
+  \beamertemplatebookbibitems
+
+    \bibitem{Bishop}  Bishop C.M. 
+    
+    \newblock{\em Pattern Recognition and Machine Learning}.
+    
+   
+    
+    
+
+  \end{thebibliography}
+  
+  
+  %----------------------------------------------------------
+\end{frame}
+%----------------------------------------------------------
+
+
+%----------------------------------------------------------
+\begin{frame}[plain]\frametitle{Будет сложно, надеюсь, Вам понравится}
+%----------------------------------------------------------
+
+
+\begin{center}
+\Large Эта и последующие лекции --- самые сложные. 
+
+\vspace{3mm}
+
+К тому же в этой лекции --- очень много формул.
+
+\vspace{3mm}
+
+Не расстраивайтесь, если в них не удастся быстро разобраться.
+\end{center}
+
+\begin{figure}[h!]
+\center{\includegraphics[width=0.5\textwidth]{Pic/GiveUp}}
+%\caption{\Large Hello darkness, my old friend} \label{Fig:}
+\end{figure}
+
+
+
+%----------------------------------------------------------
+\end{frame}
+%----------------------------------------------------------
+
+
+
+
+
+
+  %----------------------------------------------------------
+\begin{frame}[plain]\frametitle{Как лучше читать}
+%----------------------------------------------------------
+
+
+
+\begin{center}
+\noindent\fbox{%
+    \parbox{9em}{%
+
+
+\vspace{3mm}
+
+
+    \Large \textbf{\hspace{3mm} Disclaimer}
+    
+\vspace{3mm}    
+    }%
+}
+\end{center}
+\vspace{3mm}   
+
+\large Чтобы не потонуть в формулах.
+
+\vspace{3mm}   
+
+\begin{block}{Теорема}
+Каждый раздел подводит к утверждению, выделенному такой рамочкой.
+\end{block}
+
+\vspace{3mm}   
+
+Можно вначале осознать утверждение, потом --- по возможности доказательство.
+
+%----------------------------------------------------------
+\end{frame}
+%----------------------------------------------------------
+
+
+
+
+
+
+  %----------------------------------------------------------
+\begin{frame}[plain]\frametitle{Как лучше читать}
+%----------------------------------------------------------
+
+Формул много, но они однотипные.
+
+\vspace{3mm}    
+\begin{itemize}
+
+\item Все распределения в этой лекции --- нормальные.
+
+\vspace{3mm}    
+
+\item Большинство вычислений --- перемножения двух нормальных распределений \[ \mathcal{N}(\mu_1, \sigma_1^2) \mathcal{N}(\mu_2, \sigma_2^2). \]
+
+
+\end{itemize}
+
+
+  %----------------------------------------------------------
+\end{frame}
+%----------------------------------------------------------
+
+
+
+
+
+
+
+\section{Линейная регрессия по-статистически}
+
+
+
+\begin{frame}[plain]\frametitle{Линейная регрессия по-статистически} \tableofcontents[currentsection]\end{frame}
+
+
+
+
+
+
+%----------------------------------------------------------
+\begin{frame}[plain]\frametitle{Линейная регрессия}
+%----------------------------------------------------------
+
+
+\begin{figure}[h!]
+\center{\includegraphics[width=0.5\textwidth]{Pic/Noise}}
+%\caption{} \label{Fig:}
+\end{figure}
+
+
+Знакомые нам формулы:
+
+\vspace{2mm}
+
+\begin{itemize}
+
+\item Мы наблюдаем зашумлённый таргет: \[t_i = w^T x + \varepsilon_i,\] 
+
+\item где $\varepsilon_i$ --- гауссовский шум \[\varepsilon_i \bigr| X \sim \mathcal{N}(0, \sigma^2).\]
+
+\end{itemize}
+
+%----------------------------------------------------------
+\end{frame}
+%----------------------------------------------------------
+
+
+%----------------------------------------------------------
+\begin{frame}[plain]\frametitle{When in Rome...}
+%----------------------------------------------------------
+
+
+\begin{figure}[h!]
+\center{\includegraphics[width=0.5\textwidth]{Pic/Rome}}
+%\caption{} \label{Fig:}
+\end{figure}
+
+\vspace{5mm}
+
+\begin{center}
+\textbf{Q:} \textit{Как записать ``в байесовском виде'' эту модель?} \[t_i = w^T x + \varepsilon_i, \qquad \varepsilon_i \bigr| X \sim \mathcal{N}(0, \sigma^2).\]
+
+\vspace{2mm}
+
+Нужно написать правильную условную вероятность. 
+
+\vspace{2mm}
+
+(Какое распределение? Что фиксировано?)
+\end{center}
+
+
+%----------------------------------------------------------
+\end{frame}
+%----------------------------------------------------------
+
+ 
+ 
+%----------------------------------------------------------
+\begin{frame}[plain]\frametitle{Условная вероятность}
+%----------------------------------------------------------
+  
+\textit{``При фиксированных $x$ и $w$ таргет $t$ нормально распределён''}:
+  
+  \[ p(t \mid x, w) = {\displaystyle {\mathcal {N}}(t  \mid w^T x, \beta^{-1} )}.\] 
+  
+ \vspace{2mm}
+ 
+ 
+%В ``байесовском'' обозначении ${\mathcal {N}}(x | \mu, \sigma^2)$
+ 
+ 
+ \textbf{Замечание}. Дисперсия обозначена за $\beta^{-1}$ для удобства дальнейших вычислений.
+  
+  \pause
+  
+  \vspace{5mm}
+    
+  \textbf{Q:} Что нам дано и что мы хотим найти?
+    
+  
+  %----------------------------------------------------------
+\end{frame}
+%----------------------------------------------------------
+
+  %----------------------------------------------------------
+\begin{frame}[plain]\frametitle{Выборка и параметры}
+%----------------------------------------------------------
+  
+  Нам дана обучающая выборка \[ X_{tr}, T_{tr} = \left\{ x_i, t_i\right\}_{i=1}^n\]
+    
+  \vspace{2mm}
+
+  Хотим оценить \textit{параметры модели $w$}. 
+  
+    
+  \begin{figure}[h!]
+\center{\includegraphics[width=0.8\textwidth]{Pic/Reg1}}
+%\caption{} \label{Fig:}
+\end{figure}
+  
+  
+  %----------------------------------------------------------
+\end{frame}
+%----------------------------------------------------------
+
+  %----------------------------------------------------------
+\begin{frame}[plain]\frametitle{Нахождение параметров}
+%----------------------------------------------------------
+  
+  
+  \textbf{Q:} Как находить  параметры $w$? 
+
+  \pause
+
+\vspace{5mm}  
+  
+  \textbf{A:} Априорного распределения нет --- это ещё не байесовские методы. 
+  
+  \vspace{5mm}
+  
+  Значит, нужно использовать {\color{red} метод максимума правдоподобия}. 
+  
+  \pause
+  
+   \[ w_{ML} = \underset{w}{\operatorname{argmax}} \, p(T_{tr} \mid X_{tr}, w) = \underset{w}{\operatorname{argmax}}  \prod_{i=1}^n p(t_i \mid x_i, w).\]
+   
+   Естественно, от произведения сразу переходим к сумме логарифмов: \[ w_{ML} = \underset{w}{\operatorname{argmax}}  \sum_{i=1}^n \log p(t_i \mid x_i, w).\] 
+  
+   
+  %----------------------------------------------------------
+\end{frame}
+%----------------------------------------------------------
+
+  %----------------------------------------------------------
+\begin{frame}[plain]\frametitle{Метод максимум правдоподобия}
+%----------------------------------------------------------
+  
+   
+   
+ Напомним, что \[ p(t \mid x, w) = {\displaystyle {\mathcal {N}}(t  \mid w^T x, \beta^{-1} )} = \sqrt{\frac{\beta}{2 \pi}}  \exp{\left( - \frac{\beta}{2} \left( t - x^T w \right)^2 \right)}.\]
+ 
+ \vspace{2mm}
+  
+Подставляем в \[ w_{ML} = \underset{w}{\operatorname{argmax}}  \sum_{i=1}^n \log p(t_i \mid x_i, w).\] 
+ 
+ 
+ \pause
+
+\vspace{2mm}
+ 
+Убираем константы ($\beta$ не влияет на argmax):
+ 
+ \[ w_{ML} = \underset{w}{\operatorname{argmin}}   \sum_{i=1}^n  \left( t_i - x^T_i w \right)^2 =  \underset{w}{\operatorname{argmin}}  \left\| T_{tr} - X_{tr} w \right\|^2.\]
+
+\vspace{2mm}
+
+
+\textbf{Q:} Какое здесь решение?
+
+  %----------------------------------------------------------
+\end{frame}
+%----------------------------------------------------------
+
+
+
+  %----------------------------------------------------------
+\begin{frame}[plain]\frametitle{MLE}
+%----------------------------------------------------------
+  
+
+Получаем известный \textbf{ответ}:
+
+\vspace{2mm}
+
+\begin{block}{Теорема}  MLE --- это псевдорешение: \[ {\color{red} w_{ML} = \left( X_{tr}^T X_{tr} \right)^{-1} X_{tr}^T T_{tr}}. \] \end{block}
+   
+\vspace{2mm}
+
+Чтобы было удобнее следить за размерами матриц: $T_{tr}$ --- это $n \times 1$ матрица, $X_{tr}$ --- это $n \times m$ матрица и $w$ --- это $m \times 1$ матрица. 
+   
+   
+  %----------------------------------------------------------
+\end{frame}
+%----------------------------------------------------------
+
+
+
+\section{Линейная регрессия по-байесовски}
+
+
+
+\begin{frame}[plain]\frametitle{Линейная регрессия по-байесовски} \tableofcontents[currentsection]\end{frame}
+
+
+  
+  
+  %----------------------------------------------------------
+\begin{frame}[plain]\frametitle{Байес возращается}
+%----------------------------------------------------------    
+    
+    
+    
+    \begin{center}
+\large    Переходим к байесовским методам.
+    \end{center}
+    
+    
+  \begin{figure}[h!]
+\center{\includegraphics[width=0.8\textwidth]{Pic/Bayes1}}
+%\caption{} \label{Fig:}
+\end{figure}
+  
+  
+    \begin{center}
+Вводим {\color{cyan} априорное распределение} на параметры $p(w)$.
+\end{center}
+
+
+    
+  %----------------------------------------------------------
+\end{frame}
+%----------------------------------------------------------
+
+%----------------------------------------------------------
+\begin{frame}[plain]\frametitle{Всё будет нормально!}
+%----------------------------------------------------------
+
+
+Естественно, всё будет нормально   $p(w) \sim {\mathcal {N}}(w \mid 0, \alpha^{-1}I)$.
+
+\vspace{5mm}
+
+Матрица ковариации сейчас --- скалярная \[ \Sigma = \left({\begin{matrix}\frac{1}{\alpha}& &   \\  &\ddots & \\  & &\frac{1}{\alpha}\end{matrix}}\right).\]
+
+
+\vspace{5mm}
+
+\textbf{Q:} Как теперь выглядит наша модель? 
+
+\vspace{5mm}
+
+Было распределение $p(t \mid x, w)$, а теперь --- какое?
+  
+    
+  %----------------------------------------------------------
+\end{frame}
+%----------------------------------------------------------
+
+%----------------------------------------------------------
+\begin{frame}[plain]\frametitle{Что делать?}
+%----------------------------------------------------------
+  
+  Мы рассматриваем распределение   \begin{align*} p(t, w \mid x) &=  p(t \mid x, w) p(w)  \\ 
+  &= {\displaystyle {\mathcal {N}}(t  \mid w^T x, \beta^{-1} )} {\displaystyle {\mathcal {N}}(w \mid 0, \alpha^{-1}I)}.\end{align*}
+  
+\vspace{2mm}  
+  
+$x$ --- фиксировано. Мы его не предсказываем и не моделируем. 
+
+\vspace{5mm}
+
+\textbf{Q:} Что мы можем сделать?
+
+  %----------------------------------------------------------
+\end{frame}
+%----------------------------------------------------------
+
+%----------------------------------------------------------
+\begin{frame}[plain]\frametitle{Ближайшие действия}
+%----------------------------------------------------------
+  
+Дана обучающая выборка:
+ \[ X_{tr}, T_{tr} = \left\{ x_i, t_i\right\}_{i=1}^n\] 
+
+\vspace{2mm}
+
+План работ:
+
+\vspace{5mm}
+
+\begin{enumerate}
+
+\item Найдём {\color{blue} MAP-оценку}  \[ w_{MP} = \underset{w}{\operatorname{argmax }}  \, p(w \mid X_{tr}, T_{tr}).\] 
+
+\vspace{5mm}
+
+\item Вычислим явно {\color{blue} апостериорное распределение} \[ p(w \mid X_{tr}, T_{tr}).\] 
+
+\end{enumerate}
+
+
+  %----------------------------------------------------------
+\end{frame}
+%----------------------------------------------------------
+
+
+
+
+
+\subsection{MAP-оценка}
+
+\begin{frame}[plain]\frametitle{MAP-оценка} \tableofcontents[currentsubsection]\end{frame}
+
+
+
+
+  %----------------------------------------------------------
+\begin{frame}[plain]\frametitle{Простой план}
+%----------------------------------------------------------
+
+
+Ищем MAP-оценку $\underset{w}{\operatorname{argmax }}  \, p(w \mid X_{tr}, T_{tr})$. Идейно всё просто. 
+
+
+\begin{enumerate}
+
+\item Применяя формулу Байеса. 
+
+\vspace{2mm}
+
+\item Подставляем известные распределения $p(t \mid x, w) p(w)$ и честно считаем. 
+ 
+
+\end{enumerate}
+
+
+  \begin{figure}[h!]
+\center{\includegraphics[width=0.5\textwidth]{Pic/Scoro}}
+%\caption{} \label{Fig:}
+\end{figure}
+  
+
+  %----------------------------------------------------------
+\end{frame}
+%----------------------------------------------------------
+
+
+
+
+  %----------------------------------------------------------
+\begin{frame}[plain]\frametitle{Формула Байеса}
+%----------------------------------------------------------
+
+
+
+\begin{itemize}
+
+\item Ищем моду апостериорного. {\color{red} По формуле Байеса}: 
+ \[ w_{MP} = \underset{w}{\operatorname{argmax }}  \, p(w \mid X_{tr}, T_{tr}) = \underset{w}{\operatorname{argmax }}  \, p( T_{tr} \mid X_{tr}, w) p(w) \] 
+
+
+\textbf{Q:} Куда пропал знаменатель в теореме Байеса?
+
+\pause
+
+\vspace{3mm}
+
+\textbf{A:} Он не влияет на argmax. 
+
+\vspace{5mm}
+
+\item  Далее, как обычно, логарифмируем произведение. 
+
+\vspace{3mm}
+
+Правдоподобие $p( T_{tr} \mid X_{tr}, w)$ распадётся в произведение правдоподобий по отдельным объектам:
+ \[ w_{MP} = \underset{w}{\operatorname{argmax }}  \, \left( \sum_{i=1}^n \left[ \ln p( t_i \mid x_i, w)\right] + \ln p(w)  \right) \] 
+
+
+\end{itemize}
+
+  %----------------------------------------------------------
+\end{frame}
+%----------------------------------------------------------
+
+
+
+  %----------------------------------------------------------
+\begin{frame}[plain]\frametitle{Нормальные распределения}
+%----------------------------------------------------------
+
+
+\begin{itemize}
+
+\item  Подставляем формулы для нормального распределения: \begin{gather*} p(t \mid x, w) p(w) = {\displaystyle {\mathcal {N}}(t  \mid w^T x, \beta^{-1} )} {\displaystyle {\mathcal {N}}(w \mid 0, \alpha^{-1}I)} = \\ = {\color{blue} \sqrt{\frac{\beta}{2\pi}} } \exp{\left(-\frac{\beta}{2} \left( t - x^T w\right)^2 \right)} {\color{blue} \left( \frac{\alpha}{2\pi}\right)^{\frac{d}{2}}} \exp{\left( - \frac{\alpha}{2} w^T w \right)} .\end{gather*} 
+
+\pause
+
+
+\vspace{3mm}
+
+\item  Логарифмируем и подставляем в argmax: \[ w_{MP} = \underset{w}{\operatorname{argmax }}  \left[ {\color{blue} \frac{n}{2} \log \beta}  - \frac{\beta}{2} \sum_{i=1}^n \left(t_i - x_i^T w \right)^2 + {\color{blue} \frac{d}{2} \log \alpha} - \frac{\alpha}{2} w^T w + const \right] .\] 
+
+{\color{blue} Синее} не зависит от $w$.
+
+\end{itemize}
+
+
+  %----------------------------------------------------------
+\end{frame}
+%----------------------------------------------------------
+
+  %----------------------------------------------------------
+\begin{frame}[plain]\frametitle{Argmax}
+%----------------------------------------------------------
+
+
+\begin{itemize}
+
+\item Отбрасываем то, что не зависит от $w$, и записываем всё в матричном виде: \[ w_{MP} =  \underset{w}{\operatorname{argmax }}  \left[ -\frac{\beta}{2} \left(T_{tr} - X_{tr} w \right)^T \left(T_{tr} - X_{tr} w \right) - \frac{\alpha}{2} w^T w \right].\] 
+
+\vspace{5mm}
+
+\pause
+
+\item Теперь находим экстремум. Нужно приравнивать производную по $w$ к нулю. 
+
+\vspace{5mm}
+
+Если всё правильно посчитать: \[ \beta X_{tr}^T  T_{tr}   - \left( \beta X_{tr}^T X_{tr} +\alpha I\right) w =0,  \] 
+
+\end{itemize}
+
+
+  %----------------------------------------------------------
+\end{frame}
+%----------------------------------------------------------
+
+
+
+
+  %----------------------------------------------------------
+\begin{frame}[plain]\frametitle{MAP-оценка}
+%----------------------------------------------------------
+
+
+\begin{block}{MAP-оценка}
+\[w_{MP}  = \beta  \left( \beta X_{tr}^T X_{tr} + \alpha I\right)^{-1} X_{tr}^T T_{tr}. \] 
+\end{block}
+
+\pause
+
+\vspace{5mm}
+
+Похоже на то, что было раньше:  \[ w_{ML} = \left( X_{tr}^T X_{tr} \right)^{-1} X_{tr}^T T_{tr}. \] Только слагаемое $\alpha I$ в скобках появилось. 
+
+
+  %----------------------------------------------------------
+\end{frame}
+%----------------------------------------------------------
+
+
+  %----------------------------------------------------------
+\begin{frame}[plain]\frametitle{Параметр модели}
+%----------------------------------------------------------
+
+\begin{itemize}
+
+\item Пусть $\alpha \to 0$. \[\lim_{\alpha \to 0} \omega_{MP} = \omega_{ML}.\] 
+
+\vspace{5mm}
+
+
+Априорное распределение становится всё шире и шире, почти константой. 
+
+\vspace{3mm}
+
+  \begin{figure}[h!]
+\center{\includegraphics[width=0.75\textwidth]{Pic/Less}}
+%\caption{} \label{Fig:}
+\end{figure}
+
+\vspace{3mm}  
+
+$p(w)$ предсказумо перестаёт влиять на argmax.
+
+%Поэтому максимум произведения   \[ p(t, w \mid x) =  p(t \mid x, w) p(w) = {\displaystyle {\mathcal {N}}(t  \mid w^T x, \beta^{-1} )} {\displaystyle {\mathcal {N}}(w \mid 0, \alpha^{-1}I)}\]  предсказуемо сведётся к максимуму первого сомножителя.
+
+\end{itemize}
+
+
+
+  %----------------------------------------------------------
+\end{frame}
+%----------------------------------------------------------
+
+
+  %----------------------------------------------------------
+\begin{frame}[plain]\frametitle{Параметр модели}
+%----------------------------------------------------------
+
+\begin{itemize}
+
+
+
+\item Пусть $\alpha \to \infty$. Тогда \[w_{MP} \approx  \frac{\beta}{\alpha} X_{tr}^T T_{tr}.\]
+
+\vspace{5mm}
+
+Априорное распределение схлопывается в дельта-функцию.
+
+\vspace{5mm}
+
+Неопределённость на $w$ исчезает:
+
+\[\lim_{\alpha \to +\infty} \omega_{MP} = 0.\]
+
+\end{itemize}
+
+
+  %----------------------------------------------------------
+\end{frame}
+%----------------------------------------------------------
+
+
+%----------------------------------------------------------
+\begin{frame}[plain]\frametitle{Перерыв}
+%----------------------------------------------------------
+
+
+\begin{center}
+\Huge Перерыв
+\end{center}
+%----------------------------------------------------------
+\end{frame}
+%----------------------------------------------------------
+
+
+
+  
+\subsection{Аналитический байесовский вывод}
+
+\begin{frame}[plain]\frametitle{MAP-оценка} \tableofcontents[currentsubsection]\end{frame}
+
+
+
+%----------------------------------------------------------
+\begin{frame}[plain]\frametitle{Аналитический байесовский вывод}
+%----------------------------------------------------------
+
+Будем честно вычислять  {\color{blue} апостериорное распределение} $p(w \mid X_{tr}, T_{tr})$?
+
+\vspace{5mm}
+
+
+\begin{figure}[h!]
+\center{\includegraphics[width=0.7\textwidth]{Pic/Lazy}}
+%\caption{\Large Hello darkness, my old friend} \label{Fig:}
+\end{figure}
+
+
+
+%----------------------------------------------------------
+\end{frame}
+%----------------------------------------------------------
+
+
+
+
+%----------------------------------------------------------
+\begin{frame}[plain]\frametitle{Всё будет нормально!}
+%----------------------------------------------------------
+
+\textbf{Q:} А мы вообще можем выполнить аналитический байесовский вывод?
+
+\[  p(t \mid x, w) p(w) = {\displaystyle {\mathcal {N}}(t  \mid w^T x, \beta^{-1} )} {\displaystyle {\mathcal {N}}(w \mid 0, \alpha^{-1}I)}\]
+
+
+\vspace{3mm}
+
+\pause
+
+\textbf{A:} Да, и априорное распределение, и функция правдоподобия --- {\color{red}``перевёрнутые параболы под экспонентой''}. Функциональный вид сохраняется: \[ \exp{\left(-\frac{w^T \Sigma_1 w}{2}  + \dots  \right)} \exp{\left(-\frac{w^T \Sigma_2 w}{2}  + \dots  \right) }= \exp{\left(-\frac{ w^T (\Sigma_1+\Sigma_2) w}{2} + \dots  \right)  } \] 
+
+
+%----------------------------------------------------------
+\end{frame}
+%----------------------------------------------------------
+
+
+%----------------------------------------------------------
+\begin{frame}[plain]\frametitle{Апостериорное распределение}
+%----------------------------------------------------------
+
+\textbf{Q:} Итак, какой вид имеет   $p(w \mid X_{tr}, T_{tr})$? 
+
+\vspace{5mm}
+
+\pause
+
+\textbf{A:}  Это нормальное распределение \[ p\left(w \mid X_{tr}, T_{tr} \right) \sim  {\displaystyle {\mathcal {N}}(w \mid \mu, \Sigma)}\]
+
+%----------------------------------------------------------
+\end{frame}
+%----------------------------------------------------------
+
+
+%----------------------------------------------------------
+\begin{frame}[plain]\frametitle{Параметры нормального распределения}
+%------------
+
+\textbf{Q:} Как найти параметры $\mu$ и $\Sigma$ нормального распределения?
+\[ {\displaystyle {\mathcal {N}}(w \mid \mu, \Sigma)} = \left( \frac{1}{2\pi}\right)^{\frac{d}{2}} \exp{\left( - \frac{1}{2} (w - \mu)^T \Sigma^{-1} (w  - \mu) \right) } \]
+
+\vspace{3mm}
+
+
+\pause
+
+\textbf{A:} 
+
+\begin{itemize}
+
+\item $\mu$ --- это мода (точка максимума)
+
+\vspace{5mm}
+
+\item $\Sigma$ --- коэффициент в квадратичной части под экспонентой $\displaystyle -\frac{1}{2} w^T \Sigma^{-1} w$. 
+
+\end{itemize}
+
+
+%----------------------------------------------------------
+\end{frame}
+%----------------------------------------------------------
+
+
+%----------------------------------------------------------
+\begin{frame}[plain]\frametitle{Мода}
+%------------
+
+\textbf{Q:} Как найти моду $\mu$?
+
+
+\pause
+
+\vspace{5mm}
+
+\textbf{A:} А мы её уже нашли --- это MAP-оценка: 
+ \[ {\color{blue} \mu = w_{MP}  = \beta  \left( \beta X_{tr}^T X_{tr} + \alpha I\right)^{-1} X_{tr}^T T_{tr} }.\]
+
+
+%----------------------------------------------------------
+\end{frame}
+%----------------------------------------------------------
+
+
+
+  %----------------------------------------------------------
+\begin{frame}[plain]\frametitle{Матрица ковариации}
+%----------------------------------------------------------
+
+\textbf{Q:} Как найти $\Sigma$? Мы уже выделили слагаемые с $w$ при поиске argmax:
+
+
+ \[ w_{MP} =  \underset{w}{\operatorname{argmax }}  \left[ -\frac{\beta}{2} \left(T_{tr} - X_{tr} w \right)^T \left(T_{tr} - X_{tr} w \right) - \frac{\alpha}{2} w^T w \right].\] 
+
+\vspace{3mm}
+
+Остаётся выделить слагаемое вида $\displaystyle - \frac{1}{2} w^T \Sigma^{-1} w$.
+
+\pause
+
+\vspace{5mm}
+
+Раскрываем скобки --- видим, что \[ {\color{blue}  \Sigma =  \left( \beta X_{tr}^T X_{tr} + \alpha I\right)^{-1} }\]
+
+
+%----------------------------------------------------------
+\end{frame}
+%----------------------------------------------------------
+
+
+  %----------------------------------------------------------
+\begin{frame}[plain]\frametitle{Априорное распределение. Итоги}
+%----------------------------------------------------------
+
+\begin{block}{Теорема} Рассмотрим линейную модель с гауссовским шумом:  \[  p(t \mid x, w) \sim {\displaystyle {\mathcal {N}}(t  \mid w^T x, \beta^{-1} )}. \]
+Если априорное распределение имеет нормальное распределение вида \[p(w) \sim {\mathcal {N}}(w \mid 0, \alpha^{-1}I),\] то апостериорное распределение тоже нормально \[ p\left(w \mid X_{tr}, T_{tr} \right) \sim {\displaystyle {\mathcal {N}}(w \mid \mu, \Sigma)}.\]
+
+\pause
+
+
+\begin{itemize}
+
+\item Мода:  \[ \mu = w_{MP}  = \beta  \left( \beta X_{tr}^T X_{tr} + \alpha I\right)^{-1} X_{tr}^T T_{tr}.\]
+
+
+\vspace{3mm}
+
+\item Матрица ковариации:
+ \[ \Sigma =  \left( \beta X_{tr}^T X_{tr} + \alpha I\right)^{-1} \]
+
+
+\end{itemize}
+
+
+\end{block}
+
+
+%----------------------------------------------------------
+\end{frame}
+%----------------------------------------------------------
+
+  %----------------------------------------------------------
+\begin{frame}[plain]\frametitle{Подбор гиперпараметров}
+%----------------------------------------------------------
+
+
+У нас есть 2 параметра $\alpha$ и $\beta$. 
+
+\vspace{5mm}
+
+\textbf{Q:}  Как подобрать их по данным?
+
+\pause
+
+\vspace{5mm}
+
+\textbf{A:} Проще всего ---{\color{blue} кросс-валидацией}. Пока параметров 2, это ещё выполнимо. 
+
+
+\begin{figure}[h!]
+\center{\includegraphics[width=0.75\textwidth]{pic/LOO}}
+%\caption{Итоговая оценка} \label{Fig:}
+\end{figure}
+
+
+  %----------------------------------------------------------
+\end{frame}
+%----------------------------------------------------------
+
+
+
+%----------------------------------------------------------
+\begin{frame}[plain]\frametitle{Перерыв}
+%----------------------------------------------------------
+
+
+\begin{center}
+\Huge Перерыв
+\end{center}
+%----------------------------------------------------------
+\end{frame}
+%----------------------------------------------------------
+
+
+
+
+
+\section{Метод релевантных векторов}
+
+
+
+\begin{frame}[plain]\frametitle{Метод релевантных векторов} \tableofcontents[currentsection]\end{frame}
+
+
+  
+  %----------------------------------------------------------
+\begin{frame}[plain]\frametitle{Feature selection}
+%----------------------------------------------------------
+
+Вспомним задачу {\color{blue} отбора признаков} (Feature selection).
+
+\vspace{3mm}
+
+Есть основания полагать, что многие признаки --- шумовые. 
+
+
+\vspace{3mm}
+
+  \begin{figure}[h!]
+\center{\includegraphics[width=0.7\textwidth]{Pic/FeatureSelection}}
+%\caption{} \label{Fig:}
+\end{figure}
+
+
+
+  %----------------------------------------------------------
+\end{frame}
+%----------------------------------------------------------
+
+
+
+
+
+
+  %----------------------------------------------------------
+\begin{frame}[plain]\frametitle{One size doesn't fit all}
+%----------------------------------------------------------
+
+Параметр $\alpha$ отвечает за ``надстройку под параметры'':
+
+\vspace{2mm}
+
+\begin{itemize}
+
+\item $\alpha \to 0$ $\Rightarrow$ больше подстраиваемся под признак. 
+
+\vspace{2mm}
+
+\item $\alpha \to \infty$ $\Rightarrow$ меньше учитываем признак. 
+
+\end{itemize}
+
+\vspace{2mm}
+
+\textbf{Q:} Наверное, один параметр $\alpha$ на все признаки --- не лучшая идея, да?
+
+
+  \begin{figure}[h!]
+\center{\includegraphics[width=0.5\textwidth]{Pic/Size}}
+%\caption{} \label{Fig:}
+\end{figure}
+
+
+  %----------------------------------------------------------
+\end{frame}
+%----------------------------------------------------------
+
+
+
+
+  %----------------------------------------------------------
+\begin{frame}[plain]\frametitle{Куча параметров}
+%----------------------------------------------------------
+
+\textbf{Идея}! Каждому признаку --- свой параметр $\alpha_i$!
+
+\vspace{5mm}
+
+Заменяем матрицу ковариации  $\alpha^{-1} I$ на диагональную матрицу \[ A^{-1} = {\left( \begin{matrix} \displaystyle \frac{1}{\alpha_{1}}\\&\ddots \\&& \displaystyle \frac{1}{\alpha_{d}}\end{matrix} \right)}.\] 
+
+
+  %----------------------------------------------------------
+\end{frame}
+%----------------------------------------------------------
+
+
+
+
+
+  %----------------------------------------------------------
+\begin{frame}[plain]\frametitle{Новое распределение}
+%----------------------------------------------------------
+
+
+Итак, новое распределение:  \[ p(t, w \mid x) =  p(t \mid x, w, \beta) p(w \mid A) = {\displaystyle {\mathcal {N}}(t  \mid w^T x, \beta^{-1} )} {\displaystyle {\mathcal {N}}(w \mid 0, A^{-1}	)}.\]
+
+
+\vspace{2mm}
+
+
+\textbf{Q:} Итак, $\alpha I \to A$. Как думаете --- что произойдёт с апостериорным распределением?
+
+
+
+
+  %----------------------------------------------------------
+\end{frame}
+%----------------------------------------------------------
+
+
+
+%----------------------------------------------------------
+\begin{frame}[plain]\frametitle{Новое апостериорное}
+%------------
+
+
+
+\begin{itemize}
+
+\item Мода:  \[ \mu = w_{MP}  = \beta  \left( \beta X_{tr}^T X_{tr} + {\color{red} A}\right)^{-1} X_{tr}^T T_{tr}.\]
+
+
+\vspace{3mm}
+
+\item Матрица ковариации:
+ \[ \Sigma =  \left( \beta X_{tr}^T X_{tr} + {\color{red} A}\right)^{-1} \]
+
+
+\end{itemize}
+
+
+
+
+%----------------------------------------------------------
+\end{frame}
+%----------------------------------------------------------
+
+
+
+
+  %----------------------------------------------------------
+\begin{frame}[plain]\frametitle{Проклятие размерности}
+%----------------------------------------------------------
+
+
+
+\textbf{Q:} Как найти параметры $A$ и $\beta$ модели?
+
+\vspace{5mm}
+
+{\color{red} Кросс-валидация не годится!} Слишком много параметров --- $O(2^d)$ вариантов!
+
+  \begin{figure}[h!]
+\center{\includegraphics[width=0.25\textwidth]{Pic/Grid2}}
+%\caption{} \label{Fig:}
+\end{figure}
+
+
+
+  %----------------------------------------------------------
+\end{frame}
+%----------------------------------------------------------
+
+
+
+  %----------------------------------------------------------
+\begin{frame}[plain]\frametitle{Принцип наибольшей обоснованности}
+%----------------------------------------------------------
+
+
+
+\begin{itemize}
+
+\item Воспользуемся {\color{blue} принципом наибольшей обоснованности} для выбора параметров: \[(A,\beta) = \underset{A, \beta}{\operatorname{argmax }} \,  p(T_{tr} \mid X_{tr}, A, \beta). \] 
+
+\pause
+
+\vspace{2mm}
+
+\item Полностью выписываем модель, маргинализируя по всем неявным параметрам: \[ (A,\beta) =\underset{A, \beta}{\operatorname{argmax }}  \int p(T_{tr}, w \mid X_{tr}, A, \beta)dw \]
+
+
+\pause
+
+\vspace{2mm}
+
+\item Применяем правило произведения \[ (A,\beta)  = \underset{A, \beta}{\operatorname{argmax }}  \int p(T_{tr} \mid X_{tr},  w, \beta) p (w \mid A) dw . \] 
+\end{itemize}
+
+  %----------------------------------------------------------
+\end{frame}
+%----------------------------------------------------------
+
+  %----------------------------------------------------------
+\begin{frame}[plain]\frametitle{Спойлеры}
+%----------------------------------------------------------
+
+Здесь можно сразу перейти в {\color{red} конец презентации} --- там будет ответ. 
+
+\vspace{3mm}
+
+\textbf{Спойлер}. Итоговое решение --- итерационный процесс вида
+\[\alpha^{j+1} = f(\alpha^j, \beta^j, w^j), \qquad
+ \beta^{j+1} = g(\alpha^j, \beta^j, w^j), \qquad w^{j+1} = h(\alpha^j, \beta^j, w^j) \]
+
+\vspace{3mm}
+
+Оставшаяся часть лекции будет объяснением того, ``как мы дошли до жизни такой''. 
+
+\vspace{2mm}
+
+  \begin{figure}[h!]
+\center{\includegraphics[width=0.5\textwidth]{Pic/Cut}}
+\caption{\Large Настало время срезать углы} \label{Fig:}
+\end{figure}
+`
+
+%Говорим, что получится в конце --- и ссылку на конец.
+
+
+  %----------------------------------------------------------
+\end{frame}
+%----------------------------------------------------------
+
+
+
+  %----------------------------------------------------------
+\begin{frame}[plain]\frametitle{Brace yourself}
+%----------------------------------------------------------
+
+
+Нам нужно посчитать  \[ (A,\beta)  = \underset{A, \beta}{\operatorname{argmax }}  \int p(T_{tr} \mid X_{tr},  w, \beta) p (w \mid A) dw . \] 
+
+
+У нас всё нормально $\Rightarrow$ под интегралом --- экспонента от квадратичной функции. 
+
+\vspace{2mm}
+
+Всё считается, и так формулы сложные --- сразу напишем ответ. 
+
+\vspace{2mm}
+
+  \begin{figure}[h!]
+\center{\includegraphics[width=0.45\textwidth]{Pic/W}}
+%\caption{} \label{Fig:}
+\end{figure}
+`
+
+  %----------------------------------------------------------
+\end{frame}
+%----------------------------------------------------------
+
+  %----------------------------------------------------------
+\begin{frame}[plain]\frametitle{Функция под логарифмом}
+%----------------------------------------------------------
+
+
+
+Подынтегральное выражение  \[ p(T_{tr} \mid X_{tr}, w, {\beta}) p(w \mid A) = {\displaystyle {\color{blue}  {\mathcal {N}}(T_{tr}  \mid X_{tr} w, \beta^{-1} )} } {\color{red} \displaystyle {\mathcal {N}}(w \mid 0, A^{-1}	) }\]
+ 
+ \pause
+ 
+ Честно его считаем и подставляем: 
+ 
+ 
+ \[  {\color{blue} \left(\frac{\beta}{2\pi}\right)^{\frac{n}{2}} \exp{\left[-\frac{\beta}{2} \left(T_{tr} -  X_{tr} w\right)^2 \right]} } {\color{red} \left( \frac{1}{2\pi}\right)^{\frac{d}{2}} \sqrt{\det A} \exp{\left[ - \frac{1}{2} w^T A w \right]} } .\]
+ 
+ 
+ 
+ \pause
+ 
+ 
+ 
+Можно проверить, что \begin{align*} \log  p(T_{tr} \mid X_{tr}, A, \beta) & = {\color{blue} \frac{n}{2} \log \beta - \frac{\beta}{2} \left\|T_{tr} - X_{tr} w_{MP} \right\|^2 } + \\  &+ {\color{red} \frac{1}{2} \log \det A -  \frac{1}{2} w_{MP}^T A w_{MP} } + \\  & +  \frac{1}{2} \log \det \Sigma + \operatorname{const}.\end{align*}
+
+
+
+  %----------------------------------------------------------
+\end{frame}
+%----------------------------------------------------------
+
+
+
+
+
+
+
+
+  %----------------------------------------------------------
+\begin{frame}[plain]\frametitle{Неудобно дифференцировать}
+%----------------------------------------------------------
+
+Хотим дифференцировать   \begin{align*} \log  p(T_{tr} \mid X_{tr}, A, \beta)  &= \frac{n}{2} \log {\color{blue} \beta} - \frac{{\color{blue} \beta}}{2} \left\|T_{tr} - X_{tr} w_{MP} \right\|^2 + \\&+ \frac{1}{2} \log \det {\color{red}  A} -  \frac{1}{2} w_{MP}^T  {\color{red}  A} w_{MP}+  \\ &+  \frac{1}{2} \log \det {\color{red} \Sigma}  + \operatorname{const}.\end{align*} 
+ по  ${\color{red} A}$ и ${\color{blue} \beta}$ и приравнять производные к нулю.
+
+
+\vspace{5mm}
+
+\pause
+
+\textbf{Проблема}.  Последнее слагаемое дифференцировать неудобно: \[ \Sigma =  \left( \beta X_{tr}^T X_{tr} + A\right)^{-1}\] 
+
+\vspace{3mm}
+
+\textbf{Q:} Что будем делать?
+
+\vspace{5mm}
+
+\pause
+
+\textbf{A:} Меняем \[ \frac{1}{2} \log \det \Sigma =   -\frac{1}{2} \log \det \Sigma^{-1} \]
+
+
+  %----------------------------------------------------------
+\end{frame}
+%----------------------------------------------------------
+
+
+
+  %----------------------------------------------------------
+\begin{frame}[plain]\frametitle{Не считается}
+%-----------------------
+
+
+Выделили слагаемые с  ${\color{red} A}$ и ${\color{blue} \beta}$:   \begin{align*} \log  p(T_{tr} \mid X_{tr}, A, \beta)  &= \frac{n}{2} \log {\color{blue} \beta} - \frac{{\color{blue} \beta}}{2} \left\|T_{tr} - X_{tr}^T w_{MP} \right\|^2 + \\&+ \frac{1}{2} \log \det {\color{red}  A} -  \frac{1}{2} w_{MP}^T  {\color{red}  A} w_{MP}+  \\ &+  \frac{1}{2} \log \det {\color{red} \Sigma}  + \operatorname{const}.\end{align*} 
+
+\textbf{Q:} Ничего не забыли?
+
+
+\pause
+
+\vspace{5mm}
+
+\textbf{A:} Теперь  $w_{MP}$ зависит от $A$: \[  w_{MP}  = \beta  \left( \beta X_{tr}^T X_{tr} + A\right)^{-1} X_{tr}^T T_{tr}\]
+
+
+\textbf{Проблема}: Если бы вместо $w_{MP}$ было $w$, то могли бы оптимизировать. А так --- сложно!
+
+
+  %----------------------------------------------------------
+\end{frame}
+%----------------------------------------------------------
+
+  %----------------------------------------------------------
+\begin{frame}[plain]\frametitle{Если очень хочется...}
+%----------------------------------------------------------
+
+Мы оптимизируем функцию вида \[ F(A, \beta, w_{MP})\]
+
+
+\textbf{Идея}. {\color{blue} Заменим $w_{MP}$ на $w$}, не зависящую от $A, b$.  Для функции \[ F(A, \beta, w)\] мы сможем аналитически решить задачу.
+
+
+
+\vspace{5mm}
+
+  \begin{figure}[h!]
+\center{\includegraphics[width=0.35\textwidth]{Pic/Can}}
+%\caption{} \label{Fig:}
+\end{figure}
+`
+
+%----------------------------------------------------------
+\end{frame}
+%----------------------------------------------------------
+
+
+%----------------------------------------------------------
+\begin{frame}[plain]\frametitle{Новая оптимизационная задача}
+%----------------------------------------------------------
+
+
+Остаётся понять --- насколько мы ошибаемся. 
+
+\vspace{5mm}
+
+По определению $w_{MP}$ --- точка, где достигается максимум \[ w_{MP} = \underset{w}{\operatorname{argmax }} \, F(A, \beta, w).\]
+
+\vspace{2mm}
+
+Далее посмотрим --- какая оптимизационная задача у нас возникает.
+
+
+
+
+%----------------------------------------------------------
+\end{frame}
+%----------------------------------------------------------
+
+
+%----------------------------------------------------------
+\begin{frame}[plain]\frametitle{Перерыв}
+%----------------------------------------------------------
+
+
+\begin{center}
+\Huge Перерыв
+\end{center}
+%----------------------------------------------------------
+\end{frame}
+%----------------------------------------------------------
+
+
+
+\subsection{Вариационная нижняя оценка}
+ 
+\begin{frame}[plain]\frametitle{Метод релевантных векторов} \tableofcontents[currentsubsection]\end{frame}
+
+ 
+ 
+  %----------------------------------------------------------
+\begin{frame}[plain]\frametitle{ELBO}
+%----------------------------------------------------------
+
+
+Функция $g(x, \xi)$ --- {\color{blue} вариационная нижняя оценка} (ELBO) на функцию $f(x)$, если 
+
+\vspace{5mm}
+
+\begin{enumerate}
+
+\item  для всех  $x, \xi$ выполнено $f(x) \geq g(x, \xi)$ .
+
+\vspace{5mm}
+
+\item для любого $x_0$ существует $\xi_0$ т.,ч. $f(x_0) = g(x_0, \xi_0)$.
+
+\end{enumerate}
+
+\pause
+
+
+\vspace{3mm}
+
+Проще говоря:
+
+\vspace{3mm}
+
+\begin{itemize}
+
+\item  $f(x)$ всегда ``выше'' $g(x, \xi)$. 
+
+\vspace{5mm}
+
+\item на каждой вертикали $x = x_0$ семейство $g(x, \xi)$ ``доходит'' до $f(x)$.
+
+\end{itemize}
+
+
+  %----------------------------------------------------------
+\end{frame}
+%----------------------------------------------------------
+  %----------------------------------------------------------
+\begin{frame}[plain]\frametitle{ELBO}
+%----------------------------------------------------------
+
+По сути $f(x)$ --- огибающая семейства $g(x, \xi)$.
+
+\vspace{5mm}
+
+ Грубо говоря, если нарисовать все $g(x, \xi)$, то  мы ``увидим сверху'' $f(x)$. 
+
+  \begin{figure}[h!]
+\center{\includegraphics[width=0.5\textwidth]{Pic/ELBO2}}
+\caption{\Large {\color{blue} Синее} семейство --- вариационная нижняя оценка {\color{red} функции $f(x)$}} \label{Fig:}
+\end{figure}
+`
+
+
+  %----------------------------------------------------------
+\end{frame}
+%----------------------------------------------------------
+
+  %----------------------------------------------------------
+\begin{frame}[plain]\frametitle{ELBO}
+%----------------------------------------------------------
+
+
+\textbf{Q:} Знакомы ли мы с какими-нибудь примерами вариационной нижней оценки  (ELBO)?
+
+\vspace{5mm}
+
+
+\textbf{A:} Пример ELBO: \textit{выпуклая функция --- огибающая своего семейства  касательных}.
+
+%По сути $f(x)$ --- огибающая семейства $g(x, \xi)$. Грубо говоря, если нарисовать все $g(x, \xi)$, то  мы ``увидим сверху'' $f(x)$. 
+
+\vspace{5mm}
+
+  \begin{figure}[h!]
+\center{\includegraphics[width=0.75\textwidth]{Pic/Env}}
+%\caption{\Large Синие семейство --- вариационная нижняя оценка функции $f(x)$} \label{Fig:}
+\end{figure}
+`
+
+
+  %----------------------------------------------------------
+\end{frame}
+%----------------------------------------------------------
+
+
+  %----------------------------------------------------------
+\begin{frame}[plain]\frametitle{EM-алгоритм}
+%----------------------------------------------------------
+
+\textbf{Q:} Как максимизировать $f(x)$? \textbf{A:} Можно по очереди максимизировать:
+
+
+\begin{itemize}
+
+\item Брать максимум ``по горизонтали'' (по $x$) у очередной функции $g_t$ .
+
+\vspace{2mm}
+
+\item Брать максимум ``по вертикали'' (по $\xi$). 
+
+\end{itemize}
+
+
+  \begin{figure}[h!]
+\center{\includegraphics[width=0.45\textwidth]{Pic/EM3}}
+%\caption{} \label{Fig:}
+\end{figure}
+`
+
+
+  %----------------------------------------------------------
+\end{frame}
+%----------------------------------------------------------
+  %----------------------------------------------------------
+\begin{frame}[plain]\frametitle{EM-алгоритм}
+%----------------------------------------------------------
+
+
+\begin{center}
+\noindent\fbox{%
+    \parbox{9em}{%
+
+
+\vspace{3mm}
+
+
+    \Large \textbf{\hspace{1mm} {\color{blue} EM-алгоритм}}
+    
+\vspace{3mm}    
+    }%
+}
+
+
+\end{center}
+
+\vspace{5mm}
+
+
+Итеративный процесс для поиска (локального) максимума: \[ \begin{cases} x_{n+1} =  \underset{x}{\operatorname{argmax }} \, g(x, \xi_n) \\ \xi_{n+1} =  \underset{\xi}{\operatorname{argmax }} \, g(x_{n+1}, \xi)\end{cases} \] 
+
+  %----------------------------------------------------------
+\end{frame}
+%----------------------------------------------------------
+
+
+\subsection{Алгоритм}
+ 
+\begin{frame}[plain]\frametitle{Алгоритм} \tableofcontents[currentsubsection]\end{frame}
+
+
+  %----------------------------------------------------------
+\begin{frame}[plain]\frametitle{Оптимизация по параметрам}
+%----------------------------------------------------------
+
+Итак, заменяем $w_{MP}$ на $w$. Максимизируем по $({\color{red} A}, \beta)$ и ещё по $w$ выражение:  \begin{align*} \log  p(T_{tr} \mid X_{tr}, A, \beta) & =  \frac{n}{2} \log \beta - \frac{\beta}{2} \left\|T_{tr} - X_{tr} w \right\|^2  + \\  &+ {\color{red} \frac{1}{2} \log \det A -  \frac{1}{2} w^T A w } + \\  & -  {\color{red} \frac{1}{2} \log \det \Sigma^{-1}} + \operatorname{const}.\end{align*}
+
+
+\pause
+
+\vspace{5mm}
+
+Для примера продифференцируем по $\alpha_j$ --- элементу $A$ (он есть в красных слагаемых). Можно проверить, что получится  \[ \frac{1}{2 \alpha_j} - \frac{1}{2} w_j^2 - \frac{1}{2}\Sigma_{jj} = 0.\]
+
+  %----------------------------------------------------------
+\end{frame}
+%----------------------------------------------------------
+ 
+ 
+ 
+ 
+  %----------------------------------------------------------
+\begin{frame}[plain]\frametitle{Костыль}
+%----------------------------------------------------------
+
+\begin{center}
+\noindent\fbox{%
+    \parbox{9em}{%
+
+
+\vspace{3mm}
+
+
+    \Large \textbf{\hspace{1mm} Опыт показал}
+    
+\vspace{3mm}    
+    }%
+}
+
+
+\end{center}
+
+\vspace{5mm}
+
+Чтобы процесс лучше сходился, лучше оптимизировать $\log \alpha_j$, а не $\alpha_j$.
+
+\vspace{5mm}
+
+Домножим выражение 
+ \[ \frac{1}{2 \alpha_j} - \frac{1}{2} w_j^2 - \frac{1}{2}\Sigma_{jj} = 0.\]
+на $2 \alpha_j$ и представим в виде:
+ \[ \alpha_j w_j^2 = 1 - \alpha_j \Sigma_{jj}\]
+
+  %----------------------------------------------------------
+\end{frame}
+%----------------------------------------------------------
+ 
+
+  %----------------------------------------------------------
+\begin{frame}[plain]\frametitle{Метод простой итерации}
+%----------------------------------------------------------
+
+Уравнения $x - f(x) =0$ можно решать {\color{blue} методом простой итерации} \[ x_{n+1} = f(x_n).\] Отметим, что $\Sigma_{jj}$ также зависит от $\alpha_j$. Получаем итеративный процесс \[ \alpha_j^{new} = \frac{1-\alpha_j^{old} \Sigma_{jj}^{old} }{w_{j}^2}. \]
+
+Для $\beta$ и $w$ формулы получаются аналогично.
+
+  %----------------------------------------------------------
+\end{frame}
+%----------------------------------------------------------
+ 
+
+  %----------------------------------------------------------
+\begin{frame}[plain]\frametitle{Метод релевантных векторов}
+%----------------------------------------------------------
+
+
+\begin{block}{Relevance Vector Machine}
+
+Итеративный процесс обновления параметров $\alpha, \beta, w$:
+
+\vspace{3mm}
+
+\begin{itemize}
+\item Обновляем $\alpha$: \[ \alpha_{j}^{new} = \frac{1-\alpha_j^{old} \Sigma_{jj}^{old} }{w_{j}^2}. \]
+
+\vspace{3mm}
+
+\item Затем $\beta$: \[ \beta_{j}^{new} = \frac{n-\sum_{j=1}^d \left(1-\alpha_j^{old} \Sigma_{jj}^{old}	\right)}{\left\|T_{tr}  - X_{tr} w_j \right\|^2}. \] 
+
+
+\vspace{3mm}
+
+\item И наконец $w$: \[  w_{j}^{new}  = \beta^{new}  \left( \beta^{new} X_{tr}^T X_{tr} + A_{new}\right)^{-1} X_{tr}^T T_{tr}\]
+
+
+\end{itemize}
+
+\vspace{3mm}
+
+Повторить процесс несколько раз (до сходимости).
+
+\end{block}
+
+
+
+  %----------------------------------------------------------
+\end{frame}
+%----------------------------------------------------------
+
+
+
+
+  %----------------------------------------------------------
+\begin{frame}[plain]\frametitle{Преимущество модели}
+%----------------------------------------------------------
+
+
+\begin{center}
+\Large И чем эта модель так хороша?
+\end{center}
+
+
+\begin{figure}[h!]
+\center{\includegraphics[width=0.75\textwidth]{Pic/Br2}}
+%\caption{\Large Hello darkness, my old friend} \label{Fig:}
+\end{figure}
+  %----------------------------------------------------------
+\end{frame}
+%----------------------------------------------------------
+
+
+  %----------------------------------------------------------
+\begin{frame}[plain]\frametitle{Преимущество модели}
+%----------------------------------------------------------
+
+\begin{center}
+Ещё один способ отбора признаков.
+
+\vspace{2mm} 
+
+Если $\alpha_i \to \infty$ --- признак шумовой.
+
+\vspace{2mm} 
+
+Остаются только самые важные признаки.
+
+\end{center}
+
+
+\begin{figure}[h!]
+\center{\includegraphics[width=0.5\textwidth]{Pic/RVM}}
+%\caption{\Large Hello darkness, my old friend} \label{Fig:}
+\end{figure}
+
+  %----------------------------------------------------------
+\end{frame}
+%----------------------------------------------------------
+
+  %----------------------------------------------------------
+\begin{frame}[plain]\frametitle{We did it!}
+%----------------------------------------------------------
+
+\begin{figure}[h!]
+\center{\includegraphics[width=0.5\textwidth]{Pic/Build2}}
+%\caption{\Large Hello darkness, my old friend} \label{Fig:}
+\end{figure}
+
+
+  %----------------------------------------------------------
+\end{frame}
+%----------------------------------------------------------
+
+\end{document}
+
+
+

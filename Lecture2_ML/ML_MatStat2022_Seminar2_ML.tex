@@ -1,0 +1,823 @@
+\documentclass[9pt]{beamer}
+
+
+
+
+\usepackage{beamerthemesplit}
+\usetheme{Boadilla}
+\usecolortheme{orchid}
+
+
+
+
+
+ % \usepackage[cp866]{inputenc}                %%% Є®¤Ёа®ўЄ  DOS
+  \usepackage[cp1251]{inputenc}
+%  \usepackage[T2A]{fontenc}                %%% ???
+%\usepackage[english,russian]{babel}
+%\usepackage[russian]{babel}
+ \usepackage[OT1]{fontenc}
+%\usepackage[english]{babel}
+\usepackage[russian]{babel}
+
+\usepackage{amssymb,latexsym, amsmath, mathdots}
+
+\usepackage{amscd}
+\usepackage{multirow}
+\usepackage{comment}
+
+\usepackage{epstopdf}
+
+
+
+%\usepackage[table]{xcolor} %colored cells
+
+%\usepackage{tikz}
+%\usetikzlibrary{tikzmark} %arrows in tables
+
+
+\usepackage{mnsymbol} % udots in matrices
+
+
+ \usepackage{pgfpages}
+%\setbeameroption{show notes}
+%\setbeameroption{show notes on second screen=bottom}
+%% \setbeameroption{show notes on second screen}
+
+%\setbeamercolor{alerted text}{fg=red!80!black}
+
+
+% \setbeamercolor{alerted text}{fg=blue!50!green}
+% \setbeamercolor{fortheorem}{bg=blue!15!white}
+% \setbeamercolor{EMPF}{bg=blue!25!white}
+% \setbeamercolor{EMPF2}{bg=blue!35!white}
+
+%\setbeamersize{text margin left=5.mm, text margin right=5.mm}
+
+
+%---------------------------------------------------------------------------------------------------------------------------
+
+%\def\emphbox#1#2#3{\begin{beamercolorbox}[wd=#2, ht=#1, center, colsep=1.mm]{EMPF} #3 \end{beamercolorbox}}
+
+%---------------------------------------------------------------------------------------------------------------------------
+
+
+%\advance\leftskip-5.mm
+
+
+
+%***************************************************************************************************************************
+
+\theoremstyle{theorem}
+\newtheorem{mytheorem}[theorem]{Теорема}
+\newtheorem{mylemma}[theorem]{Лемма}
+\newtheorem{mycorollary}[theorem]{Следствие}
+
+\newtheorem{proposition}[theorem]{Предложение}
+\newtheorem{assertion}[theorem]{Утверждение}
+\newtheorem{remark}[theorem]{Замечание}
+\newtheorem{assumption}[theorem]{Предположение}
+
+\newtheorem{convention}[theorem]{Договорённость}
+\newtheorem{question}[theorem]{Вопрос}
+%\newtheorem{mydefinition}{mydefinition}
+
+\theoremstyle{definition}
+\newtheorem{mydefinition}[theorem]{Определение}
+\newtheorem{myexample}[theorem]{Пример}
+
+
+
+%***************************************************************************************************************************
+
+\chardef\No=194
+\newcommand{\bd}{{\rm bd}}
+\newcommand{\cl}{{\rm cl}}
+\newcommand{\ind}{{\rm ind}}
+\newcommand{\id}{{\rm id}}
+\newcommand{\inj}{{\sl in}}
+\newcommand{\pr}{{\rm pr}}
+\newcommand{\st}{{\rm St}}
+
+
+\DeclareMathOperator{\sgrad}{sgrad}
+
+\DeclareMathOperator{\cnt}{const}
+
+\DeclareMathOperator{\Aut}{Aut}
+
+
+\DeclareMathOperator{\sgn}{sgn}
+
+\DeclareMathOperator{\Int}{Int}
+
+
+\DeclareMathOperator{\tr}{tr}
+
+\DeclareMathOperator{\Mat}{Mat}
+
+
+
+
+
+
+
+%****************************************************************************
+\newcommand{\Ker}{\mathrm{Ker}\,\,}
+\newcommand{\Ann}{\mathrm{Ann}\,\,}
+
+\newcommand{\Imm}{\mathrm{Im}\,\,}
+
+\newcommand{\rk}{\mathrm{rk}\,\,}
+
+\newcommand{\const}{\mathrm{const}}
+
+
+
+\DeclareMathOperator{\Pen}{\mathcal{P}}
+
+
+\DeclareMathOperator{\Core}{K}
+
+
+\DeclareMathOperator{\BLG}{\operatorname{BLG}}
+
+\DeclareMathOperator{\AutBP}{\operatorname{Aut}(V, \mathcal{P})}
+
+
+\def\minus{\hbox{-}}   %Sign of minus in big matrices
+
+\usepackage{multirow}  %Columns spanning multiple rows
+
+\usepackage[normalem]{ulem} %underline that can break lines
+
+%\usepackage[normalem]{ulem}
+
+%****************************************************************************
+
+
+
+\title% [] (optional, only for long titles)
+{Прикладная статистика в машинном обучении \\ Семинар 2}
+%\subtitle{}
+\author [И. \,К.~Козлов] %(optional, for multiple authors)
+{И. \,К.~Козлов \\ {\footnotesize(\textit{Мехмат МГУ})}}
+
+
+\date % [](optional)
+{2022}
+%\subject{Mathematics}
+
+
+
+
+
+
+
+
+\usepackage{hyperref}
+\hypersetup{unicode=true}
+
+
+
+\begin{document}
+
+%\includeonlyframes{}
+\frame{\titlepage}
+
+
+
+
+\section{Упражнения с прошлого занятия}
+
+
+
+\begin{frame}[plain]\frametitle{Упражнения с прошлого занятия} \tableofcontents[currentsection]\end{frame}
+
+%----------------------------------------------------------
+\begin{frame}[plain]\frametitle{Семинар 2}
+%----------------------------------------------------------
+
+
+Докажем смещённость выборочной дисперсии \[ S^{2}=\frac{1}{n}\sum \limits _{{i=1}}^{n}\left(X_{i}-{\bar  {X}}\right)^{2}.\]
+
+
+\pause
+
+
+\vspace{3mm}
+
+\textbf{Доказательство}:
+
+
+\[ \mathbb{E} S^2 = \mathbb{E} \left( \frac{1}{n} X_i^2 - \frac{1}{n^2} \sum_{i,j} X_i, X_j \right)= \]
+
+\pause 
+
+\vspace{3mm}
+
+\[ = \frac{1}{n}  \mathbb{E} X_i^2 - \frac{1}{n^2}  \mathbb{E} X_i^2 -  \frac{1}{n^2} \sum_{i\not = j} \mathbb{E} X_i \, \mathbb{E} X_j = \]
+
+\pause 
+
+\vspace{3mm}
+
+
+\[ \frac{1}{n}  \mathbb{E} X_1^2 - \frac{1}{n}  \mathbb{E} X_i^2 -  \frac{n-1}{n} \left(\mathbb{E} X_1\right)^2 = \frac{n-1}{n} \mathbb{V} X_1. \]
+
+
+
+%----------------------------------------------------------
+\end{frame}
+%----------------------------------------------------------
+
+
+%----------------------------------------------------------
+\begin{frame}[plain]\frametitle{Эмпирическая функция распределений}
+%----------------------------------------------------------
+
+
+
+{\color{blue} Эмпирическая функция распределения} \[ \hat{F}(x) = \hat{F}_n(x)= \frac{\text{кол-во эл-тов в выборке $\leq$ x }}{n} ={\frac {1}{n}}\sum _{i=1}^{n}I \left( {X_{i}\leq x}\right). \]
+\begin{figure}[h!]
+\center{\includegraphics[width=0.85\textwidth]{pic/empirical}}
+%\caption{} \label{Fig:}
+\end{figure}
+
+
+
+%----------------------------------------------------------
+\end{frame}
+%----------------------------------------------------------
+
+
+%----------------------------------------------------------
+\begin{frame}[plain]\frametitle{Семинар 2}
+%----------------------------------------------------------
+
+
+\textbf{Утверждение}:
+
+\[ \mathbb{E} \left( \hat{F}_n(x)\right)  = F(x), \]
+
+
+
+\pause
+
+
+\vspace{3mm}
+
+\textbf{Доказательство}: Нужно вспомнить стандартные формулы.
+
+\vspace{5mm}
+
+\begin{itemize}
+
+\item Формула для эмпирической функции распределения
+
+\[\hat{F}_n(x)=  {\frac {1}{n}}\sum _{i=1}^{n}I \left( {X_{i}\leq x}\right). \]
+
+
+\end{itemize}
+
+
+
+%----------------------------------------------------------
+\end{frame}
+%----------------------------------------------------------
+
+
+
+%----------------------------------------------------------
+\begin{frame}[plain]\frametitle{Семинар 2}
+%----------------------------------------------------------
+
+
+\begin{itemize}
+
+\item Вспоминаем формулу для матожидания  
+\[ \mathbb{E} \left(a(x) \right) = \int a(x) dF (x) = \int a(x) f(x) dx \]
+
+\vspace{3mm}
+
+\pause
+
+Используем линейность матожидания:
+
+\[\mathbb{E} \hat{F}_n(x)=  {\frac {1}{n}} \sum _{i=1}^{n} \mathbb{E} \, I \left( {X_{i}\leq x}\right) = \mathbb{E} \, I \left( {X_{1}\leq x}\right). \]
+
+\vspace{3mm}
+
+\pause
+
+Считаем матожидание: \[ \mathbb{E}  \, I \left( X \leq x \right) = \int_{-\infty}^{\infty}  I(z \leq x) f(z) dx = \int_{-\infty}^x f(z) dx \]
+
+
+
+\end{itemize}
+
+
+%----------------------------------------------------------
+\end{frame}
+%----------------------------------------------------------
+
+
+%----------------------------------------------------------
+\begin{frame}[plain]\frametitle{Семинар 2}
+%----------------------------------------------------------
+
+
+
+\begin{itemize}
+
+\item Осталось вспомнить формулу для функции распределения \[ F(x)  = \mathbb{P}(X \leq x) =  \int_{-\infty}^x f(z) dz \] 
+
+\vspace{3mm}
+
+
+\end{itemize}
+
+
+
+
+
+\textit{Утверждение доказано}.
+
+
+
+%----------------------------------------------------------
+\end{frame}
+%----------------------------------------------------------
+
+
+
+%----------------------------------------------------------
+\begin{frame}[plain]\frametitle{Семинар 2}
+%----------------------------------------------------------
+
+
+\textbf{Утверждение}:
+
+\[\mathbb{V} \left( \hat{F}_n(x)\right)  = \frac{F(x)\left( 1 - F(x) \right)}{n} \]
+
+\vspace{3mm}
+
+\pause
+
+\textbf{Доказательство}.
+
+\vspace{5mm}
+
+\begin{itemize}
+
+\item Вспоминаем формулу дисперсии \[ \mathbb{V} (X) = \mathbb{E} \left(X\right)^2 - \left( \mathbb{E} X\right)^2.\]
+
+\vspace{5mm}
+
+\item Мы знаем, что $\mathbb{E} \left( \hat{F}_n(x)\right)  = F(x)$, осталось посчитать $\mathbb{E} \left( \hat{F}_n(x)\right)^2$. 
+
+\end{itemize}
+
+
+%----------------------------------------------------------
+\end{frame}
+%----------------------------------------------------------
+
+%----------------------------------------------------------
+\begin{frame}[plain]\frametitle{Семинар 2}
+%----------------------------------------------------------
+
+\begin{itemize}
+
+\item  Подставляем формулу для эмпирической функции распределения 
+\[\hat{F}_n(x)=  {\frac {1}{n}}\sum _{i=1}^{n}I \left( {X_{i}\leq x}\right). \]
+
+\vspace{3mm} 
+Для краткости обозначим \[ I_i = I \left( {X_{i}\leq x} \right)\]
+
+
+Получаем \[\mathbb{E} \left( \hat{F}_n(x)\right)^2  = \mathbb{E} \left( \frac {1}{n}\sum _{i=1}^{n} I_i \right)^2  = \frac{1}{n^2} \left( \sum_{i=1}^n \mathbb{E} I_i^2 +  \sum_{i\not = j} \mathbb{E} \left( I_i I_j \right) \right).\]
+
+
+\end{itemize}
+
+
+
+%----------------------------------------------------------
+\end{frame}
+%----------------------------------------------------------
+
+
+%----------------------------------------------------------
+\begin{frame}[plain]\frametitle{Семинар 2}
+%----------------------------------------------------------
+
+\begin{itemize}
+
+\item В 1ом слагаемом $I_i^2 = I_i$, т.к. это индикатор: \[\frac{1}{n^2} \sum_{i=1}^n \mathbb{E} I_i^2  = \frac{1}{n^2} \sum \mathbb{E} I_i = \frac{1}{n} F(x).\]
+
+
+\end{itemize}
+
+
+%----------------------------------------------------------
+\end{frame}
+%----------------------------------------------------------
+
+
+%----------------------------------------------------------
+\begin{frame}[plain]\frametitle{Семинар 2}
+%----------------------------------------------------------
+
+Во 2ом слагаемом $\sum_{i\not = j} \mathbb{E} \left( I_i I_j \right)$ вспоминаем 2 факта:
+
+\vspace{5mm}
+
+\begin{itemize}
+
+\item {\color{blue} (Борелевские) функции от независимых случайных величин независимы}.
+
+\vspace{5mm}
+
+\item {\color{blue} Если $X$ и $Y$ --- независимы, то \[ \mathbb{E} (XY) = \mathbb{E} X \, \mathbb{E} Y.\]}
+
+
+\end{itemize}
+
+\pause
+
+
+Поэтому \[\frac{1}{n^2} \sum_{i\not = j} \mathbb{E} \left( I_i I_j \right) = \frac{1}{n^2} \mathbb{E} I_i  \, \mathbb{E}  I_j  =  \frac{n^2-n}{n^2} F(x)^2.\] 
+
+
+%----------------------------------------------------------
+\end{frame}
+%----------------------------------------------------------
+
+
+%----------------------------------------------------------
+\begin{frame}[plain]\frametitle{Семинар 2}
+%----------------------------------------------------------
+
+Подставляем все вычисленные значения в формулу для дисперсии.
+
+\vspace{5mm}
+
+Получаем требуемый ответ: \[ \mathbb{V} \left( \hat{F}_n(x)\right)  = \frac{1}{n} F(x) +  \frac{n^2-n}{n^2} F(x)^2 - F(x)^2 = \] \[= \frac{F(x)}{n} - \frac{F(x)^2}{n} = \frac{F(x)\left( 1 - F(x) \right)}{n}\]
+
+%----------------------------------------------------------
+\end{frame}
+%----------------------------------------------------------
+
+
+\section{Вопросы про ML}
+
+\begin{frame}[plain]\frametitle{Вопросы про ML} \tableofcontents[currentsection]\end{frame}
+
+
+
+%----------------------------------------------------------
+\begin{frame}[plain]\frametitle{Логистическая регрессия}
+%----------------------------------------------------------
+
+{\color{blue} Logloss = Cross Entropy}: 
+\[ 	L_{\operatorname{log}}(y, p) = - \sum_{i} \left( y_i\log p_i  + (1-y_i)\log(1-p_i) \right)\]
+
+\vspace{2mm}
+
+\begin{itemize}
+
+\item $y_i \in \left\{0,1 \right\}$ --- истинные метки классов,
+
+\vspace{5mm}
+
+\item $p_i = \mathbb{P}(y_i = 1)$ --- вероятностные предсказания модели,
+
+\end{itemize}
+
+
+\vspace{5mm}
+
+\textbf{Q:} Откуда взялся этот лосс? 
+
+
+
+%----------------------------------------------------------
+\end{frame}
+%----------------------------------------------------------
+
+
+
+
+%----------------------------------------------------------
+\begin{frame}[plain]\frametitle{Логлосс}
+%----------------------------------------------------------
+
+
+\textbf{A:} Вспомним функцию правдоподобия для $\mathrm {Bernoulli} \left(p\right)$: \[ \mathcal{L} = p^x (1-p)^{1-x}.\]
+
+\textit{Логарифм правдоподобия даёт минус логлосс}: \[ \ell = x \log p + (1-x) \log (1-p).\]
+
+
+\vspace{3mm}
+
+Для сравнения логлосс:\[ 	L_{\operatorname{log}}(y, p) = - \sum_{i} \left( y_i\log p_i  + (1-y_i)\log(1-p_i) \right).\]
+
+
+%----------------------------------------------------------
+\end{frame}
+%----------------------------------------------------------
+
+
+
+
+%----------------------------------------------------------
+\begin{frame}[plain]\frametitle{Сингулярное разложение}
+%----------------------------------------------------------
+
+\begin{center}
+{\color{blue} \Huge SVD-разложение:}  
+\end{center}
+
+\begin{figure}[h!]
+\center{\includegraphics[width=0.95\textwidth]{Pic/SVD2}}
+%\caption{Рис. 1} \label{Fig:}
+\end{figure}
+
+
+
+\begin{center}
+Напомним, матрица $U$ ортогональная, если $U^T U = E$.
+\end{center}
+
+
+
+
+%----------------------------------------------------------
+\end{frame}
+%----------------------------------------------------------
+
+
+
+
+%----------------------------------------------------------
+\begin{frame}[plain]\frametitle{Сингулярное разложение}
+%----------------------------------------------------------
+
+\textbf{Q:} Для чего в ML может применять сингулярное разложение? Кроме линейной/логистической регрессии
+
+\vspace{5mm}
+
+\textbf{A:} \textit{Уменьшение размерности}. См. Метод главных компонент \textbf{PCA} 
+
+\begin{figure}[h!]
+\center{\includegraphics[width=0.5\textwidth]{Pic/PCA}}
+%\caption{Рис. 1} \label{Fig:}
+\end{figure}
+
+
+%----------------------------------------------------------
+\end{frame}
+%----------------------------------------------------------
+
+
+
+
+
+%----------------------------------------------------------
+\begin{frame}[plain]\frametitle{Сингулярное разложение}
+%----------------------------------------------------------
+
+Пусть SVD-разложение: \[ A = U \Sigma V^T,\] \[  \Sigma =  \left(\sigma_1, \dots, \sigma_r, 0, \dots, 0\right).\]
+
+\vspace{5mm}
+
+Если $u_i$ --- столбцы $U$, а $v_i$ --- строки $V^T$, то \[ A = \sum_{i=1}^r \sigma_i u_i v_i^T.\]
+
+%----------------------------------------------------------
+\end{frame}
+%----------------------------------------------------------
+
+
+%----------------------------------------------------------
+\begin{frame}[plain]\frametitle{Сингулярное разложение}
+%----------------------------------------------------------
+
+В диагональной матрице можно обнулить последние коэффициенты. 
+
+\[  \sigma_{k+1} \to 0, \qquad \dots \quad \sigma_{r} \to 0\]
+
+
+Получится экономия по памяти. 
+
+\begin{figure}[h!]
+\center{\includegraphics[width=0.95\textwidth]{Pic/SVD3}}
+%\caption{Рис. 1} \label{Fig:}
+\end{figure}
+
+
+
+
+%----------------------------------------------------------
+\end{frame}
+%----------------------------------------------------------
+
+
+
+
+
+
+\section{Псевдообратная матрица}
+
+\begin{frame}[plain]\frametitle{Псевдообратная матрица} \tableofcontents[currentsection]\end{frame}
+
+
+%----------------------------------------------------------
+\begin{frame}[plain]\frametitle{Псевдообратная матрица}
+%----------------------------------------------------------
+
+Формулы для {\color{blue} псевдообратной матрицы} $A^{+}$:
+
+\vspace{5mm}
+
+
+\begin{itemize}
+
+\item Если столбцы $A$ линейно независимы. \[A^+ = (A^T A)^{-1} A^T.\]
+
+\vspace{5mm}
+
+
+\item Если строчки $A$ линейно независимы: \[A^+ = A^T(A A^T)^{-1}.\]
+
+\end{itemize}
+
+
+%----------------------------------------------------------
+\end{frame}
+%----------------------------------------------------------
+
+
+
+
+%----------------------------------------------------------
+\begin{frame}[plain]\frametitle{Логистическая регрессия}
+%----------------------------------------------------------
+
+
+\textbf{Q:} Почему \[\operatorname{rk} A = \operatorname{rk} A^T A?\]
+
+Что такое матрица $A^T A$? 
+
+
+\pause 
+
+\vspace{5mm}
+
+\textbf{A:}  $A^T A$ --- это матрица Грамма для столбцов.
+
+
+\[ \left( \begin{matrix} a & c  \\ b & d \end{matrix}  \right) \left( \begin{matrix} a & b  \\ c & d \end{matrix}  \right)  = \left( \begin{matrix} a^2 + c^2  & ac +bd  \\ ac +bd &b^2 + d^2 \end{matrix}  \right)    \]
+
+\vspace{5mm}
+
+\pause
+
+Вспоминаем линейную алгебру:
+
+\vspace{5mm}
+
+Ранг матрицы Грамма векторов $v_1, \dots, v_N$ = размерности линейного подпространства, порождённого векторами $v_i$.
+
+
+%----------------------------------------------------------
+\end{frame}
+%----------------------------------------------------------
+
+
+
+
+%----------------------------------------------------------
+\begin{frame}[plain]\frametitle{Логистическая регрессия}
+%----------------------------------------------------------
+
+
+\textbf{Q:} Найти \[  \left( \begin{matrix} x_1 & 1 \\ x_2 & 1 \\ \dots & \dots \\ x_n & 1  \end{matrix} \right)^+\]
+
+\vspace{5mm}
+
+\pause
+
+\textbf{A:}  Применяем формулу \[A^+ = (A^T A)^{-1} A^T.\] Получаем \[  \left( \begin{matrix} x_1 & 1 \\ x_2 & 1 \\ \dots & \dots \\ x_n & 1  \end{matrix} \right)^+ = \left( \begin{matrix} n \bar{x^2} & n \bar{x} \\ n \bar{x} &n  \end{matrix}  \right)^{-1} \left( \begin{matrix} x_1 & x_2 &\dots & x_n \\ 1 & 1 & \dots & 1 \end{matrix} \right) = \] \pause \[\frac{1}{n} \frac{1}{ \bar{x^2}- \bar{x}^2} \left( \begin{matrix} 1 & - \bar{x} \\ - \bar{x} & \bar{x^2} \end{matrix} \right)\left( \begin{matrix} x_1 & x_2 &\dots & x_n \\ 1 & 1 & \dots & 1 \end{matrix} \right) =  \frac{1}{n} \frac{1}{ \bar{x^2}- \bar{x}^2} \left( \begin{matrix} x_1 - \bar{x} & x_2 - \bar{x} &\dots & x_n - \bar{x} \\ \bar{x^2} - x_1 \bar{x} & \bar{x^2} - x_2 \bar{x} & \dots & \bar{x^2} - x_n \bar{x} \end{matrix} \right).  \]
+
+
+
+
+%----------------------------------------------------------
+\end{frame}
+%----------------------------------------------------------
+
+
+\section{Линейная регрессия}
+
+\begin{frame}[plain]\frametitle{Линейная регрессия} \tableofcontents[currentsection]\end{frame}
+
+
+
+%----------------------------------------------------------
+\begin{frame}[plain]\frametitle{Семинар 2}
+%----------------------------------------------------------
+
+{\color{blue} Простейшая линейная регрессия.}
+
+\vspace{5mm}
+
+Пусть даны точки $(x_i, y_i)$, где $i = 1,\dots, N$.  Аппроксимируем решение линейной функцией \[ y_i = k x_i + b\]  
+
+
+
+\begin{figure}[h!]
+\center{\includegraphics[height=0.5\textheight]{Pic/Seminar3b}}
+%\caption{Рис. 1} \label{Fig:}
+\end{figure}
+
+%----------------------------------------------------------
+\end{frame}
+%----------------------------------------------------------
+
+
+
+%----------------------------------------------------------
+\begin{frame}[plain]\frametitle{Семинар 2}
+%----------------------------------------------------------
+
+\textbf{Задача}. Найти минимум MSE: \[ J = \frac{1}{N}\sum_i (y_i - (kx_i +b))^2.\]
+
+\vspace{5mm}
+
+\textbf{Решение}. Сумма выпуклых функций --- выпуклая функция. Поэтому у лосса существует минимум, и его можно найти как решение \[ \frac{\partial J}{\partial k} = 0, \qquad \frac{\partial J}{\partial b} = 0\]
+
+
+
+
+
+%----------------------------------------------------------
+\end{frame}
+%----------------------------------------------------------
+
+%----------------------------------------------------------
+\begin{frame}[plain]\frametitle{Семинар 2}
+%----------------------------------------------------------
+
+Вычисляем производные:
+
+\begin{gather*} \frac{\partial J}{\partial k} =   \frac{1}{N} \sum_i \left(y_i - (kx_i +b)\right) (-x_i), \\ \frac{\partial J}{\partial b} = =   \frac{1}{N} \sum_i \left(y_i - (kx_i +b)\right) (-1) \end{gather*}
+
+Из 2го уравнения находим \[ b = \bar{y} - k \bar{x}\] 
+
+\pause
+
+
+Подставляем в 1ое уравнение \[ 0 = - \bar{xy} + k \bar{x^2} - b \bar{x} = - \bar{xy} + \bar{x}\bar{y} + k (\bar{x^2} -  \bar{x}^2) \]
+
+Получаем \textbf{ответ } \[ k = \frac{\bar{xy} - \bar{x} \bar{y} } {\bar{x^2} -  \bar{x}^2}, \qquad  b = \bar{y} - k \bar{x}.\]
+
+%----------------------------------------------------------
+\end{frame}
+%----------------------------------------------------------
+
+
+%----------------------------------------------------------
+\begin{frame}[plain]\frametitle{Семинар 2}
+%----------------------------------------------------------
+
+
+\textbf{Задача}.  Доказать, что это решение --- это псевдорешение \[ \left( \begin{matrix} x_1 & 1 \\ x_2 & 1 \\ \dots & \dots \\ x_n & 1  \end{matrix} \right) \left(\begin{matrix}  k \\ b\end{matrix}\right) =  \left( \begin{matrix}y_1 \\y_2 \\ \dots \\ y_n  \end{matrix} \right). \]
+
+
+%----------------------------------------------------------
+\end{frame}
+%----------------------------------------------------------
+
+
+
+
+%----------------------------------------------------------
+\begin{frame}[plain]\frametitle{Семинар 2}
+%----------------------------------------------------------
+
+
+Псевдорешение:
+\[ \left(\begin{matrix}  k \\ b\end{matrix}\right) = \left( \begin{matrix} x_1 & 1 \\ x_2 & 1 \\ \dots & \dots \\ x_n & 1  \end{matrix} \right)^+  \left( \begin{matrix}y_1 \\y_2 \\ \dots \\ y_n  \end{matrix} \right) =\]
+\[= \frac{1}{n} \frac{1}{ \bar{x^2}- \bar{x}^2} \left( \begin{matrix} 1 & - \bar{x} \\ - \bar{x} & \bar{x^2} \end{matrix} \right)\left( \begin{matrix} x_1 & x_2 &\dots & x_n \\ 1 & 1 & \dots & 1 \end{matrix} \right) \left( \begin{matrix}y_1 \\y_2 \\ \dots \\ y_n  \end{matrix} \right) = \]
+\[ \frac{1}{n} \frac{1}{ \bar{x^2}- \bar{x}^2}   \left( \begin{matrix} 1 & - \bar{x} \\ - \bar{x} & \bar{x^2} \end{matrix} \right) \left( \begin{matrix} n \bar{xy} \\ n \bar{y}  \end{matrix} \right). \]
+
+
+Легко видеть, что  \[ k = \frac{\bar{xy} - \bar{x} \bar{y} } {\bar{x^2} -  \bar{x}^2}\] Равенство  $b = \bar{y} - k \bar{x}$ оставим как упражнение.
+
+%----------------------------------------------------------
+\end{frame}
+%----------------------------------------------------------
+
+
+\end{document}

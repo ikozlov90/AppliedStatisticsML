@@ -1,0 +1,1835 @@
+\documentclass[9pt]{beamer}
+
+
+
+
+\usepackage{beamerthemesplit}
+\usetheme{Boadilla}
+\usecolortheme{orchid}
+
+
+
+
+
+ % \usepackage[cp866]{inputenc}                %%% Є®¤Ёа®ўЄ  DOS
+  \usepackage[cp1251]{inputenc}
+%  \usepackage[T2A]{fontenc}                %%% ???
+%\usepackage[english,russian]{babel}
+%\usepackage[russian]{babel}
+ \usepackage[OT1]{fontenc}
+%\usepackage[english]{babel}
+\usepackage[russian]{babel}
+
+\usepackage{amssymb,latexsym, amsmath, mathdots}
+
+\usepackage{amscd}
+\usepackage{multirow}
+\usepackage{comment}
+
+\usepackage{epstopdf}
+
+
+
+%\usepackage[table]{xcolor} %colored cells
+
+%\usepackage{tikz}
+%\usetikzlibrary{tikzmark} %arrows in tables
+
+
+\usepackage{mnsymbol} % udots in matrices
+
+
+ \usepackage{pgfpages}
+%\setbeameroption{show notes}
+%\setbeameroption{show notes on second screen=bottom}
+%% \setbeameroption{show notes on second screen}
+
+%\setbeamercolor{alerted text}{fg=red!80!black}
+
+
+% \setbeamercolor{alerted text}{fg=blue!50!green}
+% \setbeamercolor{fortheorem}{bg=blue!15!white}
+% \setbeamercolor{EMPF}{bg=blue!25!white}
+% \setbeamercolor{EMPF2}{bg=blue!35!white}
+
+%\setbeamersize{text margin left=5.mm, text margin right=5.mm}
+
+
+%---------------------------------------------------------------------------------------------------------------------------
+
+%\def\emphbox#1#2#3{\begin{beamercolorbox}[wd=#2, ht=#1, center, colsep=1.mm]{EMPF} #3 \end{beamercolorbox}}
+
+%---------------------------------------------------------------------------------------------------------------------------
+
+
+%\advance\leftskip-5.mm
+
+
+
+%***************************************************************************************************************************
+
+\theoremstyle{theorem}
+\newtheorem{mytheorem}[theorem]{Теорема}
+\newtheorem{mylemma}[theorem]{Лемма}
+\newtheorem{mycorollary}[theorem]{Следствие}
+
+\newtheorem{proposition}[theorem]{Предложение}
+\newtheorem{assertion}[theorem]{Утверждение}
+\newtheorem{remark}[theorem]{Замечание}
+\newtheorem{assumption}[theorem]{Предположение}
+
+\newtheorem{convention}[theorem]{Договорённость}
+\newtheorem{question}[theorem]{Вопрос}
+%\newtheorem{mydefinition}{mydefinition}
+
+\theoremstyle{definition}
+\newtheorem{mydefinition}[theorem]{Определение}
+\newtheorem{myexample}[theorem]{Пример}
+
+
+
+%***************************************************************************************************************************
+
+\chardef\No=194
+\newcommand{\bd}{{\rm bd}}
+\newcommand{\cl}{{\rm cl}}
+\newcommand{\ind}{{\rm ind}}
+\newcommand{\id}{{\rm id}}
+\newcommand{\inj}{{\sl in}}
+\newcommand{\pr}{{\rm pr}}
+\newcommand{\st}{{\rm St}}
+
+
+\DeclareMathOperator{\sgrad}{sgrad}
+
+\DeclareMathOperator{\cnt}{const}
+
+\DeclareMathOperator{\Aut}{Aut}
+
+
+\DeclareMathOperator{\sgn}{sgn}
+
+\DeclareMathOperator{\Int}{Int}
+
+
+\DeclareMathOperator{\tr}{tr}
+
+\DeclareMathOperator{\Mat}{Mat}
+
+
+
+
+
+
+
+%****************************************************************************
+\newcommand{\Ker}{\mathrm{Ker}\,\,}
+\newcommand{\Ann}{\mathrm{Ann}\,\,}
+
+\newcommand{\Imm}{\mathrm{Im}\,\,}
+
+\newcommand{\rk}{\mathrm{rk}\,\,}
+
+\newcommand{\const}{\mathrm{const}}
+
+
+
+\DeclareMathOperator{\Pen}{\mathcal{P}}
+
+
+\DeclareMathOperator{\Core}{K}
+
+
+\DeclareMathOperator{\BLG}{\operatorname{BLG}}
+
+\DeclareMathOperator{\AutBP}{\operatorname{Aut}(V, \mathcal{P})}
+
+
+\def\minus{\hbox{-}}   %Sign of minus in big matrices
+
+\usepackage{multirow}  %Columns spanning multiple rows
+
+\usepackage[normalem]{ulem} %underline that can break lines
+
+%\usepackage[normalem]{ulem}
+
+
+%\usepackage{wasysym} %smilies
+
+
+%****************************************************************************
+
+
+
+\title% [] (optional, only for long titles)
+{Прикладная статистика в машинном обучении \\ Лекция 11 \\ ЕМ-алгоритм}
+%\subtitle{}
+\author [И. \,К.~Козлов] %(optional, for multiple authors)
+{И. \,К.~Козлов \\ {\footnotesize(\textit{Мехмат МГУ})}}
+
+
+\date % [](optional)
+{2022}
+%\subject{Mathematics}
+
+
+
+
+
+
+\usepackage{hyperref}
+%\hypersetup{unicode=true}
+\hypersetup{
+  colorlinks=true,
+  linkcolor=green!70!black, %blue!50!red,
+  urlcolor=green!70!black,
+  unicode=true
+}
+
+
+\begin{document}
+
+%\includeonlyframes{}
+\frame{\titlepage}
+
+
+
+
+
+
+
+
+
+\section{EM-алгоритм}
+
+\begin{frame}[plain]\frametitle{EM-алгоритм} \tableofcontents[currentsection]\end{frame}
+
+
+\subsection{Разделение выборок}
+
+
+\begin{frame}[plain]\frametitle{Разделение выборок} \tableofcontents[currentsubsection]\end{frame}
+
+
+%----------------------------------------------------------
+\begin{frame}[plain]\frametitle{Хьюстон, у нас проблемы}
+%----------------------------------------------------------
+  
+  
+  \begin{center}
+  \large \textbf{Проблема дня}. Дан мешок с монетами. 
+  
+  \vspace{2mm}
+  
+  В нём \textbf{2 типа} монет. Они неотличимы на глаз. 
+  
+  \vspace{2mm}
+  
+У них разная (\textit{неизвестная нам}) вероятность выпадения орла. 
+  
+  \vspace{2mm}
+  
+  
+  Как понять --- \textit{какие монеты какого типа}?
+  
+  \end{center}
+  
+\begin{figure}[h!]
+\center{\includegraphics[width=0.6\textwidth]{pic/TwoCoins}}
+%\caption{\Large Калькулятор для размера выборки} \label{Fig:}
+\end{figure}
+  
+  %----------------------------------------------------------
+\end{frame}
+%----------------------------------------------------------
+
+%----------------------------------------------------------
+\begin{frame}[plain]\frametitle{2 типа монет}
+%----------------------------------------------------------
+  
+  \begin{center}
+\Large \textbf{Уточним задачу.} Возьмём горсть из $m$ монет. 
+
+
+\vspace{5mm} Подбросим каждую из них $n$ раз. 
+
+\vspace{5mm} 
+
+Нужно по таблице восстановить тип каждой взятой монеты.
+
+  \end{center}
+  
+  
+\begin{figure}[h!]
+\center{\includegraphics[width=0.5\textwidth]{pic/Coins}}
+%\caption{\Large Калькулятор для размера выборки} \label{Fig:}
+\end{figure}
+  
+  %----------------------------------------------------------
+\end{frame}
+%----------------------------------------------------------
+
+%----------------------------------------------------------
+\begin{frame}[plain]\frametitle{2 типа монет}
+%----------------------------------------------------------
+  
+
+  \begin{center}
+\Large  Более формально --- это задача {\color{red} разделения выборок}. 
+  
+  \vspace{2mm}
+  
+  Она тесно связана с задачей {\color{blue} кластеризации} \\  (разбиения объектов по кластерам).
+\end{center}
+
+  
+\begin{figure}[h!]
+\center{\includegraphics[width=0.35\textwidth]{pic/Clust1}}
+%\caption{\Large Калькулятор для размера выборки} \label{Fig:}
+\end{figure}
+  
+  %----------------------------------------------------------
+\end{frame}
+%----------------------------------------------------------
+
+
+
+%----------------------------------------------------------
+\begin{frame}[plain]\frametitle{Разделение гауссиан}
+%----------------------------------------------------------
+  
+  \begin{center}
+\Large \textbf{Пример}. Разделение двух гауссиан.
+\end{center}
+
+\vspace{2mm}
+
+\begin{itemize}
+
+\item \large Пусть мы знаем типы точек. 
+
+
+\begin{figure}[h!]
+\center{\includegraphics[width=0.8\textwidth]{pic/EM8}}
+%\caption{\Large Калькулятор для размера выборки} \label{Fig:}
+\end{figure}
+
+\textbf{Q:} Можем найти параметры гауссиан $\mu, \sigma^2$?
+
+\vspace{5mm}
+
+\pause
+
+\textbf{A:} Да, например по {\color{blue} принципу максимума правдоподобия} \[  {\hat {\mu }}=\mu_{ML}, \qquad  {\hat {\sigma }}^{2}=\sigma^2_{ML}.\]
+
+
+\end{itemize}
+
+
+  
+
+
+  %----------------------------------------------------------
+\end{frame}
+%----------------------------------------------------------
+
+
+%----------------------------------------------------------
+\begin{frame}[plain]\frametitle{Разделение гауссиан}
+%----------------------------------------------------------
+
+
+\vspace{5mm}
+
+\begin{itemize}
+
+\item \large Пусть мы знаем параметры распределений (но НЕ знаем типы точек). 
+
+
+\begin{figure}[h!]
+\center{\includegraphics[width=0.8\textwidth]{pic/EM9}}
+%\caption{\Large Калькулятор для размера выборки} \label{Fig:}
+\end{figure}
+
+\textbf{Q:} Как найти вероятности принадлежности точки классу $p(\operatorname{class} \mid x)$?
+
+\vspace{5mm}
+
+\pause
+
+\textbf{A:} По {\color{blue} формуле Байеса}.  Обозначим классы $a$ и $b$, тогда \[ p(b \mid x) = \frac{p(x \mid b) p(b) }{p(x \mid b) p(b) + p(x \mid a) p(a)}.\]
+
+
+\end{itemize}
+
+
+  
+
+
+  %----------------------------------------------------------
+\end{frame}
+%----------------------------------------------------------
+
+
+
+%----------------------------------------------------------
+\begin{frame}[plain]\frametitle{Разделение гауссиан}
+%----------------------------------------------------------
+
+
+\begin{center}
+
+\Large 
+
+\textbf{Q:} А что делать, если мы НЕ знаем ни параметры, ни типы точек? 
+
+\vspace{5mm}
+
+Получается проблема вида ``курица или яйцо''.
+
+\vspace{5mm}
+
+\end{center}
+  
+\begin{figure}[h!]
+\center{\includegraphics[width=0.5\textwidth]{pic/Chick}}
+%\caption{\Large Калькулятор для размера выборки} \label{Fig:}
+\end{figure}
+
+
+
+  %----------------------------------------------------------
+\end{frame}
+%----------------------------------------------------------
+
+
+
+%----------------------------------------------------------
+\begin{frame}[plain]\frametitle{Идея алгоритма}
+%----------------------------------------------------------
+  
+
+
+\begin{center}
+\Large \textbf{Общая идея EM-алгоритма}.
+\end{center}
+
+\vspace{2mm}
+
+
+\Large На примере задачи с монетками. Вводим переменную $z$ --- тип монетки.
+
+\vspace{5mm}
+
+{\color{red} Итеративный процесс}:
+
+\vspace{5mm}
+
+\begin{enumerate}
+
+\item Обновляем вероятности попадания в класс $p(z \mid x, \theta)$.
+
+\vspace{5mm}
+
+\item Обновляем параметры $\displaystyle \theta = \arg \max_{\theta} \ln (Likelihood)$.
+
+\end{enumerate} 
+
+\vspace{5mm}
+
+Повторяем до сходимости. 
+
+  %----------------------------------------------------------
+\end{frame}
+%----------------------------------------------------------
+
+
+
+%----------------------------------------------------------
+\begin{frame}[plain]\frametitle{Латентные переменные}
+%----------------------------------------------------------
+
+
+\begin{center}
+\noindent\fbox{%
+    \parbox{24em}{%
+
+
+\vspace{3mm}
+
+
+
+    \Huge \textbf{\hspace{2mm}\color{blue} Латентные переменные}
+    
+\vspace{3mm}    
+    }%
+}
+
+\vspace{5mm}
+
+
+\end{center}
+
+\Large В общем случае будет распределение $p({\color{red} X}, {\color{blue} Z} \mid \theta)$ с 3 типами переменных:
+
+\vspace{5mm}
+
+\begin{itemize}
+
+\item ${\color{red} X}$ --- наблюдаемые переменные;
+
+\vspace{5mm}
+
+\item ${\color{blue} Z}$ --- \textit{латентные} (или скрытые) переменные;
+
+\vspace{5mm}
+
+\item $\theta$ --- параметры распределений.
+
+\end{itemize}
+
+
+
+
+
+%----------------------------------------------------------
+\end{frame}
+%----------------------------------------------------------
+
+%----------------------------------------------------------
+\begin{frame}[plain]\frametitle{Латентные переменные}
+%----------------------------------------------------------
+
+
+\begin{center}
+\Large \textbf{Q:} Примеры латентных переменных?
+\end{center}
+
+\pause
+  
+\begin{figure}[h!]
+\center{\includegraphics[width=\textwidth]{pic/Tran2}}
+%\caption{\Large Калькулятор для размера выборки} \label{Fig:}
+\end{figure}
+
+
+
+  %----------------------------------------------------------
+\end{frame}
+%----------------------------------------------------------
+
+
+
+
+%----------------------------------------------------------
+\begin{frame}[plain]\frametitle{ЕМ-алгоритм}
+%----------------------------------------------------------
+  
+
+\begin{center} E = Expectation, M = Maximization. \end{center}
+
+ 
+\begin{block}{ЕМ-алгоритм}
+  
+  
+  \begin{itemize}
+  
+  
+  \item {\color{blue} E-шаг}. Вычисляем апостериорное распределение для латентных переменных: \[  q^{t}( {\color{blue} Z}) = p({\color{blue} Z} \mid {\color{red} X}, \theta^{t}).\] 
+  
+  
+\vspace{2mm}
+
+Находим \textbf{матожидание} логарифма правдоподобия латентным переменным: \[  Q(\theta) = \mathbb{E}_{\color{blue} Z} \ln p({\color{red} X}, {\color{blue} Z} \mid  \theta^{t}) = \int q^{t} ( {\color{blue} Z})  \ln p({\color{red} X}, {\color{blue} Z} \mid  \theta) d  {\color{blue} Z}.\] 
+
+\vspace{2mm}
+
+
+  \item {\color{blue} M-шаг}.   \textbf{Максимизируем} найденную функцию \[ \theta _{{t+1}}=\arg \max _{{\theta }}Q(\theta ).\]  
+  
+  \end{itemize}
+  
+  
+  \end{block}
+  
+
+  %----------------------------------------------------------
+\end{frame}
+%----------------------------------------------------------
+
+
+
+
+
+
+%----------------------------------------------------------
+\begin{frame}[plain]\frametitle{Самая сложная теорема}
+%----------------------------------------------------------
+  
+\begin{center}
+\Large EM-алгоритм --- бесспорно, самая сложная теорема этого курса. 
+
+\vspace{5mm}
+
+Вся оставшаяся лекция будет посвящена её доказательству. 
+\end{center}
+
+\begin{figure}[h!]
+\center{\includegraphics[width=0.65\textwidth]{pic/Drag1}}
+\caption{\Large Финальный босс этого курса} \label{Fig:}
+\end{figure}
+ 
+  %----------------------------------------------------------
+\end{frame}
+%----------------------------------------------------------
+
+
+
+
+
+
+
+
+\section{KL-дивергенция}
+
+
+
+\begin{frame}[plain]\frametitle{KL-дивергенция} \tableofcontents[currentsection]\end{frame}
+
+%----------------------------------------------------------
+\begin{frame}[plain]\frametitle{Расстояние между распределениями}
+%----------------------------------------------------------
+ 
+
+Для доказательства EM-алгоритма изучим одно важное понятие. 
+ 
+ \vspace{5mm}
+
+
+\textbf{Q:} Как измерить расстояние между распределениями? 
+    
+    
+ \vspace{2mm}
+    
+\begin{figure}[h!]
+\center{\includegraphics[width=0.4\textwidth]{pic/Dist1}}
+%\caption{Итоговая оценка} \label{Fig:}
+\end{figure}
+
+\pause
+
+ \vspace{2mm}
+
+\textbf{A:} Есть разные способы. Обсудим {\color{blue} расстояние Кульбака-Лейблера} 
+
+\vspace{5mm}
+
+Другие названия: \textbf{расхождение Кульбака-Лейблера, KL-дивергенция, различающая информация, относительная энтропия}. 
+
+  
+  %----------------------------------------------------------
+\end{frame}
+%----------------------------------------------------------
+
+%----------------------------------------------------------
+\begin{frame}[plain]\frametitle{KL-дивергенция}
+%----------------------------------------------------------
+
+
+Пусть $P$ и $Q$ --- распределения с плотностями $p(x)$ и $q(x)$. 
+
+\vspace{5mm}
+
+{\color{blue} Расхождение Кульбака--Лейблера} распределения $Q$ относительно $P$ задаётся формулой
+\[  {\displaystyle \operatorname{KL}(P\parallel Q)=\int \,p(x)\ln {\frac {p(x)}{q(x)}}\,{\rm {d}}x}.\]
+  
+  
+\vspace{3mm}
+
+Также обозначает $D_{\text{KL}}(P\parallel Q)$.
+  
+  
+  %----------------------------------------------------------
+\end{frame}
+%----------------------------------------------------------
+
+%----------------------------------------------------------
+\begin{frame}[plain]\frametitle{KL-дивергенция}
+%----------------------------------------------------------
+
+\begin{center}
+KL-дивергенция = берём логарифм отношения $\displaystyle \ln \frac{p}{q}$ и затем матожидаем по $p$.
+\end{center}
+
+  
+\begin{figure}[h!]
+\center{\includegraphics[width=0.8\textwidth]{pic/KL}}
+%\caption{Итоговая оценка} \label{Fig:}
+\end{figure}
+
+  
+  %----------------------------------------------------------
+\end{frame}
+%----------------------------------------------------------
+
+
+
+%----------------------------------------------------------
+\begin{frame}[plain]\frametitle{Дилемма смещения-дисперсия}
+%----------------------------------------------------------
+
+
+Дивергенция Кульбака--Лейблера --- ``{\color{red} несимметричное расстояние}'', она
+
+\vspace{5mm}
+
+\begin{itemize}
+
+\item несимметрична
+\[\operatorname{KL}(p \parallel q ) \not = \operatorname{KL}(q \parallel p ),\]
+
+\vspace{3mm}
+
+
+\item неотрицательна 
+\[\operatorname{KL}(p \parallel q ) \geq 0, \]
+
+
+\vspace{3mm}
+
+\item и равна нулю $\Leftrightarrow$ распределения совпадают почти всюду: 
+\[\operatorname{KL}(p \parallel q ) =0 \qquad \Leftrightarrow \qquad p(x) = q(x) \quad \text{п.в.}.\] 
+
+\end{itemize}
+
+
+  %----------------------------------------------------------
+\end{frame}
+%----------------------------------------------------------
+
+
+%----------------------------------------------------------
+\begin{frame}[plain]\frametitle{Неравенство Гиббса}
+%----------------------------------------------------------
+
+Неравенство $\operatorname{KL}(p \parallel q ) \geq 0$ называется {\color{blue} неравенством Гиббса}.
+
+\vspace{5mm}
+
+Докажем его через {\color{blue} неравенство Йенсена}.
+
+\pause
+
+\vspace{5mm}
+
+Отметим, что для дискретных распределений \[P=\{p_{1},\ldots ,p_{n}\}, \qquad  Q=\{q_{1},\ldots ,q_{n}\}\] неравенство можно записать в виде \[{\displaystyle -\sum _{i=1}^{n}p_{i}\log p_{i}\leq -\sum _{i=1}^{n}p_{i}\log q_{i}}.\] {\color{red} Информационная энтропия} распределения $P$ не больше {\color{red} кросс-энтропии}  распределения $P$  с любым другим распределением $Q$.
+
+
+
+  %----------------------------------------------------------
+\end{frame}
+%----------------------------------------------------------
+
+
+
+%----------------------------------------------------------
+\begin{frame}[plain]\frametitle{Неравенство Йенсена}
+%----------------------------------------------------------
+
+
+Пусть $g(x)$ --- выпуклая вниз функция, $X$ --- случайная величина. 
+
+\vspace{5mm} 
+
+{\color{blue} Неравенство Йенсена}: \[ {\displaystyle g \left(\mathbb{E} [X]\right)\leq \mathbb{E} \left[g(X)\right]}.\]
+
+\vspace{2mm}
+
+Предполагаем, что оба матожидания конечны. 
+  
+\begin{figure}[h!]
+\center{\includegraphics[width=0.65\textwidth]{pic/jensen}}
+%\caption{Итоговая оценка} \label{Fig:}
+\end{figure}
+
+
+
+  %----------------------------------------------------------
+\end{frame}
+%----------------------------------------------------------
+
+
+
+
+
+%----------------------------------------------------------
+\begin{frame}[plain]\frametitle{Неравенство Гиббса}
+%----------------------------------------------------------
+
+\textbf{Доказательство неравенства Гиббса} $\operatorname{KL}(p \parallel q )  \geq 0$.
+
+
+\vspace{2mm}
+
+\begin{itemize}
+
+\item Для удобства меняем знак \[-\operatorname{KL}(p \parallel q )   = \int p(x)\log \left({\frac {q(x)}{p(x)}}\right)\,dx. \]
+
+
+\pause 
+
+\vspace{2mm}
+
+\item Применяем {\color{blue} неравенство Йенсена}   \[\int p(x)\log \left({\frac {q(x)}{p(x)}}\right)\,dx \leq \log \int p(x)\left({\frac {q(x)}{p(x)}}\right)\,dx. \]
+
+\vspace{2mm}
+
+\pause
+
+\item Правая часть равна нулю. \[ \log \int p(x)\left({\frac {q(x)}{p(x)}}\right)\,dx = \log \int q(x) \,dx = \log 1 = 0. \] 
+
+
+\vspace{2mm}
+
+\pause
+
+\item При этом равенство $\Leftrightarrow $ под логарифмом 1, т.е. $p(x) = q(x)$ (п.в.).
+
+
+\end{itemize}
+
+
+  %----------------------------------------------------------
+\end{frame}
+%----------------------------------------------------------
+
+
+
+%----------------------------------------------------------
+\begin{frame}[plain]\frametitle{Перерыв}
+%----------------------------------------------------------
+
+
+\begin{center}
+\Huge Перерыв
+\end{center}
+
+
+%----------------------------------------------------------
+\end{frame}
+%----------------------------------------------------------
+
+
+
+
+\section{Доказательство EM-алгоритма}
+
+
+
+\begin{frame}[plain]\frametitle{Доказательство EM-алгоритма} \tableofcontents[currentsection]\end{frame}
+
+%----------------------------------------------------------
+\begin{frame}[plain]\frametitle{MLE}
+%----------------------------------------------------------
+
+
+\begin{itemize}
+
+\item Вернёмся к модели с {\color{blue} латентными переменными} \[ p({\color{red} X}, {\color{blue} Z} \mid \theta)\]
+
+\vspace{2mm}
+
+\item \textbf{Q:} Если бы не было $Z$, то как найти параметры $\theta$?
+
+\vspace{5mm}
+
+\pause
+
+\item \textbf{A:} Конечно, по \textbf{принципу максимума правдоподобия}: \[ p({\color{red} X} \mid \theta) \to \arg \max_{\theta},\] где правдоподобие \[ p({\color{red} X} \mid \theta) = \prod_{i=1}^n p({\color{red} x_i} \mid \theta).\]
+
+\end{itemize}
+
+
+
+  %----------------------------------------------------------
+\end{frame}
+%----------------------------------------------------------
+
+
+%----------------------------------------------------------
+\begin{frame}[plain]\frametitle{MLE}
+%----------------------------------------------------------
+
+
+\begin{itemize}
+
+\item \textbf{Q:} Как из распределения $p({\color{red} X}, {\color{blue} Z} \mid \theta)$ получить $p({\color{red} X} \mid \theta)$?
+
+\pause
+
+\vspace{5mm}
+
+\item \textbf{A:} Вспоминаем --- по неизвестным параметрам \textbf{маргинализуем}:  \[ p({\color{red} X} \mid \theta) = \int p({\color{red} X}, {\color{blue} Z} \mid \theta)d {\color{blue} Z} = \int p({\color{red} X}, \mid  {\color{blue} Z}, \theta) p({\color{blue} Z} \mid  \theta)  d {\color{blue} Z} .\]
+
+Второе равенство --- по формуле условной вероятности.
+
+
+\pause
+
+
+\vspace{5mm}
+
+\item Распределение  $p({\color{blue} Z} \mid  \theta)$ обозначим за $q({\color{blue} Z})$.
+
+
+
+%Тогда \[  p({\color{red} X}, {\color{blue} Z} \mid \theta) =  \int q({\color{blue}Z}) p({\color{red} X}, \mid  {\color{blue} Z}, \theta)d {\color{blue} Z}.\]
+
+\end{itemize}
+
+
+
+  %----------------------------------------------------------
+\end{frame}
+%----------------------------------------------------------
+
+
+
+%----------------------------------------------------------
+\begin{frame}[plain]\frametitle{Шаг 1}
+%----------------------------------------------------------
+
+Как всегда, удобнее максимизировать логарифм правдоподобия $\ln  p({\color{red} X} \mid \theta)$.
+
+\vspace{5mm}
+
+\textbf{Доказательство EM-алгоритма} состоит из 2ух шагов:
+
+\vspace{5mm}
+
+\begin{itemize}
+
+\item \textbf{Шаг 1}. Найдём {\color{blue} вариационную нижнюю оценку} --- функцию $\mathcal{L} (q, \theta)$ т.,ч. \[ \ln  p({\color{red} X} \mid \theta) \geq \mathcal{L} (q, \theta).\] 
+
+\vspace{2mm}
+
+По-английски ELBO = Evidence Lower BOund.
+
+\end{itemize}
+
+\begin{figure}[h!]
+\center{\includegraphics[width=0.35\textwidth]{pic/ELBO2}}
+%\caption{Итоговая оценка} \label{Fig:}
+\end{figure}
+
+  %----------------------------------------------------------
+\end{frame}
+%----------------------------------------------------------
+
+
+%----------------------------------------------------------
+\begin{frame}[plain]\frametitle{Шаг 2}
+%----------------------------------------------------------
+
+\begin{itemize}
+\item \textbf{Шаг 2}. Оптимизируем   $\mathcal{L} (q, \theta)$, как на прошлом занятии.
+\end{itemize}
+
+
+\begin{figure}[h!]
+\center{\includegraphics[width=0.5\textwidth]{pic/EM3}}
+%\caption{Итоговая оценка} \label{Fig:}
+\end{figure}
+
+  %----------------------------------------------------------
+\end{frame}
+%----------------------------------------------------------
+
+
+
+\subsection{Вариационная нижняя оценка (ELBO)}
+
+\begin{frame}[plain]\frametitle{ELBO} \tableofcontents[currentsubsection]\end{frame}
+
+
+%----------------------------------------------------------
+\begin{frame}[plain]\frametitle{ELBO}
+%----------------------------------------------------------
+
+\begin{center}
+\Large Находим вариационную нижнюю оценку.
+\end{center}
+
+
+
+\begin{block}{Лемма}
+\[\ln  p({\color{red} X} \mid \theta) = \mathcal{L} (q, \theta) + \operatorname{KL}(q \parallel p),\]
+\begin{itemize}
+
+\item 1ое слагаемое: \[ \mathcal{L} (q, \theta)  = \int q({\color{blue} Z}) \ln   \frac{p({\color{red} X} , {\color{blue} Z} \mid \theta)}{q({\color{blue} Z})  } d{\color{blue} Z} .\]
+
+\item 2ое слагаемое: \[\operatorname{KL}(q \parallel p)  = \int q({\color{blue} Z}) \ln   \frac{q({\color{blue} Z}) } {p({\color{blue} Z} \mid {\color{red} X } , \theta )} d{\color{blue} Z} .\]
+
+\end{itemize}
+\end{block}
+
+  %----------------------------------------------------------
+\end{frame}
+%----------------------------------------------------------
+
+
+
+
+
+%----------------------------------------------------------
+\begin{frame}[plain]\frametitle{ELBO}
+%----------------------------------------------------------
+
+\textbf{Доказательство Леммы} --- серия несложных преобразований.
+
+
+\vspace{5mm}
+
+\begin{itemize}
+
+\item Пролографмируем правило произведения для $p({\color{red} X},  {\color{blue} Z}\mid \theta)$:  
+
+\[\ln p({\color{red} X},  {\color{blue} Z}\mid \theta) = \ln p({\color{blue} Z}\mid {\color{red} X}, \theta) + \ln  p({\color{red} X} \mid \theta).\]
+
+\pause
+
+\vspace{2mm}
+
+
+\item Выразим отсюда $\ln  p({\color{red} X} \mid \theta)$ и возьмём матожидание по плотности $q( {\color{blue} Z})$:
+
+
+ \[ \ln  p({\color{red} X} \mid \theta) = \int q( {\color{blue} Z}) \ln  \frac{p({\color{red} X},  {\color{blue} Z}\mid \theta)}{p( {\color{blue} Z} \mid {\color{red} X}, \theta)} d  {\color{blue} Z}  \] 
+
+\end{itemize}
+
+
+
+
+
+  %----------------------------------------------------------
+\end{frame}
+%----------------------------------------------------------
+
+
+
+
+%----------------------------------------------------------
+\begin{frame}[plain]\frametitle{ELBO}
+%----------------------------------------------------------
+
+
+\begin{itemize}
+
+\item Домножим числитель и знаменатель дроби на  $ q( {\color{blue} Z})$ и разобьём дробь:
+ \[  \ln  p({\color{red} X} \mid \theta) = \int  q( {\color{blue} Z}) \ln  \frac{p({\color{red} X},  {\color{blue} Z}\mid \theta)}{ q( {\color{blue} Z})} d{\color{blue} Z}  +  \int q({\color{blue} Z}) \ln   \frac{q({\color{blue} Z}) } {p({\color{blue} Z} \mid {\color{red} X } , \theta )} d{\color{blue} Z} \]
+
+
+\vspace{2mm}
+
+Это в точности то разложение, которое нам нужно. 
+
+\vspace{5mm}
+
+\textbf{Лемма доказана}.
+
+\end{itemize}
+
+
+  %----------------------------------------------------------
+\end{frame}
+%----------------------------------------------------------
+
+
+%----------------------------------------------------------
+\begin{frame}[plain]\frametitle{ELBO}
+%----------------------------------------------------------
+
+
+\textbf{Q:} ELBO можно записать в виде 
+\[  - \int  q( Z) \ln  \frac{ q( Z)}{p(X,  Z\mid \theta)} dZ  \]
+
+
+\vspace{2mm}
+
+Это не KL-дивергенция?
+
+\[  {\displaystyle \operatorname{KL}(Q\parallel P)=\int \,q(x)\log {\frac {q(x)}{p(x)}}\,{\rm {d}}x}.\]
+
+
+\vspace{5mm}
+
+\pause
+
+
+\textbf{A:} Нет, $q(Z)$ --- функция от $Z$, а $P(X, Z \mid \theta)$ --- от $(X, Z)$.
+
+  %----------------------------------------------------------
+\end{frame}
+%----------------------------------------------------------
+
+
+
+
+
+
+
+
+
+
+
+
+\subsection{E и M шаги}
+
+\begin{frame}[plain]\frametitle{E и M шаги} \tableofcontents[currentsubsection]\end{frame}
+
+
+
+
+%----------------------------------------------------------
+\begin{frame}[plain]\frametitle{Maximization-Maximization}
+%----------------------------------------------------------
+
+Поскольку KL-дивергенция неотрицательна, \[ \ln  p({\color{red} X} \mid \theta) \geq  \int  q( {\color{blue} Z}) \ln  \frac{p({\color{red} X},  {\color{blue} Z}\mid \theta)}{ q( {\color{blue} Z})} d{\color{blue} Z}   = \mathcal{L}(q, \theta). \] 
+
+
+\vspace{5mm}
+
+Начинаем попеременно оптимизировать $ \mathcal{L}(q, \theta)$ по $q$ и по $\theta$. 
+
+
+  %----------------------------------------------------------
+\end{frame}
+%----------------------------------------------------------
+
+%----------------------------------------------------------
+\begin{frame}[plain]\frametitle{E-шаг}
+%----------------------------------------------------------
+
+
+
+\begin{center}
+\noindent\fbox{%
+    \parbox{7em}{%
+
+
+\vspace{3mm}
+
+
+
+    \Huge \textbf{\hspace{2mm}E-шаг}
+    
+\vspace{3mm}    
+    }%
+}
+
+
+\end{center}
+
+\begin{block}{}
+ Оптимизируем по $q$: \[q^{t} = \arg \max_{q}  \mathcal{L}(q, \theta^{t}).\]
+\end{block}
+
+
+\vspace{2mm}
+
+Мы знаем, что  \[\ln  p({\color{red} X} \mid \theta^{t}) = \mathcal{L} (q, \theta^{t}) + \operatorname{KL}(q \parallel p),\]
+
+\vspace{2mm}
+
+
+\textbf{Q:} Чему равно $q^{t}$?
+
+
+\vspace{5mm}
+
+\pause
+
+\textbf{A:} Левая часть не зависит от $q$, поэтому максимум ELBO --- когда \[  \operatorname{KL}(q \parallel p) = 0 \qquad \Leftrightarrow \qquad q ({\color{blue} Z}) = p({\color{blue} Z} \mid {\color{red} X}, \theta^{t}).\] 
+
+
+
+  %----------------------------------------------------------
+\end{frame}
+%----------------------------------------------------------
+
+
+%----------------------------------------------------------
+\begin{frame}[plain]\frametitle{M-шаг}
+%----------------------------------------------------------
+
+\begin{center}
+\noindent\fbox{%
+    \parbox{7em}{%
+
+
+\vspace{3mm}
+
+
+
+    \Huge \textbf{\hspace{2mm}M-шаг}
+    
+\vspace{3mm}    
+    }%
+}
+
+
+\end{center}
+
+\begin{block}{}
+ Оптимизируем по $\theta$: \[\theta^{t+1} = \arg \max_{\theta}  \mathcal{L}(q^t, \theta).\]
+\end{block}
+
+По определению 
+
+\[   \mathcal{L}(q, \theta) =  \int  q( Z) \ln  \frac{p(X,  Z\mid \theta)}{ q( Z)} dZ  =\int  q( Z) \ln  p(X,  Z\mid \theta) dZ - \int  q( Z) \ln  q( Z) dZ.   \] 
+
+
+Второе слагаемое не зависит от $\theta$, поэтому его можно отбросить. 
+
+\vspace{5mm}
+
+Получаем требуемое выражение \[\theta^{t+1}  =  \arg \max_{\theta} \int q ({\color{blue} Z}) \ln  p({\color{red} X}, {\color{blue} Z} \mid \theta) d {\color{blue} Z}. \]
+
+
+
+
+  %----------------------------------------------------------
+\end{frame}
+%----------------------------------------------------------
+
+
+
+%----------------------------------------------------------
+\begin{frame}[plain]\frametitle{Victory!}
+%----------------------------------------------------------
+
+
+\begin{center}
+\Large \textbf{EM-алгоритм доказан}.
+\end{center}
+
+
+\begin{figure}[h!]
+\center{\includegraphics[height=0.6\textheight]{pic/Drag2}}
+%\caption{Итоговая оценка} \label{Fig:}
+\end{figure}
+
+  %----------------------------------------------------------
+\end{frame}
+%----------------------------------------------------------
+
+
+%----------------------------------------------------------
+\begin{frame}[plain]\frametitle{Перерыв}
+%----------------------------------------------------------
+
+
+\begin{center}
+\Huge Перерыв
+\end{center}
+
+
+%----------------------------------------------------------
+\end{frame}
+%----------------------------------------------------------
+
+
+
+\section{Применение EM-алгоритма}
+
+\begin{frame}[plain]\frametitle{Применение EM-алгоритма} \tableofcontents[currentsection]\end{frame}
+
+
+
+
+%----------------------------------------------------------
+\begin{frame}[plain]\frametitle{E-шаг}
+%----------------------------------------------------------
+
+Насколько просто выполнять шаги EM-алгоритма?
+
+\vspace{5mm}
+
+\textbf{E-шаг}. Это байесовский вывод \[q ({\color{blue} Z}) = p({\color{blue} Z} \mid {\color{red} X}, \theta^{t}) = \frac{ p({\color{red} X}, {\color{blue} Z} \mid \theta^{t})p({\color{blue} Z} \mid \theta^{t}) }{\int p({\color{red} X}, {\color{blue} Z} \mid \theta^{t})p({\color{blue} Z} \mid \theta^{t}) d{\color{blue} Z} } .\] 
+
+
+\pause
+
+
+\vspace{3mm}
+
+ Если у $Z$ --- конечное число значений, то вместо интеграла --- сумма, и \textit{всё считается}.
+
+
+  %----------------------------------------------------------
+\end{frame}
+%----------------------------------------------------------
+
+
+%----------------------------------------------------------
+\begin{frame}[plain]\frametitle{E-шаг}
+%----------------------------------------------------------
+В общем случае --- как обычно: \begin{figure}[h!]
+\center{\includegraphics[width=0.45\textwidth]{pic/Integrals}}
+%\caption{Парадокс Монти Холла} \label{Fig:}
+\end{figure}
+
+\vspace{5mm}
+
+Апостериорное можно аналитически посчитать, если $ p({\color{red} X}, {\color{blue} Z} \mid \theta^{t})$ и $p({\color{blue} Z} \mid \theta^{t})$ сопряжены. 
+
+
+
+  %----------------------------------------------------------
+\end{frame}
+%----------------------------------------------------------
+
+
+
+%----------------------------------------------------------
+\begin{frame}[plain]\frametitle{M-шаг}
+%----------------------------------------------------------
+
+
+\textbf{M-шаг}.  \[\theta^{t+1}  =  \arg \max_{\theta} \int q ({\color{blue} Z}) \ln  p({\color{red} X}, {\color{blue} Z} \mid \theta) d {\color{blue} Z}. \]
+
+
+\vspace{3mm}
+
+Максимизация по параметру --- хорошая с вычислительной точки зрения задача.
+
+\vspace{3mm}
+
+Если вдруг $\ln  p({\color{red} X}, {\color{blue} Z} \mid \theta) $ --- вогнутая функция, то совсем просто:
+
+\vspace{3mm}
+
+\begin{itemize}
+
+\item \textit{Сумма (и интеграл от) вогнутых функций --- вогнутая функция}. 
+
+\vspace{3mm}
+
+\item \textit{Максимум вогнутой функций легко находится градиентным спуском}.
+
+\end{itemize}
+
+
+  %----------------------------------------------------------
+\end{frame}
+%----------------------------------------------------------
+
+
+%----------------------------------------------------------
+\begin{frame}[plain]\frametitle{Локальные минимумы}
+%----------------------------------------------------------
+
+
+\Large EM-алгоритм не гарантирует сходимости к {\color{red} глобальному минимуму}. \\ Он может застревать в {\color{blue} локальных минимумах}.
+
+
+\vspace{5mm}
+
+\textbf{Q:} Как с этим бороться?
+
+  
+\begin{figure}[h!]
+\center{\includegraphics[width=0.5\textwidth]{pic/Min}}
+%\caption{Итоговая оценка} \label{Fig:}
+\end{figure}
+
+\pause
+
+\vspace{5mm}
+
+
+\Large \textbf{A:} Запуск с разных стартовых позиций.
+
+
+  %----------------------------------------------------------
+\end{frame}
+%----------------------------------------------------------
+
+
+%----------------------------------------------------------
+\begin{frame}[plain]\frametitle{Локальные минимумы}
+%----------------------------------------------------------
+
+
+\textbf{Q:} Как выбрать количество компонент в EM-алгоритме для смеси распределений?
+
+\vspace{5mm}
+
+\textbf{A:} Непростой вопрос. В малой размерности --- ``на глаз''.
+
+\vspace{5mm}
+
+Эвристика --- посчитать с разным числом компонент и сравнить BIC.
+
+\vspace{5mm}
+
+Другие способы: \url{https://scikit-learn.org/stable/modules/mixture.html}
+
+  %----------------------------------------------------------
+\end{frame}
+%----------------------------------------------------------
+
+
+
+
+%----------------------------------------------------------
+\begin{frame}[plain]\frametitle{Локальные минимумы}
+%----------------------------------------------------------
+
+\textbf{Q:} Как долго выполнять EM-алгоритм? (Что мы максимизируем?)
+
+\vspace{5mm}
+
+\pause
+
+\textbf{A:} Мы хотим максимизировать $\ln p({\color{red} X}  \mid  \mu, \Sigma, \pi)$. 
+
+\vspace{5mm}
+
+
+Можно остановить, если на новом шаге логарифм правдоподобия увеличился менее, чем на $\varepsilon$. %\[ \operatorname{ELBO}_{t+1} \leq \operatorname{ELBO}_t + \varepsilon.\]
+
+
+
+  %----------------------------------------------------------
+\end{frame}
+%----------------------------------------------------------
+
+
+%----------------------------------------------------------
+\begin{frame}[plain]\frametitle{E-шаг}
+%----------------------------------------------------------
+
+
+
+Естественно, на каждом шаге могут возникать проблемы.
+
+\vspace{5mm}
+
+Мы рассмотрели простейшую схему EM-алгоритма, без модификаций. 
+
+\vspace{5mm}
+
+Подробнее ---  соответственно в Главах 9  и 11
+
+\vspace{5mm}
+
+\begin{thebibliography}{10}
+
+    
+  \beamertemplatebookbibitems
+    
+    \bibitem{Bishop}  Bishop C.M. 
+    
+    \newblock{\em Pattern Recognition and Machine Learning}.    
+
+    \vspace{3mm}
+
+    
+  \beamertemplatebookbibitems
+    
+    \bibitem{Murphy} Murphy  K.P. 
+    
+    \newblock{\em Machine Learning: A Probabilistic Perspective}.
+    
+
+
+  \end{thebibliography}
+  
+
+
+  %----------------------------------------------------------
+\end{frame}
+%----------------------------------------------------------
+
+
+\subsection{Пример. Смеси гауссиан}
+
+\begin{frame}[plain]\frametitle{Пример. Смеси гауссиан} \tableofcontents[currentsubsection]\end{frame}
+
+%----------------------------------------------------------
+\begin{frame}[plain]\frametitle{Смесь гауссиан}
+%----------------------------------------------------------
+
+
+\begin{center}
+\large Рассмотрим \textbf{смесь $K$ гауссиан}. 
+\end{center}
+
+\vspace{3mm}
+
+\large Тип гауссианы зададим $K$-мерным базисным вектором: \[z=(z_1, \dots, z_k), \qquad z_i \in \left\{0, 1\right\}  \qquad \sum_k z_k = 1\]
+
+Плотность смеси:
+\[ p(x \mid z) = \prod_{k=1}^K \mathcal{N}\left(x \mid \mu_k, \Sigma_k\right)^{z_k}.\]
+
+  
+  \begin{figure}[h!]
+\center{\includegraphics[width=0.5\textwidth]{pic/Mix}}
+%\caption{Итоговая оценка} \label{Fig:}
+\end{figure}
+
+
+  %----------------------------------------------------------
+\end{frame}
+%----------------------------------------------------------
+
+%----------------------------------------------------------
+\begin{frame}[plain]\frametitle{Смесь гауссиан}
+%----------------------------------------------------------
+
+Выбираем априорное распределение для $z$. 
+
+\vspace{5mm}
+
+Чтобы всё считалось, хочется, чтобы оно было сопряжено с правдоподобием
+\[ p(x \mid {\color{blue} z}) = \prod_{k=1}^K \mathcal{N}\left(x \mid \mu_k, \Sigma_k\right)^{{\color{blue} z_k}}.\]
+
+\vspace{3mm}
+
+\textbf{Q:} Какой вид у правдоподобия как функции от $z$?
+
+\pause
+
+\vspace{5mm}
+
+\textbf{A:} В качестве априорного возьмём {\color{red} категориальное распределение} \[ p({\color{blue} z} \mid \pi) = \prod_{k=1}^K \pi_k^{{\color{blue} z_k}}, \qquad 0 \leq \pi_k \leq 1, \qquad \sum_k \pi_k = 1.\]
+
+Проще говоря, вероятность быть в $k$-той компоненте смеси: \[p(z_k = 1 \mid \pi) = \pi_k.\]
+
+
+  %----------------------------------------------------------
+\end{frame}
+%----------------------------------------------------------
+
+%----------------------------------------------------------
+\begin{frame}[plain]\frametitle{Смесь гауссиан}
+%----------------------------------------------------------
+
+
+\begin{center}
+\Large \textbf{Плотность смеси --- линейная комбинация плотностей}.
+\end{center}
+
+\vspace{5mm}
+
+Если \[  p({\color{red} X} \mid {\color{blue} z}, \theta) = \prod_{k=1}^K \mathcal{N}\left({\color{red} X} \mid \mu_k, \Sigma_k\right)^{{\color{blue} z}_k}, \qquad p({\color{blue} z} \mid \pi) = \prod_{k=1}^K \pi_k^{{\color{blue} z_k}},\] то итоговую плотность можно записать в виде \[ p({\color{red} X} \mid \theta ) = \sum_{\color{blue} z} p({\color{red} X} \mid {\color{blue} z}, \theta) p({\color{blue} z} \mid \pi) = \sum_{k=1}^K  \pi_k \, \mathcal{N}\left({\color{red} X}  \mid \mu_k, \Sigma_k\right).  \]  
+
+
+
+
+
+
+  %----------------------------------------------------------
+\end{frame}
+%----------------------------------------------------------
+
+
+%----------------------------------------------------------
+\begin{frame}[plain]\frametitle{E-шаг}
+%----------------------------------------------------------
+\begin{center}
+\noindent\fbox{%
+    \parbox{7em}{%
+
+
+\vspace{3mm}
+
+
+
+    \Huge \textbf{\hspace{2mm}E-шаг}
+    
+\vspace{3mm}    
+    }%
+}
+
+
+\end{center}
+
+
+ Вычисляем апостериорное распределение по формуле Байеса: \[  q( z_k) = p(z_k = 1 \mid x) = \frac{p(x \mid z_k = 1)p(z_k=1 \mid \pi)}{\sum_j p(x \mid z_k = j)p(z_k=j \mid \pi) }\]
+
+
+ \pause
+ 
+ \vspace{5mm}
+ 
+ 
+ 
+Подставляем плотности --- получаем простой ответ:
+
+\begin{block}{} Вероятности компонент пропорциональны взвешенным плотностям гауссиан: \[  q(  z_k)  = \frac{\pi_k \mathcal{N} (x \mid \mu_k, \Sigma_k) }{\sum_j \pi_j \mathcal{N} (x \mid \mu_j, \Sigma_j) }\]
+ \end{block}
+
+  
+
+  %----------------------------------------------------------
+\end{frame}
+%----------------------------------------------------------
+
+
+%----------------------------------------------------------
+\begin{frame}[plain]\frametitle{E-шаг}
+%----------------------------------------------------------
+
+\textbf{Матожидание} логарифма правдоподобия превращается в сумму: \[  Q(\theta) = \mathbb{E}_{\color{blue} Z} \ln p({\color{red} X}, {\color{blue} Z} \mid  \theta) = \sum_{k=1}^K q ( {\color{blue} z}_k)  \ln p({\color{red} X}, {\color{blue} z}_k \mid  \theta).\]
+
+\pause
+
+\vspace{3mm}
+
+Вычисляем правдоподобие:
+
+\vspace{3mm}
+
+\begin{itemize}
+
+\item Это произведение вероятностей объектов:
+
+\[  p({\color{red} X}, {\color{blue} z}_k \mid  \theta) = \prod_{n=1}^N  p({\color{red} x}_n, {\color{blue} z}_k \mid  \theta) \]
+
+\vspace{3mm}
+
+\item По правилу произведения: \[ p({\color{red} x}_n, {\color{blue} z}_k \mid  \theta)  =    p({\color{red} x}_n \mid {\color{blue} z}_k, \mu_k, \Sigma_k) p( {\color{blue} z}_k \mid  \pi) = \left[ \mathcal{N} ({\color{red} x}_n \mid  \mu_k, \Sigma_k) \cdot \pi_k \right]^{z_k}.  \]
+
+\end{itemize}
+
+
+
+  %----------------------------------------------------------
+\end{frame}
+%----------------------------------------------------------
+
+
+%----------------------------------------------------------
+\begin{frame}[plain]\frametitle{M-шаг}
+%----------------------------------------------------------
+
+\begin{center}
+\noindent\fbox{%
+    \parbox{7em}{%
+
+
+\vspace{3mm}
+
+
+
+    \Huge \textbf{\hspace{2mm}M-шаг}
+    
+\vspace{3mm}    
+    }%
+}
+
+
+\end{center}
+\vspace{3mm}   
+
+Честно подставляя найденные выражения, получаем:
+\[\displaystyle Q(\theta)=\sum _{n=1}^{N}\sum _{k=1}^{K}q(z_k) \left[-\frac {d}{2}\log(2\pi )  -\frac {1}{2}\log |{\color{blue} \Sigma}_{k}|-\frac {1}{2}(\mathbf {x} _{n}- {\color{red}\mu }_{k})^{\top }{\color{blue} \Sigma}_{k}^{-1}(\mathbf {x} _{n}-{\color{red}\mu }_{k})+ \log {\color{green} \pi _{k}}\right].\]
+
+
+\vspace{2mm}
+
+\textbf{Q:} По каким параметрам нужно максимизировать на этом M-шаге?
+
+\vspace{5mm}
+
+\pause
+
+\textbf{A:} По ${\color{red} \mu}, {\color{blue} \Sigma}$ и ${\color{green} \pi}$.
+
+\vspace{5mm}
+
+\textbf{Замечание}. По ${\color{green}\pi}_k$ и по различным $({\color{red}\mu}_j, {\color{blue}\Sigma}_j)$ можно максимизировать независимо --- они в разных слагаемых.
+
+
+  %----------------------------------------------------------
+\end{frame}
+%----------------------------------------------------------
+
+
+
+%----------------------------------------------------------
+\begin{frame}[plain]\frametitle{M-шаг}
+%----------------------------------------------------------
+
+Нахождение оптимума --- \textbf{упражнение по матанализу}. 
+
+\vspace{5mm}
+
+
+\begin{itemize}
+
+\item Параметры $\mu_j$ и $\Sigma_j$ находятся из условий \[ \frac{\partial Q}{\partial \mu_j} = 0, \qquad \frac{\partial Q}{\partial \Sigma_j} = 0.\]
+
+\vspace{3mm}
+
+\pause
+
+\item Параметры $\pi_k$ связаны соотношением \[\sum_k \pi_k = 1,\] поэтому их можно найти \textbf{методом множителей Лагранжа} или выразив одно из слагаемых: \[ \frac{\partial Q}{\partial \pi_k} = 0, \qquad j = 1, \dots, K-1, \] \[ \pi_K = 1 - \pi_1 - \dots - \pi_{K-1}.\]
+
+
+\end{itemize}
+
+
+  %----------------------------------------------------------
+\end{frame}
+%----------------------------------------------------------
+
+
+%----------------------------------------------------------
+\begin{frame}[plain]\frametitle{M-шаг}
+%----------------------------------------------------------
+\begin{center}
+\noindent\fbox{%
+    \parbox{7em}{%
+
+
+\vspace{3mm}
+
+
+
+    \Huge \textbf{\hspace{2mm}M-шаг}
+    
+\vspace{3mm}    
+    }%
+}
+\end{center}
+
+\begin{block}{}
+
+\begin{itemize}
+
+\item ``Ожидаемая доля точек в $k$-том кластере'': \[ N_k = \sum_{n=1}^N  q(z_{nk}).\]
+
+
+\item Новая вероятность попасть в $k$-тый кластер: \[ \pi_k = \frac{N_k}{N}.\]
+
+\pause 
+
+\item Новые средние --- взвешенные среднее данных точек: \[ \mu_k = \frac{1}{N_k} \sum_{n=1}^N q(z_{nk}) x_n. \] 
+\item Новые матрицы ковариации: \[ \Sigma_k = \frac{1}{N_k} \sum_{n=1}^N q(z_{nk}) (x_n - \mu_k) (x_n - \mu_k)^T. \]
+
+
+
+
+\end{itemize}
+
+\end{block}
+
+
+  %----------------------------------------------------------
+\end{frame}
+%----------------------------------------------------------
+
+%----------------------------------------------------------
+\begin{frame}[plain]\frametitle{ELBO}
+%----------------------------------------------------------
+\begin{center}
+\noindent\fbox{%
+    \parbox{7em}{%
+
+
+\vspace{3mm}
+
+
+
+    \Huge \textbf{\hspace{2mm}ELBO}
+    
+\vspace{3mm}    
+    }%
+}
+\end{center}
+
+\vspace{3mm}
+
+\begin{block}{}
+Для проверки сходимости вычисляем логарифм правдоподобия \[  \ln p({\color{red} X}  \mid  \mu, \Sigma, \pi) =\sum_{n=1}^N \ln \left[ \sum_{k=1}^K   \pi_k \mathcal{N} ({\color{red} x}_n \mid  \mu_k, \Sigma_k) \right]  \]
+\end{block}
+
+\vspace{3mm}
+
+Если $\ln p({\color{red} X}  \mid  \mu, \Sigma, \pi)$ увеличился более, чем на $\varepsilon$ $\Rightarrow$ повторяем E и M-Шаги.
+
+
+  %----------------------------------------------------------
+\end{frame}
+%----------------------------------------------------------
+
+%----------------------------------------------------------
+\begin{frame}[plain]\frametitle{ELBO}
+%----------------------------------------------------------
+
+Вот и весь алгоритм для смеси гауссиан. С такими красивыми ответами.
+
+\vspace{5mm}
+
+В задаче про \textbf{разделение монеток} похожий простенький ответ --- см. Главу 9.3
+
+\vspace{3mm}
+
+\begin{thebibliography}{10}
+
+    
+  \beamertemplatebookbibitems
+    
+    \bibitem{Bishop}  Bishop C.M. 
+    
+    \newblock{\em Pattern Recognition and Machine Learning}.    
+
+  \end{thebibliography}
+  
+  \vspace{3mm}
+  
+\begin{figure}[h!]
+\center{\includegraphics[width=0.4\textwidth]{pic/Lepo}}
+%\caption{Итоговая оценка} \label{Fig:}
+\end{figure}
+
+  %----------------------------------------------------------
+\end{frame}
+%----------------------------------------------------------
+
+%----------------------------------------------------------
+\begin{frame}[plain]\frametitle{Сегодня мы обогатили свои знания}
+%----------------------------------------------------------
+
+\begin{center}
+\Large Итак, мы научились различать монетки друг от друга. 
+
+\vspace{3mm}
+
+Ещё немного ---- и мы будем в них купаться)
+
+\end{center}
+
+
+\begin{figure}[h!]
+\center{\includegraphics[width=0.6\textwidth]{pic/Money}}
+%\caption{Итоговая оценка} \label{Fig:}
+\end{figure}
+
+
+  %----------------------------------------------------------
+\end{frame}
+%----------------------------------------------------------
+
+
+
+
+
+
+
+
+\end{document}

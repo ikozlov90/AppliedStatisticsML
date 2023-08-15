@@ -1,0 +1,930 @@
+\documentclass[9pt]{beamer}
+
+
+
+
+\usepackage{beamerthemesplit}
+\usetheme{Boadilla}
+\usecolortheme{orchid}
+
+
+
+
+
+ % \usepackage[cp866]{inputenc}                %%% Є®¤Ёа®ўЄ  DOS
+  \usepackage[cp1251]{inputenc}
+%  \usepackage[T2A]{fontenc}                %%% ???
+%\usepackage[english,russian]{babel}
+%\usepackage[russian]{babel}
+ \usepackage[OT1]{fontenc}
+%\usepackage[english]{babel}
+\usepackage[russian]{babel}
+
+\usepackage{amssymb,latexsym, amsmath, mathdots}
+
+\usepackage{amscd}
+\usepackage{multirow}
+\usepackage{comment}
+
+\usepackage{epstopdf}
+
+
+
+%\usepackage[table]{xcolor} %colored cells
+
+%\usepackage{tikz}
+%\usetikzlibrary{tikzmark} %arrows in tables
+
+
+\usepackage{mnsymbol} % udots in matrices
+
+
+ \usepackage{pgfpages}
+%\setbeameroption{show notes}
+%\setbeameroption{show notes on second screen=bottom}
+%% \setbeameroption{show notes on second screen}
+
+%\setbeamercolor{alerted text}{fg=red!80!black}
+
+
+% \setbeamercolor{alerted text}{fg=blue!50!green}
+% \setbeamercolor{fortheorem}{bg=blue!15!white}
+% \setbeamercolor{EMPF}{bg=blue!25!white}
+% \setbeamercolor{EMPF2}{bg=blue!35!white}
+
+%\setbeamersize{text margin left=5.mm, text margin right=5.mm}
+
+
+%---------------------------------------------------------------------------------------------------------------------------
+
+%\def\emphbox#1#2#3{\begin{beamercolorbox}[wd=#2, ht=#1, center, colsep=1.mm]{EMPF} #3 \end{beamercolorbox}}
+
+%---------------------------------------------------------------------------------------------------------------------------
+
+
+%\advance\leftskip-5.mm
+
+
+
+%***************************************************************************************************************************
+
+\theoremstyle{theorem}
+\newtheorem{mytheorem}[theorem]{Теорема}
+\newtheorem{mylemma}[theorem]{Лемма}
+\newtheorem{mycorollary}[theorem]{Следствие}
+
+\newtheorem{proposition}[theorem]{Предложение}
+\newtheorem{assertion}[theorem]{Утверждение}
+\newtheorem{remark}[theorem]{Замечание}
+\newtheorem{assumption}[theorem]{Предположение}
+
+\newtheorem{convention}[theorem]{Договорённость}
+\newtheorem{question}[theorem]{Вопрос}
+%\newtheorem{mydefinition}{mydefinition}
+
+\theoremstyle{definition}
+\newtheorem{mydefinition}[theorem]{Определение}
+\newtheorem{myexample}[theorem]{Пример}
+
+
+
+%***************************************************************************************************************************
+
+\chardef\No=194
+\newcommand{\bd}{{\rm bd}}
+\newcommand{\cl}{{\rm cl}}
+\newcommand{\ind}{{\rm ind}}
+\newcommand{\id}{{\rm id}}
+\newcommand{\inj}{{\sl in}}
+\newcommand{\pr}{{\rm pr}}
+\newcommand{\st}{{\rm St}}
+
+
+\DeclareMathOperator{\sgrad}{sgrad}
+
+\DeclareMathOperator{\cnt}{const}
+
+\DeclareMathOperator{\Aut}{Aut}
+
+
+\DeclareMathOperator{\sgn}{sgn}
+
+\DeclareMathOperator{\Int}{Int}
+
+
+\DeclareMathOperator{\tr}{tr}
+
+\DeclareMathOperator{\Mat}{Mat}
+
+
+
+
+
+
+
+%****************************************************************************
+\newcommand{\Ker}{\mathrm{Ker}\,\,}
+\newcommand{\Ann}{\mathrm{Ann}\,\,}
+
+\newcommand{\Imm}{\mathrm{Im}\,\,}
+
+\newcommand{\rk}{\mathrm{rk}\,\,}
+
+\newcommand{\const}{\mathrm{const}}
+
+
+
+\DeclareMathOperator{\Pen}{\mathcal{P}}
+
+
+\DeclareMathOperator{\Core}{K}
+
+
+\DeclareMathOperator{\BLG}{\operatorname{BLG}}
+
+\DeclareMathOperator{\AutBP}{\operatorname{Aut}(V, \mathcal{P})}
+
+
+\def\minus{\hbox{-}}   %Sign of minus in big matrices
+
+\usepackage{multirow}  %Columns spanning multiple rows
+
+\usepackage[normalem]{ulem} %underline that can break lines
+
+%\usepackage[normalem]{ulem}
+
+%****************************************************************************
+
+
+
+\title% [] (optional, only for long titles)
+{Прикладная статистика в машинном обучении \\ Семинар 1}
+%\subtitle{}
+\author [И. \,К.~Козлов] %(optional, for multiple authors)
+{И. \,К.~Козлов \\ {\footnotesize(\textit{Мехмат МГУ})}}
+
+
+\date % [](optional)
+{2022}
+%\subject{Mathematics}
+
+
+
+
+
+
+
+
+\usepackage{hyperref}
+\hypersetup{unicode=true}
+
+
+
+\begin{document}
+
+%\includeonlyframes{}
+\frame{\titlepage}
+
+
+
+
+
+
+
+%----------------------------------------------------------
+\begin{frame}[plain]\frametitle{Прикладная статистика в машинном обучении}
+%----------------------------------------------------------
+
+Курс сдаётся в 
+
+\vspace{5mm}
+
+{\color{red} \Huge
+\url{https://anytask.org}
+}
+
+\vspace{5mm}
+
+!!! Нужно зарегистрироваться !!! 
+
+%----------------------------------------------------------
+\end{frame}
+%----------------------------------------------------------
+
+
+
+
+
+%----------------------------------------------------------
+\begin{frame}[plain]\frametitle{Семинар 1}
+%----------------------------------------------------------
+
+{\Large
+\begin{center}
+Постарайтесь не заснуть на семинаре и отвечать на вопросы!
+\end{center}
+
+\begin{figure}[h!]
+\center{\includegraphics[height=0.65\textheight]{pic/Shine}}
+\caption{\Large Не спи - замёрзнешь!} \label{Fig:}
+\end{figure}
+}
+
+%----------------------------------------------------------
+\end{frame}
+%----------------------------------------------------------
+
+
+
+
+\section{MSE, проверка несмещённости и состоятельности}
+
+
+
+\begin{frame}[plain]\frametitle{MSE, проверка несмещённости и состоятельности} \tableofcontents[currentsection]\end{frame}
+
+
+
+%----------------------------------------------------------
+\begin{frame}[plain]\frametitle{Семинар 1}
+%----------------------------------------------------------
+
+\textbf{Q1:} Доказать, что \[ {\overline {X}}_{n}={\frac {1}{n}}(X_{1}+\cdots +X_{n})\] является \textbf{несмещённой} оценкой $\mathbb{E} X$. 
+
+
+\pause 
+
+\vspace{7mm}
+
+
+
+\textbf{A:} Следует из линейности матожидания: \[ \mathbb{E} \sum_i X_i = \sum_i \mathbb{E} X_i\] (для любых $X_1, \dots, X_n$, не обязательно независимых).
+
+
+
+%----------------------------------------------------------
+\end{frame}
+%----------------------------------------------------------
+
+
+%----------------------------------------------------------
+\begin{frame}[plain]\frametitle{Семинар 1}
+%----------------------------------------------------------
+
+
+\textbf{Q2:} Доказать, что \[ {\overline {X}}_{n}={\frac {1}{n}}(X_{1}+\cdots +X_{n})\] является \textbf{состоятельной} оценкой $\mathbb{E} X$. 
+
+
+\vspace{5mm}
+
+
+
+\textbf{A:}  Если \[\operatorname{Bias} \to 0, \qquad  \mathbb{V} \overline{X} \to 0,\] то  оценка состоятельная.
+
+\vspace{5mm}
+
+Оценка несмещённая, поэтому \[ \operatorname{Bias}  = \mathbb{E} \bar{X} - \mathbb{E} X = 0.\]
+
+
+
+%----------------------------------------------------------
+\end{frame}
+%----------------------------------------------------------
+
+
+
+%----------------------------------------------------------
+\begin{frame}[plain]\frametitle{Семинар 1}
+%----------------------------------------------------------
+
+\begin{itemize}
+
+\item Осталось оценить дисперсию.
+
+\vspace{5mm}
+
+\item Неравенство Чебышёва \[\mathbb{P} (\left| \hat{\theta} - \theta \right| \geq \varepsilon) \leq \frac{\mathbb{V}(\hat{\theta})}{\varepsilon^2}. \] 
+
+\vspace{3mm}
+
+\item Дисперсия суммы \textit{независимых} с.в. = сумма диспресий \[ \mathbb{V} \overline{X} = \frac{1}{n^2} \mathbb{V} \sum_i X_i = \frac{1}{n^2} \sum_i  \mathbb{V} X_i = \frac{\sigma^2}{n}.  \] 
+
+
+\vspace{3mm}
+
+
+\item Оценка состоятельна, т.к. $\operatorname{bias} = 0, \mathbb{V} \overline{X} \to 0$.
+
+\end{itemize}
+
+%----------------------------------------------------------
+\end{frame}
+%----------------------------------------------------------
+
+
+%----------------------------------------------------------
+\begin{frame}[plain]\frametitle{Семинар 1}
+%----------------------------------------------------------
+
+\textbf{Q3:} Найти \textbf{MSE} для \[ {\overline {X}}_{n}={\frac {1}{n}}(X_{1}+\cdots +X_{n}).\] 
+
+
+\vspace{5mm}
+
+
+
+\textbf{A:}  Если \[MSE = \operatorname{Bias}^2 + \mathbb{V} \overline{X}  = 0 + \frac{\sigma^2}{n} = \frac{\sigma^2}{n}. \]
+
+
+%----------------------------------------------------------
+\end{frame}
+%----------------------------------------------------------
+
+\section{Известные факты из теорвера}
+
+
+
+\begin{frame}[plain]\frametitle{Известные факты из теорвера} \tableofcontents[currentsection]\end{frame}
+
+
+
+%----------------------------------------------------------
+\begin{frame}[plain]\frametitle{Семинар 1}
+%----------------------------------------------------------
+
+\textbf{Q:} Является выборочная дисперсия \[S_{n}^{2}={\frac  {1}{n}}\sum \limits _{{i=1}}^{n}\left(X_{i}-{\bar  {X}}\right)^{2}\] \textbf{несмещённой} оценкой дисперсии?
+
+\pause
+
+\vspace{5mm}
+
+\textbf{A:} Нет, у несмещённой дисперсии другой коэффициент \[ S^{2}={\color{red} \frac  {1}{n-1}}\sum \limits _{{i=1}}^{n}\left(X_{i}-{\bar  {X}}\right)^{2}.\]
+
+
+
+%----------------------------------------------------------
+\end{frame}
+%----------------------------------------------------------
+
+%----------------------------------------------------------
+\begin{frame}[plain]\frametitle{Семинар 1}
+%----------------------------------------------------------
+
+Полезные неравенства: 
+
+\vspace{5mm}
+
+\begin{itemize}
+
+\item {\color{blue} Неравенство Чебышёва}. Если $\mathbb{V} X = \sigma^2 < \infty$ и  $ \mathbb{E} X = \mu$, то \[{\mathbb  {P}}\left(|X-\mu |\geqslant a\right)\leqslant {\frac  {\sigma ^{2}}{a^{2}}},\]
+
+\vspace{5mm}
+
+\item {\color{blue} Неравенство Маркова}. Если $X \geq 0 $ и $a >0$, то  \[{\displaystyle \operatorname {P} (X\geq a)\leq {\frac {\operatorname {E} (X)}{a}}.}\]
+
+\end{itemize}
+
+
+%----------------------------------------------------------
+\end{frame}
+%----------------------------------------------------------
+
+
+
+
+\section{Метод моментов}
+
+
+
+\begin{frame}[plain]\frametitle{Метод моментов} \tableofcontents[currentsection]\end{frame}
+
+
+
+%----------------------------------------------------------
+\begin{frame}[plain]\frametitle{Метод моментов}
+%----------------------------------------------------------
+
+
+{\color{blue} Метод моментов.} 
+
+\vspace{5mm}
+
+\begin{itemize}
+
+\item Моменты --- это функции от параметров \[\mu_j = \mathbb{E} (X^j) = g_j( \theta_1, \dots, \theta_k).\] 
+
+\vspace{2mm}
+
+\item \textit{Приравниваем моменты и выборочные моменты}
+\[{\displaystyle {\widehat {\mu }}_{j}={\frac {1}{n}}\sum _{i=1}^{n}x_{i}^{j}}\] и решаем как уравнение на параметры $\theta_1, \dots, \theta_k$.
+
+
+\end{itemize}
+
+
+%----------------------------------------------------------
+\end{frame}
+%----------------------------------------------------------
+
+
+
+%----------------------------------------------------------
+\begin{frame}[plain]\frametitle{Семинар 1}
+%----------------------------------------------------------
+Оценка методом параметров ${\displaystyle {\widehat {\theta }}_{1},{\widehat {\theta }}_{2},\dots ,{\widehat {\theta }}_{k}}$ --- решение системы уравнений 
+
+\vspace{5mm}
+
+\[{\displaystyle {\begin{aligned}{\widehat {\mu }}_{1}&=g_{1}({\widehat {\theta }}_{1},{\widehat {\theta }}_{2},\ldots ,{\widehat {\theta }}_{k}),\\[4pt]{\widehat {\mu }}_{2}&=g_{2}({\widehat {\theta }}_{1},{\widehat {\theta }}_{2},\ldots ,{\widehat {\theta }}_{k}),\\&\,\,\,\vdots \\{\widehat {\mu }}_{k}&=g_{k}({\widehat {\theta }}_{1},{\widehat {\theta }}_{2},\ldots ,{\widehat {\theta }}_{k}).\end{aligned}}}\]
+
+
+
+%----------------------------------------------------------
+\end{frame}
+%----------------------------------------------------------
+
+
+
+%----------------------------------------------------------
+\begin{frame}[plain]\frametitle{Семинар 1}
+%----------------------------------------------------------
+
+\textbf{Пример.} Найдём параметры нормального распределения $\mathcal{N}(\mu, \sigma^2)$ с помощью метода моментов. 
+
+\pause
+
+\vspace{5mm}
+
+
+\textbf{A:}
+
+\begin{itemize}
+
+\item Моменты: $\mathbb{E} X = \mu$. Чему равно $\mathbb{E} X^2$?.
+
+\vspace{3mm} 
+
+\pause 
+
+\[ \mathbb{V} X = \mathbb{E} (X - \mathbb{E} X)^2 = \mathbb{E} (X^2) - (\mathbb{E} X)^2. \]
+
+\vspace{3mm} 
+
+\item Итак, в данном случае \[ \mu_1 = \mu, \qquad \mu_2 = \sigma^2 + \mu^2.\]
+
+
+
+\end{itemize}
+
+
+%----------------------------------------------------------
+\end{frame}
+%----------------------------------------------------------
+
+
+
+%----------------------------------------------------------
+\begin{frame}[plain]\frametitle{Семинар 1}
+%----------------------------------------------------------
+
+
+Получаем систему уравнений \begin{gather*} \mu  = \frac{1}{n} \sum_{i} X_i \\ \mu^2 + \sigma^2  = \frac{1}{n} \sum_{i} X_i^2 \end{gather*}
+
+\vspace{5mm} \textbf{Ответ:} \begin{gather*} \mu  = \bar{X} \\ \sigma^2  = \frac{1}{n} \sum_{i}\left( X_i - \bar{X} \right)^2  \end{gather*}
+
+
+
+%----------------------------------------------------------
+\end{frame}
+%----------------------------------------------------------
+
+
+
+%----------------------------------------------------------
+\begin{frame}[plain]\frametitle{Семинар 1}
+%----------------------------------------------------------
+
+\textit{При необходимых нужных условий}
+
+\vspace{5mm}
+
+\begin{itemize}
+
+\item Оценка методом момента $\hat{\theta}_n$ существует.
+
+\vspace{5mm}
+
+\item Состоятельна $\hat{\theta}_n   \ \xrightarrow {\mathbb{P}} \ \theta$.
+
+\vspace{5mm}
+
+\item Асимптотически нормальна. 
+
+\end{itemize}
+
+
+%----------------------------------------------------------
+\end{frame}
+%----------------------------------------------------------
+
+
+\section{Оценка максимального правдоподобия}
+
+
+
+\begin{frame}[plain]\frametitle{Оценка максимального правдоподобия} \tableofcontents[currentsection]\end{frame}
+
+
+%----------------------------------------------------------
+\begin{frame}[plain]\frametitle{Семинар 1}
+%----------------------------------------------------------
+
+\textbf{Q:} $X_1, \dots, X_n \sim \operatorname{Bernoulli}(p)$. 
+Найти оценку максимального правдоподобия. 
+
+\vspace{5mm}
+
+\textbf{A:}  Плотность распределения \[f_p(x) = p^x (1-p)^{1-x}.\] 
+
+\pause
+
+
+\begin{enumerate}
+
+\item Вычисляем логарифмическую функцию правдоподобия. \[\ell_n = \sum_i \ln f_p(x_i) =S \ln p +(n-S) \ln (1-p), \qquad S = \sum x_i. \]
+
+\pause
+
+\item Находим экстремум \[\frac{\partial \ell_n} {\partial p} = 0 \qquad \Rightarrow \qquad \frac{S}{p} - \frac{(n-S)}{  (1-p)}= 0 \qquad \Rightarrow \qquad  \hat{p} = \frac{S}{n}. \] 
+
+
+\end{enumerate}
+
+\vspace{5mm}
+
+\textbf{Q:} Что ещё нужно сделать?
+
+%----------------------------------------------------------
+\end{frame}
+%----------------------------------------------------------
+
+ 
+ 
+
+%----------------------------------------------------------
+\begin{frame}[plain]\frametitle{Семинар 1}
+%----------------------------------------------------------
+
+\begin{itemize}
+
+\item По-хорошему, нужно проверить, что \textit{максимум не достигается на границе}.
+
+\vspace{5mm}
+
+Если в исходе все элементы равны, то формула верна. Иначе при $p =0,1$ правдоподобие равно 0, и это не максимум. 
+
+\pause
+
+\vspace{5mm}
+
+\item Проверить, что \textit{экстремум --- максимум}. Варианты:
+
+\vspace{5mm}
+
+\pause
+
+\begin{itemize}
+
+\item Матрица вторых производных (гессиан) отрицательно определена. 
+
+\vspace{5mm}
+
+\item Т-ма Вейрештрассе. Непрерывная функция на компакте достигает своего минимума и максимума.
+
+\end{itemize}
+ 
+
+\end{itemize}
+
+
+%----------------------------------------------------------
+\end{frame}
+%----------------------------------------------------------
+
+ 
+ 
+
+%----------------------------------------------------------
+\begin{frame}[plain]\frametitle{Семинар 1}
+%----------------------------------------------------------
+
+\textbf{Q:} $X_1, \dots, X_n \sim \operatorname{U}(0,\theta)$. Найти ML оценку. 
+
+\vspace{5mm}
+
+
+Плотность: \[ f(x, \theta) = \begin{cases} \frac{1}{\theta}, \qquad 0 \leq x \leq  \theta \\  0, \qquad \text{иначе} \end{cases}\]
+
+\pause
+
+\textbf{A:} $X_{n} = \max(X_1, \dots, X_n)$, потому что \[ \mathcal{L}_n  = \begin{cases} \frac{1}{\theta^n}, \qquad \theta \geq X_{(n)} \\  0, \qquad \text{иначе} \end{cases} \]
+
+
+%----------------------------------------------------------
+\end{frame}
+%----------------------------------------------------------
+
+ 
+ 
+
+
+
+%----------------------------------------------------------
+\begin{frame}[plain]\frametitle{Семинар 1}
+%----------------------------------------------------------
+
+\textbf{Q:} $X_1, \dots, X_n \sim \operatorname{U}(0,\theta)$. Найти ML оценку. 
+
+\vspace{5mm}
+
+
+Плотность: \[ f(x, \theta) = \begin{cases} \frac{1}{\theta}, \qquad 0 < x < \theta \\  0, \qquad \text{иначе} \end{cases}\]
+
+
+\pause
+
+\textbf{A:} {\color{red} Её нет}. 
+
+
+
+
+%----------------------------------------------------------
+\end{frame}
+%----------------------------------------------------------
+
+
+%----------------------------------------------------------
+\begin{frame}[plain]\frametitle{Семинар 1}
+%----------------------------------------------------------
+
+
+\textbf{Q:} Будет ли  оценка  $X_{n} = \max(X_1, \dots, X_n)$ асимптотически нормальна?
+
+\pause
+
+
+\vspace{5mm}
+
+\textbf{A:} Нет, $\hat{\theta}$ всегда меньше $\theta$. 
+
+
+\vspace{5mm}
+
+Задание на дом --- \textit{что пошло не так}?
+
+%----------------------------------------------------------
+\end{frame}
+%----------------------------------------------------------
+
+
+
+\section{Экспоненциальное семейство распределений}
+
+
+
+\begin{frame}[plain]\frametitle{Экспоненциальное семейство распределений} \tableofcontents[currentsection]\end{frame}
+
+
+
+%----------------------------------------------------------
+\begin{frame}[plain]\frametitle{Семинар 1}
+%----------------------------------------------------------
+
+Семейство распределений относится к {\color{blue} экспоненциальному классу}, если его плотность может быть представлена в следующем виде: \[ f(x | \theta)  = \frac{h(x) }{g(\theta)} \operatorname{exp} \left( \theta^T u(x) \right), \] где 
+
+\vspace{5mm}
+
+\begin{itemize}
+
+\item $h(x) \geq 0$,
+
+\vspace{5mm}
+
+\item $ \theta^T u(x)$ означает $\theta_1 u_1(x) + \dots + \theta_k u_k(x)$,
+
+\vspace{5mm}
+
+\item $u_j(x)$ --- произвольные функции.
+
+\end{itemize}
+
+
+
+%----------------------------------------------------------
+\end{frame}
+%----------------------------------------------------------
+
+ 
+ 
+
+%----------------------------------------------------------
+\begin{frame}[plain]\frametitle{Семинар 1}
+%----------------------------------------------------------
+
+ \[ f(x | \theta)  = \frac{h(x) }{g(\theta)} \operatorname{exp} \left( \theta^T u(x) \right)\] 
+ 
+  \vspace{3mm}
+  
+ \textit{Контрольный вопрос}. Чему равно $g(\theta)$? 
+ 
+\pause
+ 
+ \vspace{5mm}
+ 
+  \textit{Ответ}. Чтобы получилась плотность распределения,  \[ g(\theta) = \int h(x)  \operatorname{exp} \left( \theta^T u(x) \right) dx. \]  
+  
+  
+%----------------------------------------------------------
+\end{frame}
+%----------------------------------------------------------
+
+
+
+%----------------------------------------------------------
+\begin{frame}[plain]\frametitle{Семинар 1}
+%----------------------------------------------------------
+  
+Многие распределения лежат в экспоненциальном классе.
+  
+  
+\begin{figure}[h!]
+\center{\includegraphics[height=0.65\textheight]{pic/Distr}}
+%\caption{} \label{Fig:}
+\end{figure}
+
+  \vspace{5mm}
+  
+  \textbf{Q:} Какого известного распределения нет?
+  
+%----------------------------------------------------------
+\end{frame}
+%----------------------------------------------------------
+
+
+
+%----------------------------------------------------------
+\begin{frame}[plain]\frametitle{Семинар 1}
+%----------------------------------------------------------
+
+НЕ лежат в экспоненциальном классе:
+
+
+\vspace{5mm}
+
+\begin{itemize}
+
+\item Равномерные распределения $U[a,b]$.
+
+\vspace{5mm}
+
+\item Смеси распределений = выпуклые комбинации плотностей \[ f(x) = \sum \alpha_i f_i(x), \qquad \alpha_j \geq 0, \qquad \sum_j \alpha_j = 1.\] 
+
+\vspace{5mm}
+
+\item Распределение Стьюдента. 
+
+
+
+\end{itemize}
+  
+  
+  
+%----------------------------------------------------------
+\end{frame}
+%----------------------------------------------------------
+
+
+
+%----------------------------------------------------------
+\begin{frame}[plain]\frametitle{Семинар 1}
+%----------------------------------------------------------
+
+
+\textbf{Q:} Показать, что биномиальное распределение $\operatorname{Bin}(n, p)$ при \textit{фиксированном n} лежит в экспоненциальном семействе. 
+
+\vspace{5mm}
+
+Плотность:
+\[{\displaystyle f(x, p)={n \choose x}p^{x}(1-p)^{n-x},\quad x\in \{0,1,2,\ldots ,n\}.}.\]
+
+
+%----------------------------------------------------------
+\end{frame}
+%----------------------------------------------------------
+
+
+
+%----------------------------------------------------------
+\begin{frame}[plain]\frametitle{Семинар 1}
+%----------------------------------------------------------
+
+
+Хотим выражение \[ f(x | \theta)  = \frac{h(x) }{g(\theta)} \operatorname{exp} \left( \theta^T u(x) \right), \] 
+
+
+В произведении нужно выделить 3 множителя:
+
+\vspace{5mm}
+
+
+\begin{itemize}
+
+\item $h(x)$ --- зависит только от $x$.
+
+\vspace{5mm}
+
+\item $g(\theta)$ --- зависит только от $\theta$.
+
+\vspace{5mm}
+
+\item $ \operatorname{exp} \left( \theta^T u(x) \right)$ --- содержит всю зависимость между $x$ и параметрами.
+
+\end{itemize}
+  
+%----------------------------------------------------------
+\end{frame}
+%----------------------------------------------------------
+
+
+
+%----------------------------------------------------------
+\begin{frame}[plain]\frametitle{Семинар 1}
+%----------------------------------------------------------
+
+Смотрим на 
+\[ f(x, p)={n \choose x}p^{x}(1-p)^{n-x} = {n \choose x} \exp \left[ x \log p + (n-x) \log (1-p) \right].\]
+
+
+
+\vspace{5mm}
+
+\pause
+
+Группируем слагаемые 
+
+
+\[ {\displaystyle f(x)={n \choose x}\exp \left(x\log \left({\frac {p}{1-p}}\right)+n\log(1-p)\right) =}\]
+
+\[ = \frac{{n \choose x}}{\exp(-n \log(1-p))} \exp \left(x\log \left({\frac {p}{1-p}}\right)\right) \]
+
+
+ 
+%----------------------------------------------------------
+\end{frame}
+%----------------------------------------------------------
+
+
+
+%----------------------------------------------------------
+\begin{frame}[plain]\frametitle{Семинар 1}
+%----------------------------------------------------------
+  
+ 
+  
+\[ f(x)= \frac{{n \choose x}}{\exp(-n \log(1-p))} \exp \left(x\log \left({\frac {p}{1-p}}\right)\right)  =  \frac{h(x) }{g(\theta)} \operatorname{exp} \left( \theta^T u(x) \right), \] 
+\vspace{3mm}
+
+\textbf{Ответ:}
+
+
+\begin{itemize}
+
+\item $h(x) = {n \choose x}.$ 
+
+\vspace{5mm}
+
+
+Формально следует домножить на носитель $  I (x \in \{0,1,2,\ldots ,n\})$.
+
+\vspace{5mm}
+
+\item $\theta = \log \frac{p}{1-p} \qquad \Rightarrow \qquad p = \frac{e^{\theta}}{1 + e^{\theta}}$
+
+\vspace{5mm}
+
+\item $u(x) = x$.
+
+\vspace{5mm}
+
+\item $g(\theta) = \exp(n \log \frac{1}{1-p} )= \exp (n \log (1 + e^{\theta})).$
+
+\end{itemize}
+
+
+%----------------------------------------------------------
+\end{frame}
+%----------------------------------------------------------
+
+
+
+\end{document}

@@ -1,0 +1,1825 @@
+\documentclass[9pt]{beamer}
+
+
+
+
+\usepackage{beamerthemesplit}
+\usetheme{Boadilla}
+\usecolortheme{orchid}
+
+
+
+
+
+ % \usepackage[cp866]{inputenc}                %%% Є®¤Ёа®ўЄ  DOS
+  \usepackage[cp1251]{inputenc}
+%  \usepackage[T2A]{fontenc}                %%% ???
+%\usepackage[english,russian]{babel}
+%\usepackage[russian]{babel}
+ \usepackage[OT1]{fontenc}
+%\usepackage[english]{babel}
+\usepackage[russian]{babel}
+
+\usepackage{amssymb,latexsym, amsmath, mathdots}
+
+\usepackage{amscd}
+\usepackage{multirow}
+\usepackage{comment}
+
+\usepackage{epstopdf}
+
+
+
+%\usepackage[table]{xcolor} %colored cells
+
+%\usepackage{tikz}
+%\usetikzlibrary{tikzmark} %arrows in tables
+
+
+\usepackage{mnsymbol} % udots in matrices
+
+
+ \usepackage{pgfpages}
+%\setbeameroption{show notes}
+%\setbeameroption{show notes on second screen=bottom}
+%% \setbeameroption{show notes on second screen}
+
+%\setbeamercolor{alerted text}{fg=red!80!black}
+
+
+% \setbeamercolor{alerted text}{fg=blue!50!green}
+% \setbeamercolor{fortheorem}{bg=blue!15!white}
+% \setbeamercolor{EMPF}{bg=blue!25!white}
+% \setbeamercolor{EMPF2}{bg=blue!35!white}
+
+%\setbeamersize{text margin left=5.mm, text margin right=5.mm}
+
+
+%---------------------------------------------------------------------------------------------------------------------------
+
+%\def\emphbox#1#2#3{\begin{beamercolorbox}[wd=#2, ht=#1, center, colsep=1.mm]{EMPF} #3 \end{beamercolorbox}}
+
+%---------------------------------------------------------------------------------------------------------------------------
+
+
+%\advance\leftskip-5.mm
+
+
+
+%***************************************************************************************************************************
+
+\theoremstyle{theorem}
+\newtheorem{mytheorem}[theorem]{Теорема}
+\newtheorem{mylemma}[theorem]{Лемма}
+\newtheorem{mycorollary}[theorem]{Следствие}
+
+\newtheorem{proposition}[theorem]{Предложение}
+\newtheorem{assertion}[theorem]{Утверждение}
+\newtheorem{remark}[theorem]{Замечание}
+\newtheorem{assumption}[theorem]{Предположение}
+
+\newtheorem{convention}[theorem]{Договорённость}
+\newtheorem{question}[theorem]{Вопрос}
+%\newtheorem{mydefinition}{mydefinition}
+
+\theoremstyle{definition}
+\newtheorem{mydefinition}[theorem]{Определение}
+\newtheorem{myexample}[theorem]{Пример}
+
+
+
+%***************************************************************************************************************************
+
+\chardef\No=194
+\newcommand{\bd}{{\rm bd}}
+\newcommand{\cl}{{\rm cl}}
+\newcommand{\ind}{{\rm ind}}
+\newcommand{\id}{{\rm id}}
+\newcommand{\inj}{{\sl in}}
+\newcommand{\pr}{{\rm pr}}
+\newcommand{\st}{{\rm St}}
+
+
+\DeclareMathOperator{\sgrad}{sgrad}
+
+\DeclareMathOperator{\cnt}{const}
+
+\DeclareMathOperator{\Aut}{Aut}
+
+
+\DeclareMathOperator{\sgn}{sgn}
+
+\DeclareMathOperator{\Int}{Int}
+
+
+\DeclareMathOperator{\tr}{tr}
+
+\DeclareMathOperator{\Mat}{Mat}
+
+
+
+
+
+
+
+%****************************************************************************
+\newcommand{\Ker}{\mathrm{Ker}\,\,}
+\newcommand{\Ann}{\mathrm{Ann}\,\,}
+
+\newcommand{\Imm}{\mathrm{Im}\,\,}
+
+\newcommand{\rk}{\mathrm{rk}\,\,}
+
+\newcommand{\const}{\mathrm{const}}
+
+
+
+\DeclareMathOperator{\Pen}{\mathcal{P}}
+
+
+\DeclareMathOperator{\Core}{K}
+
+
+\DeclareMathOperator{\BLG}{\operatorname{BLG}}
+
+\DeclareMathOperator{\AutBP}{\operatorname{Aut}(V, \mathcal{P})}
+
+
+\def\minus{\hbox{-}}   %Sign of minus in big matrices
+
+\usepackage{multirow}  %Columns spanning multiple rows
+
+\usepackage[normalem]{ulem} %underline that can break lines
+
+%\usepackage[normalem]{ulem}
+
+\usepackage{wasysym} %smilies
+    
+%****************************************************************************
+
+
+
+\title% [] (optional, only for long titles)
+{Прикладная статистика в машинном обучении \\ Лекция 7 \\ $A/B$-тестирование}
+%\subtitle{}
+\author [И. \,К.~Козлов] %(optional, for multiple authors)
+{И. \,К.~Козлов \\ {\footnotesize(\textit{Мехмат МГУ})}}
+
+
+\date % [](optional)
+{2022}
+%\subject{Mathematics}
+
+
+
+
+
+
+
+
+\usepackage{hyperref}
+%\hypersetup{unicode=true}
+\hypersetup{
+  colorlinks=true,
+  linkcolor=green!70!black, %blue!50!red,
+  urlcolor=green!70!black,
+  unicode=true
+}
+
+\begin{document}
+
+%\includeonlyframes{}
+\frame{\titlepage}
+
+
+
+
+
+
+\section{АБ тестирование}
+
+
+
+\begin{frame}[plain]\frametitle{АБ тестирование} \tableofcontents[currentsection]\end{frame}
+
+
+
+%----------------------------------------------------------
+\begin{frame}[plain]\frametitle{IT is simplified Pharma}
+%----------------------------------------------------------
+
+
+\begin{center} \Large IT --- это простенькая фарма \end{center}
+
+
+\begin{figure}[h!]
+\center{\includegraphics[width=0.7\textwidth]{pic/RedBlue}}
+%\caption{\Large Осторожно! Грядут страшные формулы!} \label{Fig:}
+\end{figure}
+
+\begin{center}
+
+\large \textit{Двойное слепое рандомизированное плацебо-контролируемое испытание}.
+
+\vspace{5mm}
+
+Сильно упрощая --- АБ-тесты.
+
+\end{center}
+
+%----------------------------------------------------------
+\end{frame}
+%----------------------------------------------------------
+
+
+
+%----------------------------------------------------------
+\begin{frame}[plain]\frametitle{AB tests}
+%----------------------------------------------------------
+
+\begin{center}
+\Large Меняем один из параметров, смотрим на выгоду. 
+\end{center}
+
+  
+\begin{figure}[h!]
+\center{\includegraphics[width=0.65\textwidth]{pic/Convert}}
+%\caption{Итоговая оценка} \label{Fig:}
+\end{figure}
+
+  %----------------------------------------------------------
+\end{frame}
+%----------------------------------------------------------
+
+
+
+
+%----------------------------------------------------------
+\begin{frame}[plain]\frametitle{41 shades of blue}
+%----------------------------------------------------------
+
+
+\large Особенности IT (поисковики, Netflix и т.д.):
+
+\vspace{5mm}
+
+\begin{itemize}
+
+\item огромный поток пользователей, 
+
+\vspace{5mm}
+
+\item куча проблем вплоть до ``какого цвета сделать ссылки''.
+
+\end{itemize}
+
+\vspace{5mm}
+
+\begin{figure}[h!]
+\center{\includegraphics[width=0.55\textwidth]{pic/bluelink}}
+%\caption{\Large Осторожно! Грядут страшные формулы!} \label{Fig:}
+\end{figure}
+
+
+%----------------------------------------------------------
+\end{frame}
+%----------------------------------------------------------
+
+
+
+
+
+%----------------------------------------------------------
+\begin{frame}[plain]\frametitle{Data-driven decision-making culture}
+%----------------------------------------------------------
+
+\begin{center}
+\Large Естественно, AB-тесты прельщают своей простотой, \\ объективностью и клиентоориентированностью.
+\end{center}
+
+\begin{figure}[h!]
+\center{\includegraphics[height=0.5\textheight]{pic/ABEver}}
+%\caption{\Large Осторожно! Грядут страшные формулы!} \label{Fig:}
+\end{figure}
+
+
+%----------------------------------------------------------
+\end{frame}
+%----------------------------------------------------------
+
+
+%----------------------------------------------------------
+\begin{frame}[plain]\frametitle{AB tests}
+%----------------------------------------------------------
+
+
+Есть {\Large \textit{огромное}} количество материалов по $A/B$-тестированию:
+
+\vspace{5mm}
+
+\begin{itemize}
+
+
+\item {\large \hyperlink{https://habr.com/ru/company/avito/blog/454164/}{Как устроено A/B-тестирование в Авито}} 
+
+\vspace{5mm}
+
+\item {\large \hyperlink{https://academy.yandex.ru/posts/kak-provesti-a-b-testirovanie-6-prostykh-shagov}{Как провести A/B-тестирование: 6 простых шагов}} 
+
+
+
+\vspace{5mm}
+
+\item {\large \hyperlink{https://netflixtechblog.com/its-all-a-bout-testing-the-netflix-experimentation-platform-4e1ca458c15}{It’s All A/Bout Testing: The Netflix Experimentation Platform}}
+
+
+\vspace{5mm}
+
+
+\item и всё, что Вы ещё нагуглите... :)
+
+\end{itemize}
+
+
+
+
+
+%----------------------------------------------------------
+\end{frame}
+%----------------------------------------------------------
+
+%----------------------------------------------------------
+\begin{frame}[plain]\frametitle{Пайплайн}
+%----------------------------------------------------------
+
+
+\begin{center}
+$A/B$ тесты --- частный случай тестирования гипотез. 
+
+\vspace{2mm}
+
+Пайплайн по сути тот же.
+\end{center}
+
+\vspace{-2mm}
+
+\begin{figure}[h!]
+\center{\includegraphics[width=0.9\textwidth]{pic/Workflow1}}
+%\caption{\Large Осторожно! Грядут страшные формулы!} \label{Fig:}
+\end{figure}
+
+
+
+
+%----------------------------------------------------------
+\end{frame}
+%----------------------------------------------------------
+
+
+
+
+%----------------------------------------------------------
+\begin{frame}[plain]\frametitle{Повторим пайплайн}
+%----------------------------------------------------------
+
+\begin{figure}[h!]
+\center{\includegraphics[width=0.9\textwidth]{pic/Hypo3}}
+%\caption{\Large Осторожно! Грядут страшные формулы!} \label{Fig:}
+\end{figure}
+
+
+%----------------------------------------------------------
+\end{frame}
+%----------------------------------------------------------
+
+
+
+
+%----------------------------------------------------------
+\begin{frame}[plain]\frametitle{Популярные тесты}
+%----------------------------------------------------------
+
+
+\begin{figure}[h!]
+\center{\includegraphics[width=0.9\textwidth]{pic/Tests1}}
+%\caption{\Large Осторожно! Грядут страшные формулы!} \label{Fig:}
+\end{figure}
+
+\vspace{1mm}
+
+\begin{center}
+Ещё можно строить доверительные интервалы при помощи бутстрепа. 
+
+\vspace{5mm}
+
+Если данных мало, могут потребоваться тесты поточнее.
+\end{center}
+
+
+%----------------------------------------------------------
+\end{frame}
+%----------------------------------------------------------
+
+
+
+%----------------------------------------------------------
+\begin{frame}[plain]\frametitle{Теория без практики мертва}
+%----------------------------------------------------------
+
+\begin{center}
+Мы не можем объять необъятное.
+
+\vspace{5mm}
+
+Лучший способ разобраться в материале? Поработать аналитиком/DS)
+\end{center}
+
+
+
+\begin{figure}[h!]
+\center{\includegraphics[height=0.5\textheight]{pic/Practice}}
+%\caption{Итоговая оценка} \label{Fig:}
+\end{figure}
+
+
+
+
+%----------------------------------------------------------
+\end{frame}
+%----------------------------------------------------------
+
+
+
+
+
+
+
+
+
+%----------------------------------------------------------
+\begin{frame}[plain]\frametitle{Кино и математика}
+%----------------------------------------------------------
+
+\begin{center}
+\large Поговорим немного про Netflix и попробуем найти в этом математику)
+\end{center}
+
+\vspace{5mm}
+
+\begin{figure}[h!]
+\center{\includegraphics[width=0.7\textwidth]{pic/MathNetflix}}
+%\caption{Итоговая оценка} \label{Fig:}
+\end{figure}
+
+  
+  %----------------------------------------------------------
+\end{frame}
+%----------------------------------------------------------
+
+
+
+%----------------------------------------------------------
+\begin{frame}[plain]\frametitle{Статьи, которые обсудим}
+%----------------------------------------------------------
+
+
+\begin{center}
+Мы обсудим интересные моменты из следующих статей:
+\end{center}
+
+
+\begin{itemize}
+
+\item Improving the Sensitivity of Online Controlled Experiments by Utilizing Pre-Experiment Data
+
+\vspace{5mm}
+
+\item {\color{blue} Improving the Sensitivity of Online Controlled Experiments: Case Studies at Netflix}
+
+\vspace{5mm}
+
+\item How Booking.com increases the power of online experiments with CUPED
+
+\end{itemize}
+
+
+
+%----------------------------------------------------------
+\end{frame}
+%----------------------------------------------------------
+
+
+%----------------------------------------------------------
+\begin{frame}[plain]\frametitle{Похожий доклад}
+%----------------------------------------------------------
+
+
+
+\begin{center}
+
+\Large Доклад будет достаточно похож на:
+
+\vspace{5mm}
+
+\url{https://habr.com/ru/company/yandex/blog/497804/}
+
+\end{center}
+
+\begin{figure}[h!]
+\center{\includegraphics[height=0.5\textheight]{pic/Habr1}}
+%\caption{\Large Осторожно! Грядут страшные формулы!} \label{Fig:}
+\end{figure}
+
+
+%----------------------------------------------------------
+\end{frame}
+%----------------------------------------------------------
+
+
+
+
+\section{Размер выборки}
+
+
+
+\begin{frame}[plain]\frametitle{Размер выборки} \tableofcontents[currentsection]\end{frame}
+
+
+
+%----------------------------------------------------------
+\begin{frame}[plain]\frametitle{Хэширование}
+%----------------------------------------------------------
+
+В крупных компаниях:
+
+\vspace{5mm}
+
+\begin{itemize}
+
+\item огромный поток пользователей,
+
+\vspace{5mm}
+
+\item одновременно проводится большое количество экспериментов.
+
+\end{itemize}
+
+
+%----------------------------------------------------------
+\end{frame}
+%----------------------------------------------------------
+
+
+
+%----------------------------------------------------------
+\begin{frame}[plain]\frametitle{Повторим пайплайн}
+%----------------------------------------------------------
+
+\large Возникают вопросы вида --- как лучше и ``покомпактней'' захэшировать пользователей.
+
+\vspace{5mm}
+
+{\large \hyperlink{https://habr.com/ru/company/yandex/blog/342704/}{Как у нас устроено A/Б-тестирование. Лекция Яндекса}} 
+
+
+
+
+\begin{figure}[h!]
+\center{\includegraphics[width=0.4\textwidth]{pic/Hash}}
+\caption{\Large Хэш - нарезал и перемешал} \label{Fig:}
+\end{figure}
+
+
+
+%----------------------------------------------------------
+\end{frame}
+%----------------------------------------------------------
+
+
+
+%----------------------------------------------------------
+\begin{frame}[plain]\frametitle{MDE}
+%----------------------------------------------------------
+
+Естественно, хочется побольше экспериментов и побыстрее. 
+
+\vspace{5mm}
+
+Для этого нужно \textit{уменьшить минимальный размер выборки}.
+
+\vspace{5mm}
+
+На практике можно использовать калькуляторы типа {\large \hyperlink{https://www.optimizely.com/sample-size-calculator/?conversion=3&effect=20&significance=95}{optimizely}} или {\large \hyperlink{https://www.abtasty.com/sample-size-calculator/}{abtasty}}.
+
+
+
+%Чтобы его найти, фиксируют {\color{blue} минимальный детектируемый эффект (MDE)} --- минимальное улучшение, которое мы хотим обнаружить.
+
+%Скажем, сейчас конверсия $20\%$, если мы хотим после эксперимента $22\%$, то $MDE = 10\%$. 
+
+
+%----------------------------------------------------------
+\end{frame}
+%----------------------------------------------------------
+
+
+
+%----------------------------------------------------------
+\begin{frame}[plain]\frametitle{Калькуляторы}
+%----------------------------------------------------------
+
+
+\begin{figure}[h!]
+\center{\includegraphics[width=0.9\textwidth]{pic/Optimizely}}
+\caption{\Large Калькулятор для размера выборки} \label{Fig:}
+\end{figure}
+
+
+
+%----------------------------------------------------------
+\end{frame}
+%----------------------------------------------------------
+
+
+
+
+%----------------------------------------------------------
+\begin{frame}[plain]\frametitle{Размер выборки}
+%----------------------------------------------------------
+
+
+
+
+\begin{block}{Теорема}
+
+\begin{itemize}
+
+\item Минимальный размер выборки, чтобы оценить \textbf{доли населения}: \[ n  = \frac{\hat{p}(1-\hat{p}) z^2}{m^2}\] 
+
+
+\vspace{2mm}
+
+\item Минимальный размер выборки для оценки \textbf{среднего}: \[ n  = \frac{\sigma^2 z^2}{m^2}\] 
+
+
+\end{itemize}
+
+\end{block}
+
+\vspace{5mm}
+
+\pause
+
+Мы строим $1-\alpha$ доверительный интервал (для $p$ или $\sigma$):
+
+
+\vspace{3mm}
+
+
+\begin{itemize}
+
+\item $m$ --- {\color{blue} предельная погрешность выборки} ($\displaystyle =\frac{1}{2}$ длины доверительного интервала);
+
+\vspace{3mm}
+
+\item $z = z_{\alpha/2}$ --- квантиль нормального распределения.
+
+\end{itemize}
+
+
+
+
+%----------------------------------------------------------
+\end{frame}
+%----------------------------------------------------------
+
+
+%----------------------------------------------------------
+\begin{frame}[plain]\frametitle{Размер выборки}
+%----------------------------------------------------------
+
+
+Объясним, как получаются эти оценки. 
+
+\vspace{5mm}
+
+\textbf{Доля населения}. Мы ищем параметр $p$ для $\operatorname{Bernoulli}(p)$.
+
+\vspace{5mm}
+
+Строим доверительный интервал по ЦПТ: \[ \left({\widehat {p}}-z{\sqrt {\frac {p(1-p)}{n}}},\quad {\widehat {p}}+z{\sqrt {\frac {p(1-p)}{n}}}\right) \] 
+
+\vspace{2mm}
+
+\pause
+
+Отсюда получаем требуемую формулу \[ z{\sqrt {\frac {p(1-p)}{n}}} = m \qquad \Leftrightarrow \qquad      n  = \frac{p(1-p) z^2}{m^2}.\]
+
+
+
+
+
+
+
+
+%----------------------------------------------------------
+\end{frame}
+%----------------------------------------------------------
+
+
+
+
+
+%----------------------------------------------------------
+\begin{frame}[plain]\frametitle{Размер выборки}
+%----------------------------------------------------------
+
+\begin{center}
+\textbf{Пример}. Хотим в США измерить популярность президента. Хотим $95\%$ доверительный интервал шириной не более, чем в 2 процентных пункта ($0.02$).
+\end{center}
+
+
+
+\begin{figure}[h!]
+\center{\includegraphics[width=0.65\textwidth]{pic/USA}}
+%\caption{\Large Калькулятор для размера выборки} \label{Fig:}
+\end{figure}
+
+
+\begin{center}
+\textbf{Ответ:} Для опроса нужно $\displaystyle n = \frac{0,25 * (1,96)^2}{0,01^2} = 9604 \approx 10'000$ человек. 
+\end{center}
+
+
+
+%----------------------------------------------------------
+\end{frame}
+%----------------------------------------------------------
+
+
+
+%----------------------------------------------------------
+\begin{frame}[plain]\frametitle{Уменьшить дисперсию}
+%----------------------------------------------------------
+
+
+\begin{center}
+\large \textbf{Наблюдение}. Минимальный размер выборки имеет вид \[ n =  \text{{\color{blue} Дисперсия}} \cdot \frac{z^2}{m} .\] 
+\end{center}
+
+\vspace{5mm}
+
+
+\begin{center}
+\noindent\fbox{%
+    \parbox{16em}{%
+
+\vspace{3mm}
+
+
+
+    \Large \hspace{1mm} Чтобы \textbf{уменьшить выборку}, 
+    
+    \vspace{2mm}
+    
+\hspace{1mm}    нужно {\color{blue} уменьшить дисперсию} 
+    
+\vspace{3mm}    
+    }%
+}
+
+
+\end{center}
+
+%----------------------------------------------------------
+\end{frame}
+%----------------------------------------------------------
+
+
+
+%----------------------------------------------------------
+\begin{frame}[plain]\frametitle{Уменьшить дисперсию}
+%----------------------------------------------------------
+
+
+Способы уменьшить дисперсию:
+
+\vspace{5mm}
+
+
+\begin{itemize}
+
+\item Удаление аномалий.
+
+\vspace{5mm}
+
+
+\item {\color{blue} Стратификация}.
+
+\vspace{5mm}
+
+\item {\color{blue} CUPED}.
+
+\vspace{5mm}
+
+\item Применение ML моделей\footnote{Помогают в других способах: искать выбросы и т.д.}.
+
+\end{itemize}
+
+\vspace{5mm}
+
+Обсудим 2ой и 3ий способы.
+
+  
+  %----------------------------------------------------------
+\end{frame}
+%----------------------------------------------------------
+
+
+
+\section{Стратификация}
+
+
+
+\begin{frame}[plain]\frametitle{Стратификация} \tableofcontents[currentsection]\end{frame}
+
+
+
+%----------------------------------------------------------
+\begin{frame}[plain]\frametitle{Стратификация}
+%----------------------------------------------------------
+
+
+\begin{center}
+\noindent\fbox{%
+    \parbox{22em}{%
+
+\vspace{2mm}
+
+
+
+    \Large \hspace{1mm} Стратификация уменьшает дисперсию.
+    
+    \vspace{2mm}
+    }%
+}
+
+
+\end{center}
+
+
+
+
+\begin{figure}[h!]
+\center{\includegraphics[width=0.9\textwidth]{pic/CatDisp}}
+%\caption{\Large } \label{Fig:}
+\end{figure}
+
+
+
+%----------------------------------------------------------
+\end{frame}
+%----------------------------------------------------------
+
+
+
+%----------------------------------------------------------
+\begin{frame}[plain]\frametitle{Стратификация}
+%----------------------------------------------------------
+
+\large 
+
+\textbf{Q:} Есть ли естественные разбиения на группы для пользователей Netflix?
+
+\pause
+
+\vspace{5mm}
+
+\textbf{A:} Примеры признаков:
+
+\begin{figure}[h!]
+\center{\includegraphics[width=0.8\textwidth]{pic/NetStrat}}
+%\caption{\Large } \label{Fig:}
+\end{figure}
+
+
+
+%----------------------------------------------------------
+\end{frame}
+%----------------------------------------------------------
+
+
+%----------------------------------------------------------
+\begin{frame}[plain]\frametitle{Netflix}
+%----------------------------------------------------------
+
+\begin{center}
+Итак, Netflix.
+\end{center}
+
+\vspace{5mm}
+
+\begin{itemize}
+
+\item Есть {\color{blue} бизнес-метрика} Y.
+
+
+\vspace{5mm}
+
+\item Известен набор {\color{blue} ковариатов} $X$ --- признаков, коррелирующих с метрикой $Y$. 
+
+\vspace{5mm}
+
+Они должны быть измеримы до эксперимента (пол, возраст и т.д.)
+
+\end{itemize}
+
+
+%----------------------------------------------------------
+\end{frame}
+%----------------------------------------------------------
+
+
+%----------------------------------------------------------
+\begin{frame}[plain]\frametitle{Netflix}
+%----------------------------------------------------------
+
+
+Мы разбиваем пользователей на $K$ страт по значениям ковариат $X$. 
+
+\vspace{5mm}
+
+В каждой страте берём среднее значение бизнес-метрики $Y$. 
+
+
+\begin{figure}[h!]
+\center{\includegraphics[width=0.65\textwidth]{pic/Mean3}}
+%\caption{\Large } \label{Fig:}
+\end{figure}
+
+
+%----------------------------------------------------------
+\end{frame}
+%----------------------------------------------------------
+
+
+%----------------------------------------------------------
+\begin{frame}[plain]\frametitle{Условное матожидание}
+%----------------------------------------------------------
+
+
+
+Если занумеровать страты $Z = 1, \dots, k$, то мы рассматриваем условное матожидание \[ \mathbb{E} \left( Y \mid Z = k\right).\] 
+
+
+\vspace{1mm}
+
+Это функция от $k$, которая обозначается через $\mathbb{E}(Y \mid Z)$. 
+
+\vspace{5mm} 
+
+Вспомним формулы для её матожидания и дисперсии.
+
+
+
+%----------------------------------------------------------
+\end{frame}
+%----------------------------------------------------------
+
+
+%----------------------------------------------------------
+\begin{frame}[plain]\frametitle{Law of total expectation}
+%----------------------------------------------------------
+
+
+\textit{``Математическое ожидание убирает условие''}. 
+
+\vspace{5mm}
+
+\begin{block}{Закон полного математического ожидания} Если $\mathbb{E} (X) < \infty$, то для любой случайной величины $Y$ \[ {\color{red} \displaystyle \mathbb{E} (X) = \mathbb{E} (\mathbb{E} (X\mid Y)).} \]
+\end{block}
+
+\vspace{5mm}
+
+Ещё английские названия: the {\color{blue} law of iterated expectations}, the {\color{blue} tower rule}, the {\color{blue} smoothing theorem}.
+
+
+
+%----------------------------------------------------------
+\end{frame}
+%----------------------------------------------------------
+
+
+%----------------------------------------------------------
+\begin{frame}[plain]\frametitle{Law of total expectation}
+%----------------------------------------------------------
+
+\begin{center}
+\Large Наглядное объяснение формулы $ {\displaystyle \mathbb{E} (X) = \mathbb{E} (\mathbb{E} (X\mid Y))} $:
+\end{center}
+
+\begin{figure}[h!]
+\center{\includegraphics[width=0.5\textwidth]{pic/Mean2}}
+%\caption{\Large Калькулятор для размера выборки} \label{Fig:}
+\end{figure}
+
+
+\begin{center}
+\Large Центр масс системы - это центр масс усреднённых подсистем.
+\end{center}
+
+
+
+%----------------------------------------------------------
+\end{frame}
+%----------------------------------------------------------
+
+
+
+
+%----------------------------------------------------------
+\begin{frame}[plain]\frametitle{Law of total expectation}
+%----------------------------------------------------------
+
+Докажем теорему в случае, когда $X$ и $Y$ принимают конечное число значений.
+
+\[{\displaystyle {\begin{aligned}\operatorname {E} \left(\operatorname {E} (X\mid Y)\right)&=\operatorname {E} {\Bigg [}\sum _{x}x\cdot \operatorname {P} (X=x\mid Y){\Bigg ]}\\[6pt]&=\sum _{y}{\Bigg [}\sum _{x}x\cdot \operatorname {P} (X=x\mid Y=y){\Bigg ]}\cdot \operatorname {P} (Y=y)\\[6pt]&=\sum _{y}\sum _{x}x\cdot \operatorname {P} (X=x,Y=y).\end{aligned}}}\]
+
+\vspace{2mm}
+
+\pause
+
+Остаётся переставить местами суммы:
+
+\[ {\displaystyle {\begin{aligned}\sum _{x}\sum _{y}x\cdot \operatorname {P} (X=x,Y=y)&=\sum _{x}x\sum _{y}\operatorname {P} (X=x,Y=y)\\[6pt]&=\sum _{x}x\cdot \operatorname {P} (X=x)\\[6pt]&=\operatorname {E} (X).\end{aligned}}}\]
+
+%----------------------------------------------------------
+\end{frame}
+%----------------------------------------------------------
+
+
+
+%----------------------------------------------------------
+\begin{frame}[plain]\frametitle{Литература}
+%----------------------------------------------------------
+
+
+Доказательство в общем случае --- см. большие книжки по Теории Вероятностей:
+
+\vspace{5mm}
+
+\begin{thebibliography}{10}
+
+    
+  \beamertemplatebookbibitems
+  \bibitem{Wasserman}  А.\,Н.~Ширяев
+  
+  \newblock{\em Вероятность}.
+
+  \end{thebibliography}
+  
+  
+  %----------------------------------------------------------
+\end{frame}
+%----------------------------------------------------------
+
+
+%----------------------------------------------------------
+\begin{frame}[plain]\frametitle{Закон полной дисперсии}
+%----------------------------------------------------------
+
+
+
+\begin{block}{Закон полной дисперсии} Если $\mathbb{V} (X) < \infty$, то для любой случайной величины $Y$
+ \[{\color{red} \displaystyle \mathbb{V} (X)=\mathbb{E} [\mathbb{V} (X\mid Y)]+\mathbb{V} (\mathbb{E} [X\mid Y]).}\]
+\end{block}
+
+
+
+%----------------------------------------------------------
+\end{frame}
+%----------------------------------------------------------
+
+
+
+%----------------------------------------------------------
+\begin{frame}[plain]\frametitle{Закон полной дисперсии}
+%----------------------------------------------------------
+
+\begin{center}
+\large Наглядное объяснение формулы. Объекты --- множества вида $Y=y$.
+
+\vspace{5mm}
+
+Полная дисперсия = сумма дисперсии ``по x'' и дисперсии ``по y''.
+\end{center}
+
+
+
+\begin{figure}[h!]
+\center{\includegraphics[width=0.6\textwidth]{pic/FullVariance}}
+%\caption{\Large Калькулятор для размера выборки} \label{Fig:}
+\end{figure}
+
+
+
+
+%----------------------------------------------------------
+\end{frame}
+%----------------------------------------------------------
+
+%----------------------------------------------------------
+\begin{frame}[plain]\frametitle{Закон полной дисперсии}
+%----------------------------------------------------------
+
+
+
+\textbf{Доказательство} закона полной дисперсии.
+
+\vspace{5mm}
+
+Честно расписываем дисперсию и применяем закон полного математического матожидания \[ \displaystyle \mathbb{E} (X) = \mathbb{E} (\mathbb{E} (X\mid Y)). \]
+
+\pause
+
+\vspace{2mm} 
+
+Получаем \begin{align*}
+\mathbb{E} \left[ \mathbb{V} (X |Y) \right] &=& \mathbb{E} \left[ \mathbb{E} (X^2 |Y)  - \left(\mathbb{E}\left[ X\mid Y \right] \right)^2 \right] & =& \mathbb{E} (X^2)  - {\color{red} \mathbb{E} \left[\left(\mathbb{E}\left[ X\mid Y \right] \right)^2 \right] }   \\
+\mathbb{V} \left[ \mathbb{E} (X |Y) \right] &=&  \mathbb{E} \left[\left(\mathbb{E}\left[ X\mid Y \right] \right)^2 \right]  - \left( \mathbb{E} \left[ \mathbb{E} (X |Y) \right]\right)^2  & =& {\color{red} \mathbb{E} \left[\left(\mathbb{E}\left[ X\mid Y \right] \right)^2 \right] } - \left(\mathbb{E}\left[ X \right] \right)^2 \end{align*}
+
+\pause
+
+\vspace{2mm}
+
+Складывая, получаем требуемое  \[ \displaystyle \mathbb{V} (X)=\mathbb{E} [\mathbb{V} (X\mid Y)]+\mathbb{V} (\mathbb{E} [X\mid Y]).\] 
+
+
+%----------------------------------------------------------
+\end{frame}
+%----------------------------------------------------------
+
+
+
+%----------------------------------------------------------
+\begin{frame}[plain]\frametitle{Перерыв}
+%----------------------------------------------------------
+
+
+\begin{center}
+\Huge Перерыв
+\end{center}
+
+
+%----------------------------------------------------------
+\end{frame}
+%----------------------------------------------------------
+
+
+
+%----------------------------------------------------------
+\begin{frame}[plain]\frametitle{Netflix стратификация}
+%----------------------------------------------------------
+
+\begin{center}
+Закончим рассказ про стратификацию из 
+
+\vspace{2mm}
+
+\begin{thebibliography}{10}
+
+    
+\setbeamertemplate{bibliography item}[online]
+
+  \bibitem{Wasserman}  Improving the Sensitivity of Online Controlled Experiments by Utilizing Pre-Experiment Data
+  
+
+  \end{thebibliography}
+  \end{center}
+  
+  
+\begin{figure}[h!]
+\center{\includegraphics[width=0.8\textwidth]{pic/Strat}}
+%\caption{\Large Калькулятор для размера выборки} \label{Fig:}
+\end{figure}
+
+  
+  
+  
+%----------------------------------------------------------
+\end{frame}
+%----------------------------------------------------------
+
+
+
+%----------------------------------------------------------
+\begin{frame}[plain]\frametitle{Сэмплирования}
+%----------------------------------------------------------
+  
+  
+В статье Netflix сравниваются 2 сэмплирования:
+  
+  \vspace{5mm}
+  
+  \begin{enumerate}
+  
+  \item {\color{blue} Случайное сэмплирование} (simple random sampling). 
+  
+  \vspace{5mm}
+  
+  Обозначения: $Y_{srs}$, $\mathbb{E}_{srs}$ и $\mathbb{V}_{srs}$. 
+ 
+  \vspace{5mm}
+  
+  \pause
+  
+  
+  \item {\color{blue} Стратифицированное сэмплирование.}
+  
+  \vspace{5mm}
+  
+\textit{При сэмплировании cохраняются доли страт $p_k$}: \[n_k = p_k n.\]
+
+\vspace{2mm}
+
+За бизнес-метрику берётся взвешенное среднее по стратам \[ Y_{strat} = \sum p_k \bar{Y}_k.\]
+   
+  \vspace{2mm}
+  
+  Обозначения: $\mathbb{E}_{strat}$ и $\mathbb{V}_{strat}$. 
+ 
+   
+
+  
+  \end{enumerate}
+  
+
+%----------------------------------------------------------
+\end{frame}
+%----------------------------------------------------------
+
+
+%----------------------------------------------------------
+\begin{frame}[plain]\frametitle{Матожидания совпали}
+%----------------------------------------------------------
+
+
+Пусть $\mu_k$ и $\sigma^2_k$ --- среднее и дисперсия по $k$-той страте. 
+
+\vspace{5mm}
+
+
+ \textbf{Матожидания} совпадают \[\mathbb{E}_{srs} = \mathbb{E}_{strat} = \sum_{k=1}^K \mu_k. \] 
+
+Осталось сравнить дисперсии. 
+ 
+
+%----------------------------------------------------------
+\end{frame}
+%----------------------------------------------------------
+
+
+%----------------------------------------------------------
+\begin{frame}[plain]\frametitle{Дисперсия уменьшилась}
+%----------------------------------------------------------
+
+
+Стратифицированная дисперсия: \[ \mathbb{V}_{strat}  = \frac{1}{n}\sum_{k=1}^K p_k \sigma_k^2.\]
+
+
+\vspace{2mm}
+
+\pause
+
+Для случайного сэмплирования формула   \[ \displaystyle \mathbb{V} (X)=\mathbb{E} [\mathbb{V} (X\mid Y)]+{\color{red} \mathbb{V} (\mathbb{E} [X\mid Y])}\]  
+
+\vspace{2mm}
+
+принимает вид \[ \mathbb{V}_{srs} =  \frac{1}{n}\sum_{k=1}^K p_k \sigma_k^2 + {\color{red} \frac{1}{n}\sum_{k=1}^K p_k (\mu_k - \mu)^2}. \] 
+
+\vspace{2mm}
+
+Удалось {\color{blue} уменьшить дисперсию} --- избавиться от дисперсии между стратами.
+
+
+%----------------------------------------------------------
+\end{frame}
+%----------------------------------------------------------
+
+
+%----------------------------------------------------------
+\begin{frame}[plain]\frametitle{Show must go on}
+%----------------------------------------------------------
+
+
+\begin{center}
+\LARGE Успех! Но это не конец истории.
+\end{center}
+
+\begin{figure}[h!]
+\center{\includegraphics[width=0.5\textwidth]{pic/Victory}}
+%\caption{\Large Калькулятор для размера выборки} \label{Fig:}
+\end{figure}
+
+
+%----------------------------------------------------------
+\end{frame}
+%----------------------------------------------------------
+
+
+
+
+\section{CUPED}
+
+
+
+\begin{frame}[plain]\frametitle{CUPED} \tableofcontents[currentsection]\end{frame}
+
+
+
+%----------------------------------------------------------
+\begin{frame}[plain]\frametitle{Вычитаем ковариат}
+%----------------------------------------------------------
+
+
+
+Простая \textbf{идея}. 
+
+
+\vspace{5mm}
+
+Мы хотим уменьшить дисперсию $Y$. Рассмотрим величину \[ Y_{\theta} = Y - \theta X.\]
+
+\vspace{2mm}
+
+\textbf{Q:} При каком $\theta \in \mathbb{R}$ дисперсия $\mathbb{V} Y_{\theta}$ минимальна?
+
+%----------------------------------------------------------
+\end{frame}
+%----------------------------------------------------------
+
+
+
+%----------------------------------------------------------
+\begin{frame}[plain]\frametitle{Проекция}
+%----------------------------------------------------------
+
+
+
+\begin{center}
+\large Фактически мы проецируем $Y$ на ортогональное подпространство к $X$:
+\end{center}
+
+\begin{figure}[h!]
+\center{\includegraphics[width=0.5\textwidth]{pic/Proj}}
+%\caption{\Large Калькулятор для размера выборки} \label{Fig:}
+\end{figure}
+
+
+
+%----------------------------------------------------------
+\end{frame}
+%----------------------------------------------------------
+
+
+%----------------------------------------------------------
+\begin{frame}[plain]\frametitle{Уменьшение дисперсии}
+%----------------------------------------------------------
+
+
+Формула для ковариации: \[ \mathbb{V} (Y_{\theta}) = \mathbb{V} (Y) - 2 \theta \operatorname{cov} (X, Y) + \theta^2 \mathbb{V} (X).\] 
+
+\pause
+
+
+\vspace{2mm}
+
+Минимум достигается при \[ \theta_0 = \frac{\operatorname{cov}(X,Y) }{\mathbb{V}(X)}\] и он равен \[ (1 -\rho^2)\mathbb{V} (Y) , \qquad \rho = \frac{\operatorname{cov}(X,Y) }{\sqrt{\mathbb{V}(X) \, \mathbb{V}(Y)}}.\]
+
+\vspace{2mm}
+
+\textbf{Дисперсия уменьшилась}.
+
+%----------------------------------------------------------
+\end{frame}
+%----------------------------------------------------------
+
+
+%----------------------------------------------------------
+\begin{frame}[plain]\frametitle{Лучший ковариат}
+%----------------------------------------------------------
+
+
+\textit{Замечание}. Доведём до абсурда:
+
+\vspace{5mm}
+
+\begin{enumerate}
+
+
+\setcounter{enumi}{1}
+
+\item \textbf{Q:} Какая величина лучше всех коррелирует с $Y$?
+
+\vspace{5mm}
+
+\pause
+
+\textbf{A:} $X = Y$. Данные исчезают: \[ Y_{\theta} = 0.\]
+
+
+\vspace{2mm}
+ Не то, чего мы хотим.
+
+\end{enumerate}
+
+
+\vspace{5mm}
+
+ $X$ должен быть {\color{blue} коррелирован}, но {\color{red} не быть в причинной зависимости} от $Y$. 
+
+
+
+%----------------------------------------------------------
+\end{frame}
+%----------------------------------------------------------
+
+
+
+
+%----------------------------------------------------------
+\begin{frame}[plain]\frametitle{Самый близкий человек}
+%----------------------------------------------------------
+
+\begin{center}
+\Large \textbf{Загадка}: кто был с тобой всю жизнь и знает всё, что с тобою было?
+\end{center}
+
+
+\pause
+
+
+\begin{figure}[h!]
+\center{\includegraphics[width=0.75\textwidth]{pic/Doc}}
+%\caption{Итоговая оценка} \label{Fig:}
+\end{figure}
+
+
+\begin{center}
+\Huge Ты из прошлого.
+\end{center}
+
+
+%----------------------------------------------------------
+\end{frame}
+%----------------------------------------------------------
+
+
+
+
+
+%----------------------------------------------------------
+\begin{frame}[plain]\frametitle{Cuped}
+%----------------------------------------------------------
+
+
+\begin{center}
+\textbf{\Huge CUPED}
+\end{center}
+
+\vspace{2mm}
+
+
+\begin{center}
+\noindent\fbox{%
+    \parbox{27em}{%
+
+\vspace{2mm}
+
+
+
+    \Large \hspace{1mm} \color{blue}  Controlled-experiment Using Pre-Experiment Data
+    
+    \vspace{2mm}
+    }%
+}
+
+
+\vspace{5mm}
+
+\begin{center}
+\Large В качестве $X$ берётся значение метрики за предыдущий период.
+\end{center}
+
+
+\end{center}
+
+
+
+%----------------------------------------------------------
+\end{frame}
+%----------------------------------------------------------
+
+
+%----------------------------------------------------------
+\begin{frame}[plain]\frametitle{Идея CUPED}
+%----------------------------------------------------------
+
+\textbf{Идея CUPED}.
+
+\vspace{5mm}
+
+Часть дисперсии $Y$ вызвана постоянными факторами, которые также влияли на прошлое $X$.
+
+\vspace{5mm}
+
+Беря $Y_{CUPED} = Y - \theta X$, мы избавляемся от влияния этих факторов. 
+
+\vspace{5mm}
+
+\pause
+
+\begin{block}{Суть CUPED}
+Нас интересует не то, как в среднем ведут себя пользователи, \\ а то, \textbf{как изменилось их поведение}.
+\end{block}
+
+%----------------------------------------------------------
+\end{frame}
+%----------------------------------------------------------
+
+
+%----------------------------------------------------------
+\begin{frame}[plain]\frametitle{Регрессия}
+%----------------------------------------------------------
+
+\textbf{Q:} Нам знакомо представление $Y = \theta X + \varepsilon$?
+
+\vspace{3mm}
+
+\pause
+
+\textbf{A:} Да, подбор параметра $\theta$ --- это регрессия (через начало координат)
+
+\vspace{3mm}
+
+Мы убираем корреляцию и оставляем изменения-остатки.
+
+\begin{figure}[h!]
+\center{\includegraphics[width=0.85\textwidth]{pic/RegCuped}}
+%\caption{Итоговая оценка} \label{Fig:}
+\end{figure}
+
+
+%----------------------------------------------------------
+\end{frame}
+%----------------------------------------------------------
+
+%----------------------------------------------------------
+\begin{frame}[plain]\frametitle{Просто добавь ML}
+%----------------------------------------------------------
+
+\begin{center}
+\Large Последний штрих --- добавим в лекцию немного ML.
+\end{center}
+
+
+\begin{figure}[h!]
+\center{\includegraphics[width=0.5\textwidth]{pic/Cherry}}
+%\caption{Итоговая оценка} \label{Fig:}
+\end{figure}
+
+
+%----------------------------------------------------------
+\end{frame}
+%----------------------------------------------------------
+
+
+%----------------------------------------------------------
+\begin{frame}[plain]\frametitle{Не живи в прошлом}
+%----------------------------------------------------------
+
+\begin{center}
+\large Почему мы ``живём прошлым''?
+
+\vspace{3mm}
+
+ML модели, работающие с \textit{временными рядами}, \\ учатся ``предсказывать'' будущее. 
+
+\vspace{3mm}
+
+Почему бы не оставить в $Y$ только те факторы, \\ которые мы не смогли предсказать по прошлому $X$?
+
+\end{center}
+
+
+\begin{figure}[h!]
+\center{\includegraphics[width=0.85\textwidth]{pic/MLFut}}
+%\caption{Итоговая оценка} \label{Fig:}
+\end{figure}
+
+
+%----------------------------------------------------------
+\end{frame}
+%----------------------------------------------------------
+
+
+
+
+%----------------------------------------------------------
+\begin{frame}[plain]\frametitle{CUPAC}
+%----------------------------------------------------------
+
+
+
+\begin{center}
+\textbf{\Huge CUPAC}
+\end{center}
+
+\vspace{2mm}
+
+
+\begin{center}
+\noindent\fbox{%
+    \parbox{23em}{%
+
+\vspace{2mm}
+
+
+
+    \Large \hspace{3mm} \color{blue}  Control Using Predictions as Covariate
+    
+    \vspace{2mm}
+    }%
+}
+
+\vspace{5mm}
+
+\Large В качестве ковариаты можно взять {\color{red} предсказание ML модели} на исторических данных.
+
+
+\end{center}
+
+%----------------------------------------------------------
+\end{frame}
+%----------------------------------------------------------
+
+
+
+
+%----------------------------------------------------------
+\begin{frame}[plain]\frametitle{Больше ML}
+%----------------------------------------------------------
+
+\begin{figure}[h!]
+\center{\includegraphics[width=0.85\textwidth]{pic/More}}
+%\caption{Итоговая оценка} \label{Fig:}
+\end{figure}
+
+
+
+%----------------------------------------------------------
+\end{frame}
+%----------------------------------------------------------
+
+
+
+
+%----------------------------------------------------------
+\begin{frame}[plain]\frametitle{Снова в Школу}
+%----------------------------------------------------------
+
+\begin{center}
+\Large Для начала полезно пройти курс по ML, например в
+\end{center}
+
+\begin{figure}[h!]
+\center{\includegraphics[width=0.85\textwidth]{pic/Shad}}
+%\caption{Итоговая оценка} \label{Fig:}
+\end{figure}
+
+%----------------------------------------------------------
+\end{frame}
+%----------------------------------------------------------
+
+
+
+
+
+\section{Вместо послесловия}
+
+\begin{frame}[plain]\frametitle{Вместо послесловия} \tableofcontents[currentsection]\end{frame}
+
+
+
+
+%----------------------------------------------------------
+\begin{frame}[plain]\frametitle{Лучше 1 раз увидеть, что 100 раз услышать}
+%----------------------------------------------------------
+
+\begin{center}
+\Large В заключение --- пара замечаний.
+
+\vspace{5mm}
+
+На практике Вы узнаете гораздо больше)
+\end{center}
+
+
+
+
+\begin{figure}[h!]
+\center{\includegraphics[width=0.5\textwidth]{pic/Einstein}}
+%\caption{Не забывайте} \label{Fig:}
+\end{figure}
+
+
+
+  %----------------------------------------------------------
+\end{frame}
+%----------------------------------------------------------
+
+
+
+
+%----------------------------------------------------------
+\begin{frame}[plain]\frametitle{3 kinds of lies}
+%----------------------------------------------------------
+
+\begin{center}
+\Large Data-driven development - не панацея.
+
+\vspace{5mm}
+
+Никто не гарантирует, что гипотеза верна, и что дизайн эксперимента не был ``подогнан под ответ''. 
+\end{center}
+
+
+
+\begin{figure}[h!]
+\center{\includegraphics[width=0.85\textwidth]{pic/ThreeLies}}
+%\caption{} \label{Fig:}
+\end{figure}
+
+
+%----------------------------------------------------------
+\end{frame}
+%----------------------------------------------------------
+
+
+%----------------------------------------------------------
+\begin{frame}[plain]\frametitle{Как сломать тест}
+%----------------------------------------------------------
+
+\begin{center}
+{\color{red} \Large Как сломать тест:}
+\end{center}
+
+\begin{figure}[h!]
+\center{\includegraphics[width=0.5\textwidth]{pic/BAD}}
+%\caption{Не убивайте котёнка!} \label{Fig:}
+\end{figure}
+
+\begin{center}
+{\color{red} \Large Никогда так не делайте!!!}
+\end{center}
+
+%----------------------------------------------------------
+\end{frame}
+%----------------------------------------------------------
+
+
+%----------------------------------------------------------
+\begin{frame}[plain]\frametitle{Спаси котёнка!}
+%----------------------------------------------------------
+
+
+\begin{center}
+\Large АБ-тест --- как котёнок Шрёдингера. 
+
+\vspace{2mm}
+
+Нарушите правила эксперимента --- котёнок умрёт!
+\end{center}
+
+\begin{figure}[h!]
+\center{\includegraphics[width=0.4\textwidth]{pic/ShCat4}}
+\caption{\Large Не убивайте котёнка!} \label{Fig:}
+\end{figure}
+
+
+
+%----------------------------------------------------------
+\end{frame}
+%----------------------------------------------------------
+
+
+
+
+
+
+
+
+\end{document}
+
+
+

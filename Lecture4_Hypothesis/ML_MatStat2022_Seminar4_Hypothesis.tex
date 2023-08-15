@@ -1,0 +1,854 @@
+\documentclass[9pt]{beamer}
+
+
+
+
+\usepackage{beamerthemesplit}
+\usetheme{Boadilla}
+\usecolortheme{orchid}
+
+
+
+
+
+ % \usepackage[cp866]{inputenc}                %%% Є®¤Ёа®ўЄ  DOS
+  \usepackage[cp1251]{inputenc}
+%  \usepackage[T2A]{fontenc}                %%% ???
+%\usepackage[english,russian]{babel}
+%\usepackage[russian]{babel}
+ \usepackage[OT1]{fontenc}
+%\usepackage[english]{babel}
+\usepackage[russian]{babel}
+
+\usepackage{amssymb,latexsym, amsmath, mathdots}
+
+\usepackage{amscd}
+\usepackage{multirow}
+\usepackage{comment}
+
+\usepackage{epstopdf}
+
+
+
+%\usepackage[table]{xcolor} %colored cells
+
+%\usepackage{tikz}
+%\usetikzlibrary{tikzmark} %arrows in tables
+
+
+\usepackage{mnsymbol} % udots in matrices
+
+
+ \usepackage{pgfpages}
+%\setbeameroption{show notes}
+%\setbeameroption{show notes on second screen=bottom}
+%% \setbeameroption{show notes on second screen}
+
+%\setbeamercolor{alerted text}{fg=red!80!black}
+
+
+% \setbeamercolor{alerted text}{fg=blue!50!green}
+% \setbeamercolor{fortheorem}{bg=blue!15!white}
+% \setbeamercolor{EMPF}{bg=blue!25!white}
+% \setbeamercolor{EMPF2}{bg=blue!35!white}
+
+%\setbeamersize{text margin left=5.mm, text margin right=5.mm}
+
+
+%---------------------------------------------------------------------------------------------------------------------------
+
+%\def\emphbox#1#2#3{\begin{beamercolorbox}[wd=#2, ht=#1, center, colsep=1.mm]{EMPF} #3 \end{beamercolorbox}}
+
+%---------------------------------------------------------------------------------------------------------------------------
+
+
+%\advance\leftskip-5.mm
+
+
+
+%***************************************************************************************************************************
+
+\theoremstyle{theorem}
+\newtheorem{mytheorem}[theorem]{Теорема}
+\newtheorem{mylemma}[theorem]{Лемма}
+\newtheorem{mycorollary}[theorem]{Следствие}
+
+\newtheorem{proposition}[theorem]{Предложение}
+\newtheorem{assertion}[theorem]{Утверждение}
+\newtheorem{remark}[theorem]{Замечание}
+\newtheorem{assumption}[theorem]{Предположение}
+
+\newtheorem{convention}[theorem]{Договорённость}
+\newtheorem{question}[theorem]{Вопрос}
+%\newtheorem{mydefinition}{mydefinition}
+
+\theoremstyle{definition}
+\newtheorem{mydefinition}[theorem]{Определение}
+\newtheorem{myexample}[theorem]{Пример}
+
+
+
+%***************************************************************************************************************************
+
+\chardef\No=194
+\newcommand{\bd}{{\rm bd}}
+\newcommand{\cl}{{\rm cl}}
+\newcommand{\ind}{{\rm ind}}
+\newcommand{\id}{{\rm id}}
+\newcommand{\inj}{{\sl in}}
+\newcommand{\pr}{{\rm pr}}
+\newcommand{\st}{{\rm St}}
+
+
+\DeclareMathOperator{\sgrad}{sgrad}
+
+\DeclareMathOperator{\cnt}{const}
+
+\DeclareMathOperator{\Aut}{Aut}
+
+
+\DeclareMathOperator{\sgn}{sgn}
+
+\DeclareMathOperator{\Int}{Int}
+
+
+\DeclareMathOperator{\tr}{tr}
+
+\DeclareMathOperator{\Mat}{Mat}
+
+
+
+
+
+
+
+%****************************************************************************
+\newcommand{\Ker}{\mathrm{Ker}\,\,}
+\newcommand{\Ann}{\mathrm{Ann}\,\,}
+
+\newcommand{\Imm}{\mathrm{Im}\,\,}
+
+\newcommand{\rk}{\mathrm{rk}\,\,}
+
+\newcommand{\const}{\mathrm{const}}
+
+
+
+\DeclareMathOperator{\Pen}{\mathcal{P}}
+
+
+\DeclareMathOperator{\Core}{K}
+
+
+\DeclareMathOperator{\BLG}{\operatorname{BLG}}
+
+\DeclareMathOperator{\AutBP}{\operatorname{Aut}(V, \mathcal{P})}
+
+
+\def\minus{\hbox{-}}   %Sign of minus in big matrices
+
+\usepackage{multirow}  %Columns spanning multiple rows
+
+\usepackage[normalem]{ulem} %underline that can break lines
+
+%\usepackage[normalem]{ulem}
+
+\usepackage{wasysym} %smile
+
+%****************************************************************************
+
+
+
+\title% [] (optional, only for long titles)
+{Прикладная статистика в машинном обучении \\ Лекция 4. Часть 2. \\ Проверка гипотез}
+%\subtitle{}
+\author [И. \,К.~Козлов] %(optional, for multiple authors)
+{И. \,К.~Козлов \\ {\footnotesize(\textit{Мехмат МГУ})}}
+
+
+\date % [](optional)
+{2022}
+%\subject{Mathematics}
+
+
+
+
+
+
+
+\usepackage{hyperref}
+%\hypersetup{unicode=true}
+\hypersetup{
+  colorlinks=true,
+  linkcolor=green!70!black, %blue!50!red,
+  urlcolor=green!70!black,
+  unicode=true
+}
+
+
+\begin{document}
+
+%\includeonlyframes{}
+\frame{\titlepage}
+
+
+
+\section{Критерий отношения правдоподобия}
+
+
+
+\begin{frame}[plain]\frametitle{Критерий отношения правдоподобия} \tableofcontents[currentsection]\end{frame}
+
+
+%----------------------------------------------------------
+\begin{frame}[plain]\frametitle{Likelihood}
+%----------------------------------------------------------
+\begin{center}
+\noindent\fbox{%
+    \parbox{27em}{%
+
+
+\vspace{3mm}
+
+\Huge \hspace{4mm} Statistics is all about {\color{blue} Likelihood}
+    
+\vspace{3mm}    
+    }%
+}
+
+
+\end{center}
+
+%----------------------------------------------------------
+\end{frame}
+%----------------------------------------------------------
+
+
+
+%----------------------------------------------------------
+\begin{frame}[plain]\frametitle{Правдоподобие}
+%----------------------------------------------------------
+
+
+Есть ряд тестов, основанных на {\color{blue} правдоподобии}.
+
+\vspace{5mm}
+
+Мы опишем один из них. Остальные обычно ему асимптотически эквивалентны:
+
+\vspace{5mm}
+
+\hyperlink{https://www2.karlin.mff.cuni.cz/~kulich/vyuka/pokreg/doc/mle_summary.pdf}{Maximum Likelihood Estimation Theory Summary of Notation and Main Results}
+
+
+%----------------------------------------------------------
+\end{frame}
+%----------------------------------------------------------
+
+
+
+
+
+%----------------------------------------------------------
+\begin{frame}[plain]\frametitle{Статистика отношения правдоподобия}
+%----------------------------------------------------------
+
+
+Тестируем гипотезы:
+ \[ H_0 = \left\{ \theta \in \Theta_0 \right\}, \qquad H_1 = \left\{ \theta \in \Theta_1\right\}\]
+ 
+ \vspace{3mm}
+ 
+ {\color{blue} Статистика отношения правдоподобия}:
+
+\[ \lambda = 2 \log \left( \frac{\sup_{\theta\in \Theta} \mathcal{L}(\theta)}{\sup_{\theta\in \Theta_0} \mathcal{L}(\theta)}\right) \]
+
+
+
+
+%----------------------------------------------------------
+\end{frame}
+%----------------------------------------------------------
+
+%----------------------------------------------------------
+\begin{frame}[plain]\frametitle{Статистика отношения правдоподобия}
+%----------------------------------------------------------
+
+
+
+
+
+Проще говоря,  \[\lambda = 2 \log \left( \frac{\mathcal{L}(\hat{\theta})}{\mathcal{L}(\hat{\theta}_0)}\right), \] 
+
+\vspace{3mm}
+
+где $\hat{\theta}$ --- MLE для $\Theta$ и $\hat{\theta}_0$ --- MLE для $\Theta_0$.
+
+
+\vspace{5mm}
+
+
+\pause
+
+\textit{Замечание}. Вместо $\lambda$ можно взять отношение правдоподобий для $\Theta_0$ и $\Theta_1$  \[\lambda' =  2 \log \left( \frac{\sup_{{\color{red} \theta\in \Theta_1}} \mathcal{L}(\theta)}{\sup_{\theta\in \Theta_0} \mathcal{L}(\theta)}\right) , \]  На практике это не принципиально, формулы проще для $\lambda$.
+
+
+%----------------------------------------------------------
+\end{frame}
+%----------------------------------------------------------
+
+
+%----------------------------------------------------------
+\begin{frame}[plain]\frametitle{Тест отношения правдоподобия}
+%----------------------------------------------------------
+
+
+
+\begin{block}{Критерий отношения правдоподобия}
+Пусть \[\theta = (\theta_1, \dots, \theta_q, \theta_{q+1}, \dots, \theta_r). \]
+
+\vspace{5mm}
+
+Пусть при нулевой гипотезе мы фиксируем последние $r-q$ параметров: \[ \Theta_{0} = \left\{ \theta: (\theta_{q+1}, \dots, \theta_r) =(\theta_{0,q+1}, \dots, \theta_{0,r})  \right\}\]
+
+\vspace{3mm}
+
+\pause
+
+\begin{itemize}
+
+\item При выполнении $H_0:$ {\color{red} \[ \lambda (x^n)\xrightarrow {d} \chi^2_{r-q}, \] } где $r-q = \dim\Theta - \dim \Theta_0$.
+
+\vspace{5mm}
+
+\pause
+
+\item  Примерное \[ p_{value} = \mathbb{P}( \chi^2_{r-q} >\lambda).\]
+
+\end{itemize}
+
+\end{block}
+
+%----------------------------------------------------------
+\end{frame}
+%----------------------------------------------------------
+
+
+
+\section{Критерий Неймана-Пирсона}
+
+
+
+\begin{frame}[plain]\frametitle{Критерий Неймана-Пирсона} \tableofcontents[currentsection]\end{frame}
+
+
+
+
+%----------------------------------------------------------
+\begin{frame}[plain]\frametitle{Критерий Неймана-Пирсона}
+%----------------------------------------------------------
+
+
+\begin{center}
+\Large { \color{blue} Критерий Неймана-Пирсона} --- самый мощный критерий.
+\end{center}
+\begin{figure}[h!]
+\center{\includegraphics[width=0.5\textwidth]{pic/HavePower}}
+%\caption{} \label{Fig:}
+\end{figure}
+
+
+
+%----------------------------------------------------------
+\end{frame}
+%----------------------------------------------------------
+
+
+
+
+%----------------------------------------------------------
+\begin{frame}[plain]\frametitle{Критерий Неймана-Пирсона}
+%----------------------------------------------------------
+
+Сравниваем две простые гипотезы \[ H_0: \theta = \theta_0, \qquad VS \qquad H_1: \theta = \theta_1\]
+
+\vspace{3mm}
+
+Фиксируем силу критерия $\alpha$ (=вероятность ошибки I рода).
+
+\begin{figure}[h!]
+\center{\includegraphics[width=0.5\textwidth]{pic/Error1}}
+%\caption{} \label{Fig:}
+\end{figure}
+
+Т.е. вероятность критического множества равна $\alpha$ при выполнении $H_0$. 
+
+
+%----------------------------------------------------------
+\end{frame}
+%----------------------------------------------------------
+
+
+
+
+%----------------------------------------------------------
+\begin{frame}[plain]\frametitle{Критерий Неймана-Пирсона}
+%----------------------------------------------------------
+
+Рассмотрим дискретный случай. 
+
+\vspace{5mm}
+
+Есть $M$ точек. Пусть при $H_0$ они равновероятны:
+
+\vspace{5mm}
+ 
+ \[ P_0(X_j) = \frac{1}{M}, \qquad P_1(X_j) = p_j\]
+
+\begin{figure}[h!]
+\center{\includegraphics[width=0.5\textwidth]{pic/Discrete}}
+\caption{Размер пропорционален $P_1(X_j) = p_j$ } \label{Fig:}
+\end{figure}
+
+%----------------------------------------------------------
+\end{frame}
+%----------------------------------------------------------
+
+
+
+
+%----------------------------------------------------------
+\begin{frame}[plain]\frametitle{Критерий Неймана-Пирсона}
+%----------------------------------------------------------
+
+\begin{figure}[h!]
+\center{\includegraphics[width=0.5\textwidth]{pic/Discrete}}
+%\caption{Размер пропорционален $P_1(X_j) = p_j$ } \label{Fig:}
+\end{figure}
+
+
+В каждой точке мы выбираем --- $H_0$ или $H_1$. 
+
+
+\vspace{5mm}
+
+\textbf{Q:} Какие $k = \alpha M$ точек взять за критическое множество (где мы выбираем $H_1$)? 
+
+\vspace{5mm}
+
+Вероятность правильного выбора $H_1$ должна быть максимальна.
+
+
+
+
+%----------------------------------------------------------
+\end{frame}
+%----------------------------------------------------------
+
+
+
+%----------------------------------------------------------
+\begin{frame}[plain]\frametitle{Критерий Неймана-Пирсона}
+%----------------------------------------------------------
+
+\begin{figure}[h!]
+\center{\includegraphics[width=0.5\textwidth]{pic/Discrete2}}
+%\caption{Размер пропорционален $P_1(X_j) = p_j$ } \label{Fig:}
+\end{figure}
+
+\textbf{A:} Нужно брать точки с  \textit{\color{red} наибольшим отношением правдоподобия}: \[ \frac{P_1(x_j)}{P_0(x_j)} \to \max\]
+В общем случае аналогично.
+
+
+%----------------------------------------------------------
+\end{frame}
+%----------------------------------------------------------
+
+
+%----------------------------------------------------------
+\begin{frame}[plain]\frametitle{Лемма Неймана-Пирсона}
+%----------------------------------------------------------
+
+Сравниваем две простые гипотезы \[ H_0: \theta = \theta_0, \qquad VS \qquad H_1: \theta = \theta_1\]
+
+\vspace{2mm}
+
+\begin{block}{Лемма Неймана-Пирсона}
+
+Рассмотрим {\color{red}отношение правдоподобий} \[ T= \frac{\mathcal{L} (\theta_1)}{\mathcal{L} (\theta_0)} = \frac{\prod_{i=1}^n f(x_i; \theta_1)}{\prod_{i=1}^n f(x_i; \theta_0)}.\]
+
+\vspace{3mm}
+
+Пусть мы отклоняем $H_0$, если $T > k$. Если существует такое $k$, что \[P_{\theta_0} (T> k ) = \alpha,\] то этот тест будет наиболее мощным тестом размера $\alpha$. 
+
+\end{block}
+
+\vspace{5mm}
+
+Т.е. среди всех тестов размера $\alpha$ вероятность ошибки II рода $\beta(\theta_1)$ будет минимальна.
+
+
+
+
+%----------------------------------------------------------
+\end{frame}
+%----------------------------------------------------------
+
+
+%----------------------------------------------------------
+\begin{frame}[plain]\frametitle{Pain}
+%----------------------------------------------------------
+
+\begin{center}
+\Large Применение леммы Неймана-Пирсона --- сплошное удовольствие.
+\end{center}
+
+\begin{figure}[h!]
+\center{\includegraphics[width=0.75\textwidth]{pic/Pain}}
+%\caption{Размер пропорционален $P_1(X_j) = p_j$ } \label{Fig:}
+\end{figure}
+
+%----------------------------------------------------------
+\end{frame}
+%----------------------------------------------------------
+
+
+%----------------------------------------------------------
+\begin{frame}[plain]\frametitle{Критерий Неймана-Пирсона}
+%----------------------------------------------------------
+
+
+\textbf{Пример}. $X_1, \dots, X_n$ --- i.i.d $\mathcal{N}(\mu, \sigma^2)$. Дисперсия $\sigma^2$ известна. \[  H_0: \mu = \mu_0, \qquad VS \qquad H_1: \mu = \mu_1 > \mu_0.\] 
+
+\pause
+
+\begin{itemize}
+
+\item Отношение правдоподобий \[T =  \frac{\mathcal{L} (\theta_1)}{\mathcal{L} (\theta_0)} =  \exp\left[ \frac{1}{2\sigma^2} \left( \sum_{i=1}^n (x_i -\mu_0)^2 - \sum_{i=1}^n (x_i -\mu_1)^2 \right) \right] \] 
+
+\vspace{3mm}
+
+\pause
+
+\item Замечаем, что  \[ \sum_{i=1}^n (x_i -\mu_0)^2 - \sum_{i=1}^n (x_i -\mu_1)^2 = n(\mu_0^2 - \mu_1^2) + 2n \bar{x} (\mu_1 - \mu_0).\]
+
+\end{itemize}
+
+
+
+
+
+
+%----------------------------------------------------------
+\end{frame}
+%----------------------------------------------------------
+
+%----------------------------------------------------------
+\begin{frame}[plain]\frametitle{Критерий Неймана-Пирсона}
+%----------------------------------------------------------
+
+
+
+\begin{itemize}
+
+\item Применяем Лемму Неймана-Пирсона. Критическое множество: \[C =  \left\{x: \quad \exp\left[ \frac{1}{2\sigma^2} \left( n(\mu_0^2 - \mu_1^2) + 2n \bar{x} (\mu_1 - \mu_0) \right) \right] \geq k   \right\} = \] \[=   \left\{x: \quad \bar{x} \geq  \frac{\sigma^2}{n(\mu_1 - \mu_0)} \log k + \frac{\mu_0 + \mu_1}{2} \right\}\]
+
+
+\vspace{3mm}
+
+\pause
+
+
+\item Обозначим правую часть за $k^*$. 
+
+\vspace{5mm}  
+
+При $H_0$ выполнено $\displaystyle \bar{x} \sim \mathcal{N}\left(\mu_0, \frac{\sigma}{\sqrt{n}}\right)$.
+
+\vspace{5mm}  
+
+Находим $k^*$ из условия $P_0(C) = \alpha$: \[ k^* = \mu_0 + z_{(1-\alpha)} \frac{\sigma}{\sqrt{n}} \]
+
+\end{itemize}
+
+\textbf{Ответ:} Тест задаётся описанным критическим множеством $C$.
+
+
+%----------------------------------------------------------
+\end{frame}
+%----------------------------------------------------------
+
+
+%----------------------------------------------------------
+\begin{frame}[plain]\frametitle{Критерий Неймана-Пирсона}
+%----------------------------------------------------------
+
+
+Доказательство в общем случае --- см. Главу 12.
+
+\vspace{3mm}
+
+\begin{thebibliography}{10} 
+     \beamertemplatebookbibitems
+  \bibitem{Lagutin}  М.\,Б.~Лагутин, 
+    \newblock {\em Наглядная математическая статистика}.      
+  \end{thebibliography}
+  
+  
+  \vspace{5mm}
+  
+Если не фиксировать размеры выборки, для последовательного тестирования\footnote{Это уже СлуПы} (см. Главу 12, $\S 3$), могут быть более мощные тесты.
+
+
+
+%----------------------------------------------------------
+\end{frame}
+%----------------------------------------------------------
+
+
+
+
+\section{Критерий перестановок}
+
+
+
+\begin{frame}[plain]\frametitle{Критерий перестановок} \tableofcontents[currentsection]\end{frame}
+
+
+
+%----------------------------------------------------------
+\begin{frame}[plain]\frametitle{Критерий перестановок}
+%----------------------------------------------------------
+
+
+\begin{center}
+{\Huge {\color{blue} Критерий перестановок}}
+\end{center}
+
+\vspace{5mm}
+
+
+\begin{center}
+\noindent\fbox{%
+    \parbox{27em}{%
+
+
+\vspace{1mm}
+
+\begin{center}
+\Huge \hspace{3mm} От перемены мест слагаемых \\ сумма не меняется.   
+\end{center}    
+    
+\vspace{1mm}    
+    }%
+}
+\end{center}
+
+%----------------------------------------------------------
+\end{frame}
+%----------------------------------------------------------
+
+
+%----------------------------------------------------------
+\begin{frame}[plain]\frametitle{Критерий перестановок}
+%----------------------------------------------------------
+
+
+\begin{center}
+{\large \color{red} Непараметрический критерий равенства распределений}
+\end{center}
+
+\vspace{5mm}
+
+
+Пусть $X_1, \dots, X_n \sim F_X$ и $Y_1,\dots, Y_m \sim F_Y$.
+
+\vspace{5mm}
+
+Тестируем гипотезы:
+ \[ H_0 = \left\{ F_X = F_Y\right\}, \qquad H_1 = \left\{ F_X \not = F_Y\right\}\]
+
+
+\vspace{5mm}
+
+
+\textbf{Q:} Что здесь можно переставить (при $H_0$)?
+
+\pause
+
+\vspace{5mm}
+
+\textbf{Идея}. \textit{Берём статистику $T(X_1, \dots, X_n, Y_1, \dots, Y_m)$ и переставляем аргументы.} 
+
+
+%----------------------------------------------------------
+\end{frame}
+%----------------------------------------------------------
+
+%----------------------------------------------------------
+\begin{frame}[plain]\frametitle{Критерий перестановок}
+%----------------------------------------------------------
+
+\begin{center}
+{\color{blue} \Large Критерий перестановок}
+\end{center}
+
+\begin{itemize}
+
+\item Вычисляем статистику \[ t = T(X_1, \dots, X_n, Y_1, \dots, Y_m)\]
+
+\vspace{2mm}
+
+\item $B$ раз случайным образом переставляем\footnote{Не обязательно брать все перестановки} данные $X_1, \dots, Y_m$ и вычисляем статистики $T_1, \dots, T_B$.
+
+\vspace{5mm}
+
+\item Все $T_i$ равновероятны, поэтому \[ \operatorname{p-value} = \frac{1}{B} \sum_{j=1}^B I(T_j > t).\]
+
+\end{itemize}
+
+
+%----------------------------------------------------------
+\end{frame}
+%----------------------------------------------------------
+
+
+
+
+
+
+
+
+\section{Заключение}
+
+
+
+\begin{frame}[plain]\frametitle{Заключение} \tableofcontents[currentsection]\end{frame}
+
+
+%----------------------------------------------------------
+\begin{frame}[plain]\frametitle{3 kinds of lies}
+%----------------------------------------------------------
+
+\begin{center}
+\Large Никогда нет гарантий, что тест был составлен правильно, не был подогнан под ответ, или что не существует лучшей альтернативы.
+\end{center}
+
+\begin{figure}[h!]
+\center{\includegraphics[width=0.85\textwidth]{pic/ThreeLies}}
+%\caption{} \label{Fig:}
+\end{figure}
+
+
+%----------------------------------------------------------
+\end{frame}
+%----------------------------------------------------------
+
+
+%----------------------------------------------------------
+\begin{frame}[plain]\frametitle{Способ выстрелить себе в ногу}
+%----------------------------------------------------------
+
+\begin{center}
+\large {\color{blue} ``Эффект Умного Ганса''  = ``Эффект Экспериментатора''.}
+
+\vspace{5mm}
+
+Экспериментатор влияет на результат.
+
+\end{center}
+
+\begin{figure}[h!]
+\center{\includegraphics[width=0.5\textwidth]{pic/Hans}}
+\caption{\large Умный Ганс --- не умел считать, но видел реакцию хозяина} \label{Fig:}
+\end{figure}
+
+
+%----------------------------------------------------------
+\end{frame}
+%----------------------------------------------------------
+
+
+%----------------------------------------------------------
+\begin{frame}[plain]\frametitle{Способ выстрелить себе в ногу}
+%----------------------------------------------------------
+
+\begin{center}
+\large Насколько честно Вы ответите в соцопросе?
+
+\vspace{5mm}
+
+{\color{blue} ``Хоторнский эффект''} --- рабочие стали более эффективны из-за интереса к эксперименту. 
+
+\end{center}
+
+\begin{figure}[h!]
+\center{\includegraphics[width=0.85\textwidth]{pic/Hot}}
+%\caption{\large Умный Ганс --- не умел считать, но видел реакцию хозяина} \label{Fig:}
+\end{figure}
+
+
+%----------------------------------------------------------
+\end{frame}
+%----------------------------------------------------------
+
+
+
+
+
+%----------------------------------------------------------
+\begin{frame}[plain]\frametitle{Data never lies}
+%----------------------------------------------------------
+
+\begin{center}
+\Large Данные не врут. Врут люди. 
+
+\vspace{5mm}
+
+К ML-статьям это тоже относится $\smiley{}$.
+
+\end{center}
+
+
+\begin{figure}[h!]
+\center{\includegraphics[width=0.5\textwidth]{pic/Liars}}
+%\caption{} \label{Fig:}
+\end{figure}
+
+
+%----------------------------------------------------------
+\end{frame}
+%----------------------------------------------------------
+
+%----------------------------------------------------------
+\begin{frame}[plain]\frametitle{$A/B$-тестирование}
+%----------------------------------------------------------
+
+\begin{center}
+\Large Это всё теория, а как тестирование проходит на практике?
+
+\vspace{5mm}
+
+Обсудим {\color{blue} $A/B$-тестирование } на {\color{red} Лекции 7}.
+
+\end{center}
+
+\begin{figure}[h!]
+\center{\includegraphics[width=0.45\textwidth]{pic/ABMorph}}
+%\caption{} \label{Fig:}
+\end{figure}
+
+
+
+
+%----------------------------------------------------------
+\end{frame}
+%----------------------------------------------------------
+
+
+
+
+
+
+\end{document}
+

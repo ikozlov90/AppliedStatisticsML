@@ -1,0 +1,1751 @@
+\documentclass[9pt]{beamer}
+
+
+
+
+\usepackage{beamerthemesplit}
+\usetheme{Boadilla}
+\usecolortheme{orchid}
+
+
+
+
+
+ % \usepackage[cp866]{inputenc}                %%% Є®¤Ёа®ўЄ  DOS
+  \usepackage[cp1251]{inputenc}
+%  \usepackage[T2A]{fontenc}                %%% ???
+%\usepackage[english,russian]{babel}
+%\usepackage[russian]{babel}
+ \usepackage[OT1]{fontenc}
+%\usepackage[english]{babel}
+\usepackage[russian]{babel}
+
+\usepackage{amssymb,latexsym, amsmath, mathdots}
+
+\usepackage{amscd}
+\usepackage{multirow}
+\usepackage{comment}
+
+\usepackage{epstopdf}
+
+
+
+%\usepackage[table]{xcolor} %colored cells
+
+%\usepackage{tikz}
+%\usetikzlibrary{tikzmark} %arrows in tables
+
+
+\usepackage{mnsymbol} % udots in matrices
+
+
+ \usepackage{pgfpages}
+%\setbeameroption{show notes}
+%\setbeameroption{show notes on second screen=bottom}
+%% \setbeameroption{show notes on second screen}
+
+%\setbeamercolor{alerted text}{fg=red!80!black}
+
+
+% \setbeamercolor{alerted text}{fg=blue!50!green}
+% \setbeamercolor{fortheorem}{bg=blue!15!white}
+% \setbeamercolor{EMPF}{bg=blue!25!white}
+% \setbeamercolor{EMPF2}{bg=blue!35!white}
+
+%\setbeamersize{text margin left=5.mm, text margin right=5.mm}
+
+
+%---------------------------------------------------------------------------------------------------------------------------
+
+%\def\emphbox#1#2#3{\begin{beamercolorbox}[wd=#2, ht=#1, center, colsep=1.mm]{EMPF} #3 \end{beamercolorbox}}
+
+%---------------------------------------------------------------------------------------------------------------------------
+
+
+%\advance\leftskip-5.mm
+
+
+
+%***************************************************************************************************************************
+
+\theoremstyle{theorem}
+\newtheorem{mytheorem}[theorem]{Теорема}
+\newtheorem{mylemma}[theorem]{Лемма}
+\newtheorem{mycorollary}[theorem]{Следствие}
+
+\newtheorem{proposition}[theorem]{Предложение}
+\newtheorem{assertion}[theorem]{Утверждение}
+\newtheorem{remark}[theorem]{Замечание}
+\newtheorem{assumption}[theorem]{Предположение}
+
+\newtheorem{convention}[theorem]{Договорённость}
+\newtheorem{question}[theorem]{Вопрос}
+%\newtheorem{mydefinition}{mydefinition}
+
+\theoremstyle{definition}
+\newtheorem{mydefinition}[theorem]{Определение}
+\newtheorem{myexample}[theorem]{Пример}
+
+
+
+%***************************************************************************************************************************
+
+\chardef\No=194
+\newcommand{\bd}{{\rm bd}}
+\newcommand{\cl}{{\rm cl}}
+\newcommand{\ind}{{\rm ind}}
+\newcommand{\id}{{\rm id}}
+\newcommand{\inj}{{\sl in}}
+\newcommand{\pr}{{\rm pr}}
+\newcommand{\st}{{\rm St}}
+
+
+\DeclareMathOperator{\sgrad}{sgrad}
+
+\DeclareMathOperator{\cnt}{const}
+
+\DeclareMathOperator{\Aut}{Aut}
+
+
+\DeclareMathOperator{\sgn}{sgn}
+
+\DeclareMathOperator{\Int}{Int}
+
+
+\DeclareMathOperator{\tr}{tr}
+
+\DeclareMathOperator{\Mat}{Mat}
+
+
+
+
+
+
+
+%****************************************************************************
+\newcommand{\Ker}{\mathrm{Ker}\,\,}
+\newcommand{\Ann}{\mathrm{Ann}\,\,}
+
+\newcommand{\Imm}{\mathrm{Im}\,\,}
+
+\newcommand{\rk}{\mathrm{rk}\,\,}
+
+\newcommand{\const}{\mathrm{const}}
+
+
+
+\DeclareMathOperator{\Pen}{\mathcal{P}}
+
+
+\DeclareMathOperator{\Core}{K}
+
+
+\DeclareMathOperator{\BLG}{\operatorname{BLG}}
+
+\DeclareMathOperator{\AutBP}{\operatorname{Aut}(V, \mathcal{P})}
+
+
+\def\minus{\hbox{-}}   %Sign of minus in big matrices
+
+\usepackage{multirow}  %Columns spanning multiple rows
+
+\usepackage[normalem]{ulem} %underline that can break lines
+
+%\usepackage[normalem]{ulem}
+
+
+%\usepackage{wasysym} %smile
+
+
+%****************************************************************************
+
+
+
+\title% [] (optional, only for long titles)
+{Прикладная статистика в машинном обучении \\ Лекция 5 \\ Регрессионный анализ}
+%\subtitle{}
+\author [И. \,К.~Козлов] %(optional, for multiple authors)
+{И. \,К.~Козлов \\ {\footnotesize(\textit{Мехмат МГУ})}}
+
+
+\date % [](optional)
+{2022}
+%\subject{Mathematics}
+
+
+
+
+
+
+
+
+\usepackage{hyperref}
+%\hypersetup{unicode=true}
+\hypersetup{
+  colorlinks=true,
+  linkcolor=green!70!black, %blue!50!red,
+  urlcolor=green!70!black,
+  unicode=true
+}
+
+
+
+\begin{document}
+
+%\includeonlyframes{}
+\frame{\titlepage}
+
+
+
+
+
+
+\section{Регрессия}
+
+
+
+\begin{frame}[plain]\frametitle{Регрессия} \tableofcontents[currentsection]\end{frame}
+
+
+
+
+%----------------------------------------------------------
+\begin{frame}[plain]\frametitle{Скатывание в посредственность}
+%----------------------------------------------------------
+
+
+\begin{center} {\Large \color{blue} Регрессия} --- скатывание в посредственность. \end{center}
+
+
+\begin{figure}[h!]
+\center{\includegraphics[width=0.85\textwidth]{pic/RegrWord}}
+%\caption{Итоговая оценка} \label{Fig:}
+\end{figure}
+
+
+
+
+  %----------------------------------------------------------
+\end{frame}
+%----------------------------------------------------------
+
+
+
+%----------------------------------------------------------
+\begin{frame}[plain]\frametitle{Гальтон}
+%----------------------------------------------------------
+
+
+Ф. Гальтон, ``Регрессия к посредственности в наследовании роста'' (1885) 
+
+\vspace{5mm}
+
+\begin{itemize}
+
+\item $X$ --- рост родителя
+
+\vspace{5mm}
+
+\item $Y$ --- рост ребёнка.
+
+\vspace{5mm}
+
+\item Зависимость хорошо описывается уравнением \[ Y - \bar{Y} = \frac{2}{3} \left( X - \bar{X} \right).  \] 
+
+\end{itemize}
+
+
+  %----------------------------------------------------------
+\end{frame}
+%----------------------------------------------------------
+
+
+
+%----------------------------------------------------------
+\begin{frame}[plain]\frametitle{Регрессия}
+%----------------------------------------------------------
+
+
+\begin{figure}[h!]
+\center{\includegraphics[width=0.65\textwidth]{pic/Rate}}
+%\caption{Итоговая оценка} \label{Fig:}
+\end{figure}
+
+
+  %----------------------------------------------------------
+\end{frame}
+%----------------------------------------------------------
+
+
+
+%----------------------------------------------------------
+\begin{frame}[plain]\frametitle{Регрессия}
+%----------------------------------------------------------
+
+\begin{itemize}
+
+\item  \textbf{Регрессия}. Даны пары $(x_1, Y_1), \dots, (x_n, Y_n)$, где \[ Y_i = r(x_i) + \varepsilon_i, \qquad \mathbb{E} \varepsilon_i = 0.\] Нужно восстановить функцию регрессии ({\color{blue} регрессор})  $r$.   
+
+\end{itemize}
+
+
+
+  %----------------------------------------------------------
+\end{frame}
+%----------------------------------------------------------
+
+
+%----------------------------------------------------------
+\begin{frame}[plain]\frametitle{Шум и гомоскедастичность}
+%----------------------------------------------------------
+
+
+Будем считать, что шумы $\varepsilon_1, \dots, \varepsilon_n$
+
+
+\vspace{5mm}
+
+\begin{itemize}
+
+\item имеют нулевое матожидание:
+\[ \mathbb{E} \varepsilon_i = 0, \]
+
+\vspace{2mm}
+
+\item {\color{blue} гомоскедастичны}, т.е. имеют одинаковую дисперсию: \[\mathbb{V} \varepsilon_i = \sigma^2\]
+
+\vspace{2mm}
+
+\item некоррелированы: \[{\displaystyle {\text{Cov}}(\varepsilon _{i},\varepsilon _{j})=0, \qquad \forall i\neq j.}\]
+% \[ \mathbb{E} \varepsilon_i  \varepsilon_j = 0.\]
+
+\end{itemize}
+
+
+ %----------------------------------------------------------
+\end{frame}
+%----------------------------------------------------------
+
+
+
+\section{Линейная регрессия}
+
+
+
+\begin{frame}[plain]\frametitle{Линейная регрессия} \tableofcontents[currentsection]\end{frame}
+
+
+
+
+
+%----------------------------------------------------------
+\begin{frame}[plain]\frametitle{Линейная регрессия}
+%----------------------------------------------------------
+
+\begin{center} Рассмотрим простейшую задачу {\color{blue} линейной регрессии} \[ {\displaystyle y_{i}=\beta _{0}+\beta _{1}x_{i1}+\cdots +\beta _{m}x_{im}+\varepsilon _{i},\qquad i=1,\ldots ,n,}\]
+
+
+%\[{\displaystyle y_{i}= \mathbf {x} _{i}^{\mathsf {T}}{\boldsymbol {\beta }}+\varepsilon _{i},\qquad i=1,\ldots ,n,} \]
+
+\end{center}
+
+\begin{figure}[h!]
+\center{\includegraphics[width=0.65\textwidth]{pic/SimpREg}}
+%\caption{$y_i=\mathbf {x} _{i}^{\mathsf {T}}{\boldsymbol {\beta }}+\varepsilon _{i}$} \label{Fig:}
+\end{figure}
+
+%----------------------------------------------------------
+\end{frame}
+%----------------------------------------------------------
+
+
+
+
+%----------------------------------------------------------
+\begin{frame}[plain]\frametitle{Линейная регрессия}
+%----------------------------------------------------------
+
+
+Вместе все эти уравнения можно записать в матричном виде  \[{\displaystyle \mathbf {Y} =X{\boldsymbol {\beta }}+{\boldsymbol {\varepsilon }},\,}\]
+
+
+\[ {\displaystyle \mathbf {Y} ={\begin{pmatrix}y_{1}\\y_{2}\\\vdots \\y_{n}\end{pmatrix}},\quad }
+{\displaystyle {\boldsymbol {\beta }}={\begin{pmatrix}\beta _{0}\\\beta _{1}\\\beta _{2}\\\vdots \\\beta _{m}\end{pmatrix}},\quad {\boldsymbol {\varepsilon }}={\begin{pmatrix}\varepsilon _{1}\\\varepsilon _{2}\\\vdots \\\varepsilon _{n}\end{pmatrix}}.} \]
+
+\vspace{3mm} \underline{Подчеркнём} --- чтобы учесть свободный член, в 1ом столбце матрицы $X$ стоят 1:
+\[ {\displaystyle X={\begin{pmatrix}\mathbf {x} _{1}^{\mathsf {T}}\\\mathbf {x} _{2}^{\mathsf {T}}\\\vdots \\\mathbf {x} _{n}^{\mathsf {T}}\end{pmatrix}}={\begin{pmatrix}1&x_{11}&\cdots &x_{1m}\\1&x_{21}&\cdots &x_{2m}\\\vdots &\vdots &\ddots &\vdots \\1&x_{n1}&\cdots &x_{nm}\end{pmatrix}},}\]
+
+%----------------------------------------------------------
+\end{frame}
+%----------------------------------------------------------
+
+
+
+
+
+
+
+
+%----------------------------------------------------------
+\begin{frame}[plain]\frametitle{Deja Vu}
+%----------------------------------------------------------
+
+\begin{center}
+\Huge Deja Vu!
+\end{center}
+
+\begin{figure}[h!]
+\center{\includegraphics[width=0.5\textwidth]{pic/Hog}}
+%\caption{$y_i=\mathbf {x} _{i}^{\mathsf {T}}{\boldsymbol {\beta }}+\varepsilon _{i}$} \label{Fig:}
+\end{figure}
+
+%----------------------------------------------------------
+\end{frame}
+%----------------------------------------------------------
+
+
+
+
+%----------------------------------------------------------
+\begin{frame}[plain]\frametitle{МНК = ОМП}
+%----------------------------------------------------------
+
+
+\begin{center}
+\Large На {\color{red} Лекции 2} мы уже показали:
+\end{center}
+
+
+\vspace{3mm}
+
+\begin{center}
+\noindent\fbox{%
+    \parbox{21em}{%
+
+
+\vspace{3mm}
+
+\Large \hspace{4mm} В предположении нормальности:
+
+\vspace{3mm}
+
+
+
+    \Huge \textbf{\hspace{1mm} ОМП = оценка МНК}
+    
+\vspace{3mm}    
+    }%
+}
+
+
+\end{center}
+
+\vspace{3mm}
+
+\begin{center}
+\Large Сегодня будет больше Статистики.
+\end{center}
+
+%----------------------------------------------------------
+\end{frame}
+%----------------------------------------------------------
+
+
+
+
+%----------------------------------------------------------
+\begin{frame}[plain]\frametitle{МНК-оценка}
+%----------------------------------------------------------
+
+
+{\color{blue} Оценка наименьших квадратов} (МНК-оценка): \[\hat{\beta} = \left( \hat{\beta}_0, \dots, \hat{\beta}_m\right)^T\] минимизирует {\color{blue} остаточную сумму квадратов} (Residual Sum of Squares): \[ \operatorname{RSS} = (Y - X\hat{\beta})^T (Y - X\hat{\beta}) = \sum_{i=1}^n \hat{\varepsilon}_i^2. \]
+
+
+
+\begin{figure}[h!]
+\center{\includegraphics[width=0.4\textwidth]{pic/Resid}}
+%\caption{$y_i=\mathbf {x} _{i}^{\mathsf {T}}{\boldsymbol {\beta }}+\varepsilon _{i}$} \label{Fig:}
+\end{figure}
+
+ %----------------------------------------------------------
+\end{frame}
+%----------------------------------------------------------
+
+
+
+
+
+
+
+
+%----------------------------------------------------------
+\begin{frame}[plain]\frametitle{МНК-оценка}
+%----------------------------------------------------------
+
+
+
+
+\textbf{Q:} Формула для МНК оценки?
+
+
+\vspace{5mm}
+
+\pause
+
+\textbf{A:} МНК-оценка:   \[{\color{blue} \hat{\beta} = X^{+} Y.} \] Напомним формулу псевдообратной матрицы $X^{+}$. 
+
+
+
+
+  %----------------------------------------------------------
+\end{frame}
+%----------------------------------------------------------
+
+
+
+%----------------------------------------------------------
+\begin{frame}[plain]\frametitle{МНК-оценка}
+%----------------------------------------------------------
+
+
+В разложении \[ Y = X \hat{\beta} + \hat{\varepsilon}\] первый вектор лежит в $L(X)$  --- подпространстве, порождённом $X_1, \dots, X_n$.
+
+\begin{figure}[h!]
+\center{\includegraphics[width=0.5\textwidth]{pic/Regr1}}
+%\caption{Итоговая оценка} \label{Fig:}
+\end{figure}
+
+\vspace{5mm}
+
+\textbf{Q:} Когда длина $\hat{\varepsilon}$ минимальна?
+
+
+
+
+  %----------------------------------------------------------
+\end{frame}
+%----------------------------------------------------------
+
+
+
+%----------------------------------------------------------
+\begin{frame}[plain]\frametitle{МНК-оценка}
+%----------------------------------------------------------
+
+\begin{itemize}
+
+\item $X\hat{\beta}$ --- проекция $Y$ на $L(X)$. 
+
+\vspace{5mm}
+
+\item Значит,  $\hat{\varepsilon}$ ортогонален $X_1, \dots, X_n$.
+
+
+\begin{figure}[h!]
+\center{\includegraphics[width=0.5\textwidth]{pic/Regr2}}
+%\caption{Итоговая оценка} \label{Fig:}
+\end{figure}
+
+
+\end{itemize}
+
+
+  %----------------------------------------------------------
+\end{frame}
+%----------------------------------------------------------
+
+
+%----------------------------------------------------------
+\begin{frame}[plain]\frametitle{МНК-оценка}
+%----------------------------------------------------------
+
+Условие ортогональности \[(X_i, \hat{\varepsilon})  = X^T_i \hat{\varepsilon} = 0\] можно записать в виде  \[ X^T \hat{\varepsilon}= X^T (Y - X \hat{\beta} )  = 0\]
+
+
+\vspace{2mm}
+
+
+\pause
+
+\begin{block}{МНК-оценка}
+Если \textbf{$X^T X$ невырождена}, то МНК-оценка: \[\hat{\varepsilon} = (X^T X)^{-1} X^T Y. \] 
+\end{block}
+
+
+  %----------------------------------------------------------
+\end{frame}
+%----------------------------------------------------------
+
+
+%----------------------------------------------------------
+\begin{frame}[plain]\frametitle{МНК-оценка}
+%----------------------------------------------------------
+
+
+Далее будем везде считать, что {\color{red} $X^T X$ невырождена}.
+
+\vspace{5mm}
+
+\textbf{Следствие}. МНК-оценка --- это правильный ответ + линейный образ шума: \[ \begin{cases} \hat{\beta} = (X^T X)^{-1} X^T Y \\ Y = X \beta + \varepsilon \end{cases}  \qquad \Rightarrow \qquad \hat{\beta} =  \beta + (X^T X)^{-1} X^T \varepsilon. \]
+
+  %----------------------------------------------------------
+\end{frame}
+%----------------------------------------------------------
+
+
+%----------------------------------------------------------
+\begin{frame}[plain]\frametitle{МНК-оценка}
+%----------------------------------------------------------
+
+
+\begin{center}
+\Large Изучим вопрос --- насколько $\hat{\beta}$ является хорошей оценкой параметров $\beta$:
+\end{center}
+
+
+\begin{figure}[h!]
+\center{\includegraphics[width=\textwidth]{pic/True1}}
+%\caption{Итоговая оценка} \label{Fig:}
+\end{figure}
+
+
+  %----------------------------------------------------------
+\end{frame}
+%----------------------------------------------------------
+
+
+
+\section{Свойства МНК-оценок}
+
+
+
+\begin{frame}[plain]\frametitle{Свойства МНК-оценок} \tableofcontents[currentsection]\end{frame}
+
+
+
+%----------------------------------------------------------
+\begin{frame}[plain]\frametitle{Свойства МНК-оценок}
+%----------------------------------------------------------
+
+\begin{center}
+\Large Начнём со свойств МНК-оценок $\hat{\beta}$.
+
+\vspace{5mm}
+
+Это \textit{линейная алгебра} --- всё будет просто и замечательно.  %$\smiley{}$.
+
+\end{center}
+
+
+\begin{figure}[h!]
+\center{\includegraphics[width=0.5\textwidth]{pic/Fine}}
+%\caption{Итоговая оценка} \label{Fig:}
+\end{figure}
+
+
+
+  %----------------------------------------------------------
+\end{frame}
+%----------------------------------------------------------
+
+
+
+%----------------------------------------------------------
+\begin{frame}[plain]\frametitle{Свойства МНК-оценок}
+%----------------------------------------------------------
+
+Оценка $\hat{\beta}$ обладает всеми ``хорошими'' свойствами:
+
+\vspace{5mm}
+
+\begin{itemize}
+
+
+\item {\color{blue}Несмещённость} $\mathbb{E}  \hat{\beta} = \ \beta$;
+
+\end{itemize}
+
+\vspace{5mm}
+
+Если $n \,\sigma^2 (X^T X)^{-1} \to \Sigma$, то также 
+
+\vspace{5mm}
+
+\begin{itemize}
+
+
+\item {\color{blue} Асимптотическая нормальность}  $\displaystyle  \hat{\beta} \approx \mathcal{N} \left(\beta, \frac{\Sigma}{n}\right)$,
+
+
+\vspace{5mm}
+
+\item {\color{blue} Состоятельность} $ \hat{\beta} \ \xrightarrow {\mathbb{P}} \ \beta$;
+
+\end{itemize}
+
+
+
+
+
+
+  %----------------------------------------------------------
+\end{frame}
+%----------------------------------------------------------
+
+
+
+\subsection{Моменты}
+
+\begin{frame}[plain]\frametitle{Моменты} \tableofcontents[currentsubsection]\end{frame}
+
+
+
+%----------------------------------------------------------
+\begin{frame}[plain]\frametitle{Моменты}
+%----------------------------------------------------------
+
+
+Начнём с вычисления моментов.
+
+\vspace{5mm}
+
+
+\begin{block}{Теорема 1} Свойства МНК-оценки \[\hat{\beta} = (X^T X)^{-1} X^T Y. \] 
+
+\vspace{5mm}
+
+\begin{enumerate}
+
+\item Оценка несмещённая: \[ \mathbb{E} \hat{\beta} = \beta.\]
+
+\vspace{5mm}
+
+\item Матрица ковариации \[ \operatorname{Cov} (\hat{\beta}) = \sigma^2 (X^T X)^{-1}.\]
+
+\end{enumerate}
+
+\end{block}
+
+
+
+  %----------------------------------------------------------
+\end{frame}
+%----------------------------------------------------------
+
+
+%----------------------------------------------------------
+\begin{frame}[plain]\frametitle{Моменты}
+%----------------------------------------------------------
+
+
+\textbf{Замечание}. Формально эти матожидания условные: \[ \mathbb{E}(\hat{\beta} \, \bigr|\, X ), \qquad  \operatorname{Cov}(\hat{\beta} \, \bigr|\, X ), \qquad \text{ ... }\] Для краткости мы просто пишем \[ \mathbb{E}(\hat{\beta}), \qquad  \operatorname{Cov}(\hat{\beta}), \qquad \text{ ... }\] 
+
+\vspace{2mm}
+
+\textbf{Замечание-2}. Матрицу ковариации будем обозначать \[ \mathbb{V}(X) = \operatorname{Cov}(X) =\operatorname{Cov}(X, X).\] 
+
+  %----------------------------------------------------------
+\end{frame}
+%----------------------------------------------------------
+
+
+%----------------------------------------------------------
+\begin{frame}[plain]\frametitle{Just Math It!}
+%----------------------------------------------------------
+
+
+\begin{center}
+\Huge Доказательство --- прямым вычислением.
+\end{center}
+
+
+
+\begin{figure}[h!]
+\center{\includegraphics[width=0.5\textwidth]{pic/Math}}
+%\caption{Итоговая оценка} \label{Fig:}
+\end{figure}
+
+
+
+  %----------------------------------------------------------
+\end{frame}
+%----------------------------------------------------------
+
+
+
+
+%----------------------------------------------------------
+\begin{frame}[plain]\frametitle{Моменты и линейное преобразование}
+%----------------------------------------------------------
+
+\textit{Общие формулы}. Пусть
+
+\vspace{5mm}
+
+\begin{itemize}
+
+\item $\displaystyle \xi = \left( \begin{matrix} \xi_1, \\ \dots \\ \xi_m \end{matrix} \right)$ --- произвольный случайный вектор, $\mathbb{E} \xi  < \infty,\operatorname{Cov}(\xi) < \infty$;
+
+\vspace{5mm}
+
+\item $A$ --- это $k \times m$ матрица.
+
+\end{itemize}
+
+\vspace{5mm}
+
+\textbf{Q:} $\, \mathbb{E}( A \xi) = ?, \quad \operatorname{Cov}( A \xi) = ?$
+
+
+\pause
+
+\vspace{5mm}
+
+\textbf{A:} Матожидание линейно, ковариация --- билинейна\footnote{Закон преобразования билинейной формы $Q' = C^T QC$.}: {\color{red} \[ \mathbb{E}( A \xi) = A \, \mathbb{E} \xi, \qquad  \operatorname{Cov}( A \xi) = A \operatorname{Cov} (\xi) A^T.\] }
+
+ %----------------------------------------------------------
+\end{frame}
+%----------------------------------------------------------
+
+
+%----------------------------------------------------------
+\begin{frame}[plain]\frametitle{Несмещённость}
+%----------------------------------------------------------
+
+
+\textbf{Несмещённость}: \[ \mathbb{E} \hat{\beta} = \beta.\]
+
+\vspace{2mm}
+
+\textbf{Доказательство}: \[ \mathbb{E} \hat{\beta} =  \mathbb{E} (\beta + X^{+} \varepsilon) = \beta \]
+
+ %----------------------------------------------------------
+\end{frame}
+%----------------------------------------------------------
+
+
+%----------------------------------------------------------
+\begin{frame}[plain]\frametitle{Ковариация}
+%----------------------------------------------------------
+
+\textbf{Матрица ковариации}: \[ \operatorname{Cov} (\hat{\beta}) = \sigma^2 (X^T X)^{-1}.\]
+
+\vspace{4mm}
+
+\textbf{Доказательство}:  \[\operatorname{Cov} (\hat{\beta}) =  \operatorname{Cov}(\beta + X^{+} \varepsilon)  =  X^{+}  \operatorname{Cov}(\varepsilon) (X^{+})^T.\]
+
+
+\vspace{4mm}
+
+\textbf{Q:} Чему равна $\operatorname{Cov}(\varepsilon)$?
+
+
+ %----------------------------------------------------------
+\end{frame}
+%----------------------------------------------------------
+
+
+%----------------------------------------------------------
+\begin{frame}[plain]\frametitle{Ковариация}
+%----------------------------------------------------------
+
+
+Матрица $ \operatorname{Cov}(\varepsilon)$ диагональна, т.к. $\mathbb{V} \varepsilon_i = \sigma^2$ и ${\displaystyle {\text{Cov}}(\varepsilon _{i},\varepsilon _{j})=0}$.
+
+\vspace{3mm}
+
+
+
+\[ \operatorname{Cov} (\hat{\beta}) =    (X^T X)^{-1} X^{T} \sigma^2  \left( (X^T X)^{-1} X^{T} \right)^T  =\]
+\[ =  \sigma^2  {\color{red} (X^T X)^{-1} X^{T} X}  (X^T X)^{-1}  =   \sigma^2 (X^T X)^{-1}.\]
+
+
+\vspace{3mm}
+
+\textbf{Теорема 1 доказана}.
+
+
+ %----------------------------------------------------------
+\end{frame}
+%----------------------------------------------------------
+
+\subsection{Асимптотика}
+
+\begin{frame}[plain]\frametitle{Асимптотика} \tableofcontents[currentsubsection]\end{frame}
+
+
+
+%----------------------------------------------------------
+\begin{frame}[plain]\frametitle{Свойства МНК-оценок}
+%----------------------------------------------------------
+
+
+{\color{blue} Асимптотическая нормальность}  $\displaystyle  \hat{\beta} \approx \mathcal{N} \left(\beta, \frac{\Sigma}{n} \right)$, если $n \, \sigma^2 (X^T X)^{-1} \to \Sigma$.
+
+\vspace{5mm}
+
+Мы знаем моменты. Доказательство нормальности --- см. Главу 21, $\S 3$, Теорема 3 
+
+\begin{thebibliography}{10}
+
+    \vspace{3mm}
+     \beamertemplatebookbibitems
+  \bibitem{Lagutin}  М.\,Б.~Лагутин, 
+    \newblock {\em Наглядная математическая статистика}.
+    
+    
+
+  \end{thebibliography}
+  
+
+  %----------------------------------------------------------
+\end{frame}
+%----------------------------------------------------------
+
+%----------------------------------------------------------
+\begin{frame}[plain]\frametitle{Свойства МНК-оценок}
+%----------------------------------------------------------
+
+
+\vspace{5mm} Вспоминаем {\color{red} Лекцию 1:} Если $\operatorname{Bias}(\beta_j) \to 0$ и $\mathbb{V} (\beta_j) \to 0$, то оценка состоятельна.
+
+
+\vspace{5mm}
+
+\begin{itemize}
+
+\item Несмещённость $\Rightarrow$ $\operatorname{Bias} =0$
+
+\vspace{5mm}
+
+\item Асимптотическая нормальность  $\displaystyle  \hat{\beta} \approx \mathcal{N} \left(\beta, \frac{\Sigma}{n} \right)$ $\Rightarrow$ ковариация $\displaystyle \frac{\Sigma}{n} \to 0$.
+
+\end{itemize}
+
+
+\vspace{5mm}
+
+\begin{exampleblock}{Следствие} 
+МНК-оценка состоятельна: \[ \hat{\beta} \ \xrightarrow {\mathbb{P}} \ \beta.\]
+
+\end{exampleblock}
+
+
+
+  %----------------------------------------------------------
+\end{frame}
+%----------------------------------------------------------
+
+
+
+
+
+
+
+\section{Теорема Гаусса-Маркова}
+
+
+
+\begin{frame}[plain]\frametitle{Теорема Гаусса-Маркова} \tableofcontents[currentsection]\end{frame}
+
+
+
+
+
+
+%----------------------------------------------------------
+\begin{frame}[plain]\frametitle{Вспомним ЛинАл}
+%----------------------------------------------------------
+
+\begin{center}
+{\large Продолжаем вспоминать {\color{red} ЛинАл}. 
+
+\vspace{3mm}
+
+\begin{itemize}
+
+\item $\operatorname{Cov}(X,Y)$ --- это билинейная форма, 
+
+\vspace{3mm}
+
+\item $\mathbb{V}(X) = \operatorname{Cov}(X) = \operatorname{Cov}(X, X)$  ---  соответствующая квадратичная форма.
+
+\end{itemize}
+
+}
+\end{center}
+
+
+\begin{figure}[h!]
+\center{\includegraphics[width=0.35\textwidth]{pic/Love}}
+%\caption{Итоговая оценка} \label{Fig:}
+\end{figure}
+
+
+
+
+  %----------------------------------------------------------
+\end{frame}
+%----------------------------------------------------------
+
+
+
+
+
+
+
+%----------------------------------------------------------
+\begin{frame}[plain]\frametitle{Дисперсия}
+%----------------------------------------------------------
+
+\begin{center}
+ {\Large  Мы нашли матрицу ковариации $\operatorname{Cov}(\hat{\beta})$. \\ \vspace{2mm} Посмотрим на дисперсию в каждом направлении:\[ {\color{red} \mathbb{V}(c^T \hat{\beta})} = c^T \operatorname{Cov}  (\hat{\beta}) \, c. \]}
+\end{center}
+
+
+\begin{figure}[h!]
+\center{\includegraphics[width=0.5\textwidth]{pic/Ellipse0}}
+%\caption{Итоговая оценка} \label{Fig:}
+\end{figure}
+
+
+
+
+  %----------------------------------------------------------
+\end{frame}
+%----------------------------------------------------------
+
+
+
+
+
+
+%----------------------------------------------------------
+\begin{frame}[plain]\frametitle{Теорема Гаусса-Маркова}
+%----------------------------------------------------------
+
+Итак, \[ \mathbb{E} \hat{\beta} = \beta, \qquad \operatorname{Cov} (\hat{\beta}) = \sigma^2 (X^T X)^{-1}.\]
+
+
+\vspace{5mm}
+
+\textbf{Q:} Пусть $c \in \mathbb{R}^m$. Чему равны $\mathbb{E}( c^T \hat{\beta})$ и $\mathbb{V}( c^T \hat{\beta})$?
+
+
+\pause
+
+\vspace{5mm}
+
+\textbf{A:} Матожидание линейно, дисперсия --- квадратичная форма: {\color{red} \[  \mathbb{E}(c^T \hat{\beta}) = c^T \hat{\beta}, \quad \mathbb{V}(c^T \hat{\beta}) = \sigma^2 c^T (X^T X)^{-1} c.\]}
+
+  %----------------------------------------------------------
+\end{frame}
+%----------------------------------------------------------
+
+
+
+
+
+
+%----------------------------------------------------------
+\begin{frame}[plain]\frametitle{Теорема Гаусса-Маркова}
+%----------------------------------------------------------
+
+
+\begin{center}
+\Large \textbf{OLS} --- ordinary least squares estimator.
+
+\vspace{5mm}
+
+{\color{blue} BLUE} --- best linear unbiased estimator.
+\end{center}
+
+\vspace{5mm}
+
+\begin{center}
+\noindent\fbox{%
+    \parbox{17em}{%
+    \vspace{3mm}
+ \hspace{7mm}   \Large Gauss--Markov theorem:
+
+\vspace{5mm}
+
+
+
+    \Huge \textbf{\hspace{5mm} \textbf{OLS } is {\color{blue} BLUE}}
+    
+\vspace{3mm}    
+    }%
+}
+
+
+\end{center}
+
+
+  %----------------------------------------------------------
+\end{frame}
+%----------------------------------------------------------
+
+
+
+%----------------------------------------------------------
+\begin{frame}[plain]\frametitle{Теорема Гаусса-Маркова}
+%----------------------------------------------------------
+
+
+\begin{block}{Теорема Гаусса-Маркова}  Среди {\color{red} несмещённых} \textbf{линейных}\footnote{Линейность по $Y$, коэффициенты $ c_{ij}$ могут зависеть от $X$.} оценок \[ \tilde{\beta}_j = c_{1j} Y_1 + \dots + c_{nj} Y_n \qquad  {\color{red} \mathbb{E}(\tilde{\beta}) = \beta} \] МНК-оценка имеет наименьшую возможную дисперсию  $\mathbb{V}( c^T \hat{\beta})$ для каждого $c \in \mathbb{R}^m$.
+\end{block}
+
+\pause
+
+\vspace{5mm}
+
+\textbf{Замечание}. Все условия важны.
+
+\vspace{5mm}
+
+ Если шумы нормальны, то МНК - лучшая оценка в классе \textbf{всех} {\color{red} несмещённых} оценок.
+
+
+  %----------------------------------------------------------
+\end{frame}
+%----------------------------------------------------------
+
+%----------------------------------------------------------
+\begin{frame}[plain]\frametitle{Перерыв}
+%----------------------------------------------------------
+
+
+\begin{center}
+\Huge Перерыв
+\end{center}
+%----------------------------------------------------------
+\end{frame}
+%----------------------------------------------------------
+
+
+
+\subsection{Доказательство теоремы Гаусса-Маркова}
+
+
+
+\begin{frame}[plain]\frametitle{Доказательство теоремы Гаусса-Маркова} \tableofcontents[currentsubsection]\end{frame}
+
+
+
+%----------------------------------------------------------
+\begin{frame}[plain]\frametitle{Теорема Гаусса-Маркова}
+%----------------------------------------------------------
+
+
+
+Рассмотрим произвольную линейную оценку ${\displaystyle {\tilde {\beta }}=C Y}$, где ${\displaystyle C= X^{+} + D}$.
+
+
+\vspace{5mm}
+
+\textbf{Шаг 1.}  \textit{Оценка несмещённая $\Leftrightarrow$ $DX = 0$.}
+
+\pause
+
+\vspace{5mm}
+
+\begin{itemize}
+
+\item По линейности \[ \mathbb {E} \left[{\tilde {\beta }}\right] =\mathbb {E} [C Y] =C \mathbb {E} [ X\beta +\varepsilon ] = C X \beta + C\mathbb{E} [\varepsilon ]. \]
+
+\pause
+
+\vspace{2mm}
+
+\item По условию $\mathbb{E} [\varepsilon ] =0$,  поэтому \[  \mathbb {E} \left[{\tilde {\beta }}\right] = ((X^T X)^{-1} X^T  + D) X \beta =  \beta +D X \beta.\]
+
+\vspace{2mm}
+
+\item \textbf{Q:} Почему $DX = 0$?
+
+\vspace{5mm}
+
+\pause
+
+Оценка несмещённая $ \mathbb {E} \left[{\tilde {\beta }}\right] = \beta$ {\color{red} для любого $\beta$} $\Leftrightarrow$ 2ое слагаемое равно нулю.
+
+
+\end{itemize}
+
+
+
+
+  %----------------------------------------------------------
+\end{frame}
+%----------------------------------------------------------
+
+
+%----------------------------------------------------------
+\begin{frame}[plain]\frametitle{Теорема Гаусса-Маркова}
+%----------------------------------------------------------
+
+
+
+
+\textbf{Шаг 2.}  \textit{Дисперсия минимальна.}
+
+
+
+\[
+ {\begin{aligned}\mathbb{V} \left({\tilde {\beta }}\right)&=\operatorname {Var} (C Y) = C\operatorname {Var} (\varepsilon) C^T=  \sigma ^{2}CC^T = \\&=\sigma ^{2}\left((X^TX)^{-1}X^T+D\right)\left(X(X^TX)^{-1}+D^T\right)\end{aligned}}\]
+ 
+ 
+ \pause
+ 
+\vspace{3mm}
+
+ Честно раскрываем скобки 
+ 
+ 
+\[ \mathbb{V} \left({\tilde {\beta }}\right) =\sigma ^{2}(X^T X)^{-1}+\sigma ^{2}(X^T X)^{-1}({\color{red} DX} )^T+\sigma ^{2}{\color{red} DX } (X^T X)^{-1}+\sigma ^{2}DD^T.\]
+
+\vspace{3mm}
+
+\pause
+
+ Согласно Шагу 1 {\color{red} $DX =0$}. 
+ 
+\vspace{5mm}
+ 
+ \textbf{Q:} Чему равно 1ое слагаемое?
+
+
+
+  %----------------------------------------------------------
+\end{frame}
+%----------------------------------------------------------
+
+
+%----------------------------------------------------------
+\begin{frame}[plain]\frametitle{Теорема Гаусса-Маркова}
+%----------------------------------------------------------
+
+
+
+
+Мы знаем, что $\sigma ^{2}(X^T X)^{-1} = \mathbb{V}(\hat{\beta})$. Поэтому \[ \mathbb{V} \left({\tilde {\beta }}\right) = \mathbb{V} \left({\widehat {\beta }}\right)+\sigma ^{2}DD^T.\]
+
+\pause
+
+Получаем требуемое: \[ \mathbb{V}(c^T\tilde {\beta }) -   \mathbb{V}(c^T \hat{\beta}) = \sigma^2 c^T D D^T c \geq 0.\] 
+
+\vspace{3mm}
+
+\textbf{Теорема Гаусса-Маркова доказана.}
+
+
+  %----------------------------------------------------------
+\end{frame}
+%----------------------------------------------------------
+
+
+
+
+
+\section{Feature Selection}
+
+
+
+\begin{frame}[plain]\frametitle{Feature Selection} \tableofcontents[currentsection]\end{frame}
+
+
+%----------------------------------------------------------
+\begin{frame}[plain]\frametitle{Насущный вопрос}
+%----------------------------------------------------------
+
+
+
+\begin{center}
+\Large Насущный вопрос --- пилить ли фичу?
+\end{center}
+
+
+\begin{figure}[h!]
+\center{\includegraphics[width=0.65\textwidth]{pic/Piling}}
+\caption{\Large  Или всё-таки не пилить?} \label{Fig:}
+\end{figure}
+
+  %----------------------------------------------------------
+\end{frame}
+%----------------------------------------------------------
+
+
+
+%----------------------------------------------------------
+\begin{frame}[plain]\frametitle{Feature Selection}
+%----------------------------------------------------------
+
+
+
+\begin{center}
+
+\Large Поговорим об {\color{blue} отборе признаков} (Feature Selection) для моделей. 
+
+\vspace{5mm} 
+
+\textbf{Q:} Зачем отбирать фичи/признаки для модели? 
+
+\end{center}
+
+
+
+\begin{figure}[h!]
+\center{\includegraphics[width=0.5\textwidth]{pic/FeatureSelection}}
+%\caption{Итоговая оценка} \label{Fig:}
+\end{figure}
+
+
+
+
+  %----------------------------------------------------------
+\end{frame}
+%----------------------------------------------------------
+
+
+%----------------------------------------------------------
+\begin{frame}[plain]\frametitle{Bias-Variance trade-off}
+%----------------------------------------------------------
+
+\begin{center} \Large Для \textbf{линейных} моделей есть {\color{blue} Bias-Variance trade-off}. \end{center}
+
+\begin{figure}[h!]
+\center{\includegraphics[width=0.95\textwidth]{pic/BVModel}}
+%\caption{Итоговая оценка} \label{Fig:}
+\end{figure}
+
+
+  %----------------------------------------------------------
+\end{frame}
+%----------------------------------------------------------
+
+
+%----------------------------------------------------------
+\begin{frame}[plain]\frametitle{Bias-Variance trade-off}
+%----------------------------------------------------------
+
+
+\begin{figure}[h!]
+\center{\includegraphics[width=0.8\textwidth]{pic/BV2}}
+%\caption{Итоговая оценка} \label{Fig:}
+\end{figure}
+
+
+  %----------------------------------------------------------
+\end{frame}
+%----------------------------------------------------------
+
+
+%----------------------------------------------------------
+\begin{frame}[plain]\frametitle{Сдача экзамена}
+%----------------------------------------------------------
+
+\begin{center}
+\Large Приведём неформальное\footnote{\Large Нестрогое и неверное!} рассуждение. 
+
+\vspace{5mm}
+
+Представим обучение ML-модели как ``сдачу экзамена''.
+\end{center}
+
+
+\begin{figure}[h!]
+\center{\includegraphics[width=0.8\textwidth]{pic/Exam0}}
+%\caption{Итоговая оценка} \label{Fig:}
+\end{figure}
+
+  %----------------------------------------------------------
+\end{frame}
+%----------------------------------------------------------
+
+
+%----------------------------------------------------------
+\begin{frame}[plain]\frametitle{Сдача экзамена}
+%----------------------------------------------------------
+\begin{center}
+\Large Сдавали экзамен 3 модели:
+\end{center}
+
+
+\begin{figure}[h!]
+\center{\includegraphics[width=0.95\textwidth]{pic/ModelsM}}
+%\caption{Итоговая оценка} \label{Fig:}
+\end{figure}
+
+
+  %----------------------------------------------------------
+\end{frame}
+%----------------------------------------------------------
+
+
+%----------------------------------------------------------
+\begin{frame}[plain]\frametitle{Lack of fit + complexity penalty}
+%----------------------------------------------------------
+
+
+\begin{center}
+
+\Large 
+
+\textbf{Q:} Как оценивать модели?
+
+\vspace{5mm}
+
+\textbf{A:} Кажутся разумными критерии вида
+\end{center}
+
+
+\vspace{3mm}
+
+\begin{center}
+\noindent\fbox{%
+    \parbox{21em}{%
+
+
+\vspace{3mm}
+
+\Large \hspace{2mm} Ошибка модели + Сложность модели
+\vspace{3mm}    
+    }%
+}
+
+
+\end{center}
+
+\vspace{3mm}
+
+
+%----------------------------------------------------------
+\end{frame}
+%----------------------------------------------------------
+
+
+
+%----------------------------------------------------------
+\begin{frame}[plain]\frametitle{Статистики}
+%----------------------------------------------------------
+
+
+Пусть
+
+
+\vspace{5mm}
+
+\begin{itemize}
+
+\item Всего {\color{blue} $n$}  признаков в полной модели.
+
+\vspace{5mm}
+
+\item Из них мы отобрали {\color{blue} $k$} признаков. 
+
+\vspace{5mm}
+
+\item {\color{blue} $L$} --- правдоподобие для меньшей модели.
+
+\vspace{5mm}
+
+
+\item {\color{blue} $\hat{Y}_i$} --- предсказания меньшей модели. 
+
+\end{itemize}
+
+%----------------------------------------------------------
+\end{frame}
+%----------------------------------------------------------
+
+%----------------------------------------------------------
+\begin{frame}[plain]\frametitle{AIC, BIC, Mallow Cp}
+%----------------------------------------------------------
+
+Есть несколько известных статистик (все минимизируются):
+
+
+\vspace{5mm}
+
+\begin{enumerate}
+
+
+\item {\color{blue} Информационный критерий Акаике} (1974) \[ {\displaystyle {\operatorname{AIC}}= 2 k - 2 \ln(L)};\]
+
+
+\vspace{3mm}
+
+\pause
+
+
+\item {\color{blue} Байесовский информационный критерий}  (1978) \[ {\displaystyle {\operatorname{BIC}}=k \ln(n) - 2\ln(L)};\]  
+
+\vspace{3mm}
+
+\pause
+
+\item Стастика {\color{blue} $C_P$ Mallow} (1973) \[ \hat{R} = \hat{R}_{\operatorname{tr}} + 2 k \hat{\sigma}^2, \] 
+
+\begin{itemize}
+
+\item $\displaystyle \hat{R}_{\operatorname{tr}}  = \sum_{i=1}^n \left( \hat{Y}_i - Y_i\right)^2$ --- ошибка на обучающей выборке
+
+\vspace{5mm}
+
+\item $\hat{\sigma}^2 $ --- оценка дисперсии ошибки по полной модели (со всеми признаками).
+
+\end{itemize}
+
+
+\end{enumerate}
+
+
+
+%----------------------------------------------------------
+\end{frame}
+%----------------------------------------------------------
+
+
+
+%----------------------------------------------------------
+\begin{frame}[plain]\frametitle{Meh}
+%----------------------------------------------------------
+
+\begin{center}
+\Large На практике особого толку от этих доисторических статистик {\color{red} НЕТ}.
+\end{center}
+
+
+
+\begin{figure}[h!]
+\center{\includegraphics[width=0.35\textwidth]{pic/Meh}}
+%\caption{Итоговая оценка} \label{Fig:}
+\end{figure}
+
+%----------------------------------------------------------
+\end{frame}
+%----------------------------------------------------------
+
+
+%----------------------------------------------------------
+\begin{frame}[plain]\frametitle{No silver bullet}
+%----------------------------------------------------------
+
+
+\begin{center}
+\Large Универсального алгоритма для отбора признаков {\color{red} НЕТ}.
+\end{center}
+
+\begin{figure}[h!]
+\center{\includegraphics[width=0.7\textwidth]{pic/Silver}}
+%\caption{Итоговая оценка} \label{Fig:}
+\end{figure}
+
+
+
+%----------------------------------------------------------
+\end{frame}
+%----------------------------------------------------------
+
+
+%----------------------------------------------------------
+\begin{frame}[plain]\frametitle{Отбор признаков регрессией}
+%----------------------------------------------------------
+
+\begin{center}
+\large \textbf{Q:} Мы уже сталкивались с моделью, которая может отбирать признаки?
+\end{center}
+
+\pause
+
+\begin{figure}[h!]
+\center{\includegraphics[width=0.75\textwidth]{pic/FeatureMode3}}
+%\caption{Итоговая оценка} \label{Fig:}
+\end{figure}
+
+%----------------------------------------------------------
+\end{frame}
+%----------------------------------------------------------
+
+
+
+%----------------------------------------------------------
+\begin{frame}[plain]\frametitle{Cross-validation}
+%----------------------------------------------------------
+
+
+\begin{center}
+\large На практике --- последовательно добавляем-удаляем \\ признаки ({\color{blue} Stepwise regression}).
+
+\vspace{5mm}
+
+\textbf{Q:} Как сравнить модели?
+
+\vspace{5mm}
+
+\pause
+
+\Large \textbf{A:} Сравнить средние ошибки скользящего контроля ({\color{blue} Кросс-валидация}). 
+
+\end{center}
+
+\pause
+
+\begin{figure}[h!]
+\center{\includegraphics[width=0.5\textwidth]{pic/CV}}
+%\caption{Итоговая оценка} \label{Fig:}
+\end{figure}
+
+
+
+
+%----------------------------------------------------------
+\end{frame}
+%----------------------------------------------------------
+
+
+\section{А что нейронки?}
+
+
+
+\begin{frame}[plain]\frametitle{А что нейронки?} \tableofcontents[currentsection]\end{frame}
+
+
+
+%----------------------------------------------------------
+\begin{frame}[plain]\frametitle{Нейронки --- o дивный новый мир}
+%----------------------------------------------------------
+
+\begin{figure}[h!]
+\center{\includegraphics[width=0.5\textwidth]{pic/Wrong}}
+\caption{\LARGE А потом пришли нейронки} \label{Fig:}
+\end{figure}
+
+
+
+
+%----------------------------------------------------------
+\end{frame}
+%----------------------------------------------------------
+
+
+%----------------------------------------------------------
+\begin{frame}[plain]\frametitle{Double Decent}
+%----------------------------------------------------------
+
+\begin{center}
+Был открыт эффект {\color{blue} Двойного Спуска} (Double Decent), \\ противоречащий Bias-Variance Trade-off.
+\end{center}
+
+
+\begin{figure}[h!]
+\center{\includegraphics[width=\textwidth]{pic/InterMode}}
+%\caption{\LARGE А потом пришли нейронки} \label{Fig:}
+\end{figure}
+
+\vspace{5mm}
+
+\begin{thebibliography}{99} 
+\bibitem[Belkin, 2012]{p1}  M. Belkin, D. Hsu, S. Ma, and S. Mandal. (2012)
+\newblock Reconciling modern machine learning practice and the bias-variance trade-off.
+%\newblock \emph{Journal Name} 12(3), 45 -- 678.
+\end{thebibliography}
+
+
+%----------------------------------------------------------
+\end{frame}
+%----------------------------------------------------------
+
+
+%----------------------------------------------------------
+\begin{frame}[plain]\frametitle{DNN can fit randomly labeled data}
+%----------------------------------------------------------
+
+\begin{center}
+\Large Чудеса продолжаются! \\ 
+
+\vspace{3mm}
+
+Нейронки способны выучить всё, что угодно, \\ даже {\color{red} рандомные метки} (только медленней).
+\end{center}
+
+\begin{figure}[h!]
+\center{\includegraphics[width=0.35\textwidth]{pic/Random}}
+%\caption{\LARGE А потом пришли нейронки} \label{Fig:}
+\end{figure}
+
+
+\begin{center}
+\begin{thebibliography}{99} 
+\bibitem[Belkin, 2012]{p1}  C. Zhang, S. Bengio, M. Hardt, B. Recht, O. Vinyals (2016)
+\newblock Understanding deep learning requires rethinking generalization
+%\newblock \emph{Journal Name} 12(3), 45 -- 678.
+\end{thebibliography}
+\end{center}
+
+
+
+%----------------------------------------------------------
+\end{frame}
+%----------------------------------------------------------
+
+
+
+%----------------------------------------------------------
+\begin{frame}[plain]\frametitle{OpenAI}
+%----------------------------------------------------------
+
+\begin{center}
+\large CNN, ResNet, Трансформеры --- не переобучаются!
+
+\vspace{3mm}
+
+ Подробнее в популярном блоге OpenAI:
+
+\vspace{3mm}
+
+\hyperlink{https://openai.com/blog/deep-double-descent/}{https://openai.com/blog/deep-double-descent/}
+
+\end{center}
+
+\begin{figure}[h!]
+\center{\includegraphics[width=0.75\textwidth]{pic/Reg}}
+%\caption{\LARGE А потом пришли нейронки} \label{Fig:}
+\end{figure}
+
+
+
+
+%----------------------------------------------------------
+\end{frame}
+%----------------------------------------------------------
+
+
+%----------------------------------------------------------
+\begin{frame}[plain]\frametitle{Самое важное в ML}
+%----------------------------------------------------------
+
+\begin{center}
+\Large Главное, что мы узнали сегодня:
+\end{center}
+
+
+\begin{figure}[h!]
+\center{\includegraphics[width=0.6\textwidth]{pic/Muller}}
+%\caption{\Huge А потом пришли нейронки} \label{Fig:}
+\end{figure}
+
+
+
+
+%----------------------------------------------------------
+\end{frame}
+%----------------------------------------------------------
+
+
+
+
+
+
+\end{document}

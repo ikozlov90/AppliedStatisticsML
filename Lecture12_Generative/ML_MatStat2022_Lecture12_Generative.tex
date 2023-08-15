@@ -1,0 +1,2161 @@
+\documentclass[9pt]{beamer}
+
+
+
+
+\usepackage{beamerthemesplit}
+\usetheme{Boadilla}
+\usecolortheme{orchid}
+
+
+
+
+
+ % \usepackage[cp866]{inputenc}                %%% Є®¤Ёа®ўЄ  DOS
+  \usepackage[cp1251]{inputenc}
+%  \usepackage[T2A]{fontenc}                %%% ???
+%\usepackage[english,russian]{babel}
+%\usepackage[russian]{babel}
+ \usepackage[OT1]{fontenc}
+%\usepackage[english]{babel}
+\usepackage[russian]{babel}
+
+\usepackage{amssymb,latexsym, amsmath, mathdots}
+
+\usepackage{amscd}
+\usepackage{multirow}
+\usepackage{comment}
+
+\usepackage{epstopdf}
+
+
+
+%\usepackage[table]{xcolor} %colored cells
+
+%\usepackage{tikz}
+%\usetikzlibrary{tikzmark} %arrows in tables
+
+
+\usepackage{mnsymbol} % udots in matrices
+
+
+ \usepackage{pgfpages}
+%\setbeameroption{show notes}
+%\setbeameroption{show notes on second screen=bottom}
+%% \setbeameroption{show notes on second screen}
+
+%\setbeamercolor{alerted text}{fg=red!80!black}
+
+
+% \setbeamercolor{alerted text}{fg=blue!50!green}
+% \setbeamercolor{fortheorem}{bg=blue!15!white}
+% \setbeamercolor{EMPF}{bg=blue!25!white}
+% \setbeamercolor{EMPF2}{bg=blue!35!white}
+
+%\setbeamersize{text margin left=5.mm, text margin right=5.mm}
+
+
+%---------------------------------------------------------------------------------------------------------------------------
+
+%\def\emphbox#1#2#3{\begin{beamercolorbox}[wd=#2, ht=#1, center, colsep=1.mm]{EMPF} #3 \end{beamercolorbox}}
+
+%---------------------------------------------------------------------------------------------------------------------------
+
+
+%\advance\leftskip-5.mm
+
+
+
+%***************************************************************************************************************************
+
+\theoremstyle{theorem}
+\newtheorem{mytheorem}[theorem]{Теорема}
+\newtheorem{mylemma}[theorem]{Лемма}
+\newtheorem{mycorollary}[theorem]{Следствие}
+
+\newtheorem{proposition}[theorem]{Предложение}
+\newtheorem{assertion}[theorem]{Утверждение}
+\newtheorem{remark}[theorem]{Замечание}
+\newtheorem{assumption}[theorem]{Предположение}
+
+\newtheorem{convention}[theorem]{Договорённость}
+\newtheorem{question}[theorem]{Вопрос}
+%\newtheorem{mydefinition}{mydefinition}
+
+\theoremstyle{definition}
+\newtheorem{mydefinition}[theorem]{Определение}
+\newtheorem{myexample}[theorem]{Пример}
+
+
+
+%***************************************************************************************************************************
+
+\chardef\No=194
+\newcommand{\bd}{{\rm bd}}
+\newcommand{\cl}{{\rm cl}}
+\newcommand{\ind}{{\rm ind}}
+\newcommand{\id}{{\rm id}}
+\newcommand{\inj}{{\sl in}}
+\newcommand{\pr}{{\rm pr}}
+\newcommand{\st}{{\rm St}}
+
+
+\DeclareMathOperator{\sgrad}{sgrad}
+
+\DeclareMathOperator{\cnt}{const}
+
+\DeclareMathOperator{\Aut}{Aut}
+
+
+\DeclareMathOperator{\sgn}{sgn}
+
+\DeclareMathOperator{\Int}{Int}
+
+
+\DeclareMathOperator{\tr}{tr}
+
+\DeclareMathOperator{\Mat}{Mat}
+
+
+
+
+
+
+
+%****************************************************************************
+\newcommand{\Ker}{\mathrm{Ker}\,\,}
+\newcommand{\Ann}{\mathrm{Ann}\,\,}
+
+\newcommand{\Imm}{\mathrm{Im}\,\,}
+
+\newcommand{\rk}{\mathrm{rk}\,\,}
+
+\newcommand{\const}{\mathrm{const}}
+
+
+
+\DeclareMathOperator{\Pen}{\mathcal{P}}
+
+
+\DeclareMathOperator{\Core}{K}
+
+
+\DeclareMathOperator{\BLG}{\operatorname{BLG}}
+
+\DeclareMathOperator{\AutBP}{\operatorname{Aut}(V, \mathcal{P})}
+
+
+\def\minus{\hbox{-}}   %Sign of minus in big matrices
+
+\usepackage{multirow}  %Columns spanning multiple rows
+
+\usepackage[normalem]{ulem} %underline that can break lines
+
+%\usepackage[normalem]{ulem}
+
+
+\usepackage{wasysym} %smilies
+
+%****************************************************************************
+
+
+
+\title% [] (optional, only for long titles)
+{Прикладная статистика в машинном обучении \\ Лекция 12 \\ Генеративные модели}
+%\subtitle{}
+\author [И. \,К.~Козлов] %(optional, for multiple authors)
+{И. \,К.~Козлов \\ {\footnotesize(\textit{Мехмат МГУ})}}
+
+
+\date % [](optional)
+{2022}
+%\subject{Mathematics}
+
+
+
+
+\usepackage{hyperref}
+%\hypersetup{unicode=true}
+\hypersetup{
+  colorlinks=true,
+  linkcolor=green!70!black, %blue!50!red,
+  urlcolor=green!70!black,
+  unicode=true
+}
+
+
+\begin{document}
+
+%\includeonlyframes{}
+\frame{\titlepage}
+
+
+
+%----------------------------------------------------------
+\begin{frame}[plain]\frametitle{Нельзя объять необъятное}
+%----------------------------------------------------------
+\begin{center}
+\Large Сегодня мы поговорим про {\color{blue} генеративные модели}.
+
+\vspace{2mm}
+
+Это гигантская тема. Мы буквально одним глазком \\ посмотрим на некоторые модели.
+
+\end{center}
+
+
+\begin{figure}[h!]
+\center{\includegraphics[width=0.8\textwidth]{pic/Tip}}
+\caption{\Large Не надейтесь, даже столько не узнаем} \label{Fig:}
+\end{figure}
+
+%----------------------------------------------------------
+\end{frame}
+%----------------------------------------------------------
+
+
+
+%----------------------------------------------------------
+\begin{frame}[plain]\frametitle{NF и Diffusion Models}
+%----------------------------------------------------------
+
+
+Мы обсудим {\color{blue}Auto-Encoders} и  скажем пару слов про {\color{blue} GAN}. 
+
+\vspace{5mm}
+
+Есть много других популярных моделей, например
+
+\vspace{5mm}
+
+\begin{itemize}
+
+\item \textbf{Normalizing Flows}
+
+\vspace{2mm}
+
+\url{https://lilianweng.github.io/posts/2018-10-13-flow-models/}
+
+\vspace{5mm}
+
+
+\item \textbf{Diffusion Models}
+ 
+\vspace{2mm}
+ 
+\url{https://lilianweng.github.io/lil-log/2021/07/11/diffusion-models.html}
+
+
+\end{itemize}
+
+%----------------------------------------------------------
+\end{frame}
+%----------------------------------------------------------
+
+
+
+\section{Autoencoder (AE)}
+
+
+\begin{frame}[plain]\frametitle{AE} \tableofcontents[currentsection]\end{frame}
+
+
+
+%----------------------------------------------------------
+\begin{frame}[plain]\frametitle{Векторизация}
+%----------------------------------------------------------
+\begin{center}
+\Large Самые лучшие данные для компьютера --- это векторы (или массивы). 
+
+\vspace{2mm}
+
+Нейронки --- по сути эффективный способ {\color{blue} векторизации} сложных (однородных) данных, таких как изображения, текст, речь.
+\end{center}
+
+
+\begin{figure}[h!]
+\center{\includegraphics[width=\textwidth]{pic/Vect1}}
+%\caption{Итоговая оценка} \label{Fig:}
+\end{figure}
+
+%----------------------------------------------------------
+\end{frame}
+%----------------------------------------------------------
+
+
+
+%----------------------------------------------------------
+\begin{frame}[plain]\frametitle{Сжатие без потерь}
+%----------------------------------------------------------
+\begin{center}
+\Large Отображение в вектор --- по сути ``сжатие информации''. 
+
+\vspace{5mm}
+
+По идее мы хотим сжать информацию как можно компактней, \\ но при этом {\color{red} не потерять ничего нужного}.
+
+\vspace{5mm}
+
+\textbf{Q:} А как это проверить --- что мы ``не потеряли ничего нужного''?
+
+\pause
+
+\vspace{5mm}
+
+\textbf{A:} Мы не потеряли информацию, если мы {\color{blue} можем восстановить исходное изображение}.
+
+
+\end{center}
+
+
+%----------------------------------------------------------
+\end{frame}
+%----------------------------------------------------------
+
+
+%----------------------------------------------------------
+\begin{frame}[plain]\frametitle{AutoEncoder}
+%----------------------------------------------------------
+\begin{center}
+\Large Так возникает идея {\color{blue} автокодировщика} ({\color{blue} Autoencoder}) 
+\end{center}
+
+\begin{figure}[h!]
+\center{\includegraphics[width=\textwidth]{pic/autoencoder}}
+%\caption{Итоговая оценка} \label{Fig:}
+\end{figure}
+
+%----------------------------------------------------------
+\end{frame}
+%----------------------------------------------------------
+
+
+
+%----------------------------------------------------------
+\begin{frame}[plain]\frametitle{AutoEncoder}
+%----------------------------------------------------------
+
+
+Как нейронная сеть {\color{blue} автокодировщик} --- это пара нейронных сетей: 
+
+\vspace{5mm}
+
+
+\begin{itemize}
+
+\item {\color{blue} Энкодер} $f: x \to z$;
+
+\vspace{5mm}
+
+\item {\color{blue} Декодер} $g: z \to x'$,
+
+\end{itemize} 
+
+\vspace{5mm}
+
+которые обучаются, минимизируя выбранный лосс \[ L(x, g(f(x)).\]
+
+
+%----------------------------------------------------------
+\end{frame}
+%----------------------------------------------------------
+
+
+
+%----------------------------------------------------------
+\begin{frame}[plain]\frametitle{Пример AE}
+%----------------------------------------------------------
+
+\textbf{Q:} Какое отображение выучит AE с 
+
+\vspace{2mm}
+
+\begin{itemize}
+
+\item MSE-лоссом и
+
+\vspace{2mm}
+
+\item линейным декодером?
+
+\end{itemize}
+
+\vspace{5mm}
+
+
+%----------------------------------------------------------
+\end{frame}
+%----------------------------------------------------------
+
+
+
+
+%----------------------------------------------------------
+\begin{frame}[plain]\frametitle{Пример AE}
+%----------------------------------------------------------
+
+
+
+\textbf{A:} Это {\color{blue} PCA}:
+
+\vspace{2mm}
+
+\begin{itemize}
+\item образ --- линейное пространство т.,ч. 
+
+\vspace{2mm}
+
+\item сумма квадратов расстояний до образов точек минимальна. 
+
+\end{itemize}
+
+
+\begin{figure}[h!]
+\center{\includegraphics[width=0.4\textwidth]{pic/PCA}}
+%\caption{\Large Учимся считать.  $\smiley{}$} \label{Fig:}
+\end{figure}
+
+
+
+%----------------------------------------------------------
+\end{frame}
+%----------------------------------------------------------
+
+%----------------------------------------------------------
+\begin{frame}[plain]\frametitle{Литература}
+%----------------------------------------------------------
+
+Про AE см. Главу 14
+
+\vspace{5mm}
+
+\begin{thebibliography}{10}
+
+   
+  \beamertemplatebookbibitems
+    
+    \bibitem{Goodfellow} Goodfellow C.M. 
+    
+    \newblock{\em Pattern Recognition and Machine Learning}.
+    
+
+  \end{thebibliography}
+  
+  
+  %----------------------------------------------------------
+\end{frame}
+%----------------------------------------------------------
+
+
+
+%----------------------------------------------------------
+\begin{frame}[plain]\frametitle{Путь к BERT начинается с циферек в MNIST}
+%----------------------------------------------------------
+
+\begin{center}
+
+\Large Настало время реализовать нашу первую нейронку: \\ {\color{blue} автоэнкодер для цифр из MNIST}.
+
+\vspace{2mm}
+
+{\color{green} Откройте Jupyter-Notebook к семинару.}
+
+\end{center}
+
+
+\begin{figure}[h!]
+\center{\includegraphics[width=0.65\textwidth]{pic/Bert1}}
+\caption{\Large Учимся считать.  $\smiley{}$} \label{Fig:}
+\end{figure}
+
+%----------------------------------------------------------
+\end{frame}
+%----------------------------------------------------------
+
+
+
+
+
+\subsection{Модификации AE}
+
+
+\begin{frame}[plain]\frametitle{Модификации AE} \tableofcontents[currentsubsection]\end{frame}
+
+
+
+%----------------------------------------------------------
+\begin{frame}[plain]\frametitle{Когда памяти слишком много}
+%----------------------------------------------------------
+
+{\color{red} Возможная проблема с Auto-Encoder}:
+
+\vspace{5mm}
+
+
+\textbf{Q:} Пусть $\dim z \geq \dim x$. Что может выучить авто-энкодер?
+  
+\vspace{5mm}
+
+\pause
+
+\textbf{A:} Тождественное отображение \[\operatorname{id} (x) = x.\]   
+  
+  
+  %----------------------------------------------------------
+\end{frame}
+%----------------------------------------------------------
+
+
+%----------------------------------------------------------
+\begin{frame}[plain]\frametitle{Проблемы AE}
+%----------------------------------------------------------
+
+  
+  \begin{center}
+\Large {\color{red} Ключевые проблемы AE}.
+\end{center}
+
+\vspace{5mm}
+
+\begin{enumerate}
+
+\item \textbf{\color{blue} У латентного представления $z$ нет никаких хороших свойств}.
+
+\vspace{5mm}
+
+\item \textbf{Переобучение}. AE может заучить объекты $x_i$. Например, отображения \[x_{i} \to i, \qquad i \to x_{i}\] дадут идеальный, но абсолютно бесполезный AE \[\operatorname{id}(x_i) = x_i.\] Не знаем, как AE поведёт себя на других объектах $x_{new} \not = x_i$.
+
+
+\vspace{5mm}
+
+\item \textbf{Нельзя сэмплировать}.
+
+\end{enumerate}
+
+
+  
+    
+  %----------------------------------------------------------
+\end{frame}
+%----------------------------------------------------------
+
+%----------------------------------------------------------
+\begin{frame}[plain]\frametitle{Модификации AE}
+%----------------------------------------------------------
+
+  
+  \begin{center}
+\Large Стандартные модификации AE.
+\end{center}
+
+\vspace{5mm}
+
+\begin{enumerate}
+
+\item Регуляризации для улучшения свойств $z$ (\textbf{Sparse AE}, \textbf{Contractive AE}).
+
+\vspace{5mm}
+
+\item Зашумление данных, чтобы избежать переобучения (\textbf{Denoising AE})
+
+\vspace{5mm}
+
+\item Модификация для возможности сэмплирования ({\color{blue} Variational AE}). 
+
+\end{enumerate}
+
+\pause
+
+\vspace{4mm}
+
+2ая и 3ья идея --- более практичны, 1ая --- скорее факт истории.
+
+
+  %----------------------------------------------------------
+\end{frame}
+%----------------------------------------------------------
+
+%----------------------------------------------------------
+\begin{frame}[plain]\frametitle{ Sparse AE}
+%----------------------------------------------------------
+
+  \begin{center}
+\Large {\color{blue} Sparse AutoEncoder}.
+\end{center}
+
+\begin{center}
+\textbf{Идея}. \textit{Чем разреженней представления $z$, чем дальше образы объектов друг от друга, тем лучше.}
+\end{center}
+
+
+Можно выучить много фичей $z_1, \dots, z_N$. 
+
+\vspace{2mm}
+
+Но для каждого объекта $x_j$ требуем большинство $z_i = 0$.
+
+\vspace{2mm}
+
+AE активирует лишь ``важнейшие нейроны'' $z_i$ для каждого объекта $x_j$.
+
+  
+  \begin{figure}[h!]
+\center{\includegraphics[width=0.25\textwidth]{pic/Sparce}}
+%\caption{\Large Учимся считать.  $\smiley{}$} \label{Fig:}
+\end{figure}
+
+  %----------------------------------------------------------
+\end{frame}
+%----------------------------------------------------------
+
+
+%----------------------------------------------------------
+\begin{frame}[plain]\frametitle{ Sparse AE}
+%----------------------------------------------------------
+
+  \begin{center}
+\Large {\color{blue} Sparse AutoEncoder}.
+\end{center}
+
+\vspace{5mm}
+
+На практике в лосс добавляется штраф на $z$: \[ {\displaystyle L(x,x' )+\Omega (z)} \]  
+
+\begin{itemize}
+
+\item Например, $L_1$-лосс $\Omega(z) = \lambda \sum_i | z_i|$;
+
+\vspace{5mm}
+
+\item Или $KL$-дивергенция, чтобы сделать вероятность $z_i \not =0$ близкой к малому $p$.
+
+\vspace{2mm}
+
+{\small
+\url{https://lilianweng.github.io/posts/2018-08-12-vae/\#sparse-autoencoder}
+}
+
+\vspace{5mm}
+
+\item Или можно явно занулить все $z_i$ кроме TOP-k.
+
+
+\end{itemize}
+
+  %----------------------------------------------------------
+\end{frame}
+%----------------------------------------------------------
+
+
+%----------------------------------------------------------
+\begin{frame}[plain]\frametitle{Contractive  AE}
+%----------------------------------------------------------
+
+  \begin{center}
+\Large {\color{blue} Contractive  AutoEncoder}.
+\end{center}
+
+
+\begin{center}
+\textbf{Идея}. \textit{Требуем, чтобы $z_i$ не сильно менялись при малом шевелении $x$.}
+\end{center}
+
+\vspace{2mm}
+
+Добавляем в лосс регуляризацию: 
+
+\[ L(x ,x' )+\lambda \sum _{i}||\nabla _{x}z_{i}||^{2}.\]
+
+  %----------------------------------------------------------
+\end{frame}
+%----------------------------------------------------------
+
+%----------------------------------------------------------
+\begin{frame}[plain]\frametitle{Denoising AE}
+%----------------------------------------------------------
+
+  \begin{center}
+\Large {\color{blue} Denoising AutoEncoder}.
+\end{center}
+
+
+\begin{center}
+\textbf{Идея}. \textit{Зашумляем $x$, чтобы модель не зазубривала тупо объекты.}
+\end{center}
+
+\vspace{2mm}
+
+Добавляем к объектам шум $x \to \hat{x}$.
+
+\vspace{2mm}
+
+Требуем, чтобы AE правильно восстанавливал $x$ по зашумлённому $\hat{x}$: \[g(f(\hat{x})) \approx x.\] 
+
+Минимизируем лосс $L(x, g(f(\hat{x}))$.
+
+\vspace{2mm}
+
+  \begin{figure}[h!]
+\center{\includegraphics[width=0.85\textwidth]{pic/Noise}}
+%\caption{\Large Учимся считать.  $\smiley{}$} \label{Fig:}
+\end{figure}
+
+
+  %----------------------------------------------------------
+\end{frame}
+%----------------------------------------------------------
+
+
+
+\section{VAE}
+
+
+\begin{frame}[plain]\frametitle{VAE} \tableofcontents[currentsection]\end{frame}
+
+
+%----------------------------------------------------------
+\begin{frame}[plain]\frametitle{Variational AutoEncoder}
+%----------------------------------------------------------
+
+Обсудим {\color{blue} вариационный автокодировщик} (VAE). 
+
+\vspace{5mm}
+
+Про VAE и его модификации можно почитать в:
+
+\vspace{3mm}
+
+\begin{itemize}
+
+\item Глава VAE в \url{https://ml-handbook.ru}  (доступно ШАД).
+
+\vspace{3mm}
+
+\item \url{https://lilianweng.github.io/posts/2018-08-12-vae/}
+
+\vspace{3mm}
+
+\item Главу 20.10.3
+
+\vspace{3mm}
+
+\begin{thebibliography}{10}
+
+   
+  \beamertemplatebookbibitems
+    
+    \bibitem{Goodfellow} Goodfellow C.M. 
+    
+    \newblock{\em Pattern Recognition and Machine Learning}.
+    
+
+  \end{thebibliography}
+
+\end{itemize}  
+
+%----------------------------------------------------------
+\end{frame}
+%----------------------------------------------------------
+
+
+%----------------------------------------------------------
+\begin{frame}[plain]\frametitle{Хотим генерить новые объекты}
+%----------------------------------------------------------
+\begin{center}
+
+\textbf{Проблема}. Из AE неудобно сэмплировать. 
+
+\vspace{5mm}
+
+\textbf{Q:} Откуда мы умеем сэмплировать?
+
+\vspace{5mm}
+
+
+\pause
+
+\textbf{A:} Из распределения $p(x)$. 
+
+\end{center}
+
+%----------------------------------------------------------
+\end{frame}
+%----------------------------------------------------------
+
+
+%----------------------------------------------------------
+\begin{frame}[plain]\frametitle{Variational AutoEncoder}
+%----------------------------------------------------------
+\begin{center}
+\Large  {\color{blue} Вариационный автокодировщик} ({\color{blue} Variational Autoencoder}) 
+
+\vspace{5mm}
+
+\large  Отличие от AE: на выходе энкодера и декодера --- распределения.
+
+\end{center}
+
+
+\begin{figure}[h!]
+\center{\includegraphics[width=\textwidth]{pic/VAE1}}
+%\caption{Итоговая оценка} \label{Fig:}
+\end{figure}
+
+
+%----------------------------------------------------------
+\end{frame}
+%----------------------------------------------------------
+
+
+%----------------------------------------------------------
+\begin{frame}[plain]\frametitle{VAE лишь внешне похож на AE}
+%----------------------------------------------------------
+
+\begin{center}
+\Large Несмотря на схожесть с AE, VAE --- абсолютно ``байесовский зверь''  \\ и скорее результат ``параллельной эволюции''.
+\end{center}
+
+
+
+\begin{figure}[h!]
+\center{\includegraphics[width=0.7\textwidth]{pic/ConvEvo}}
+\caption{\Large Параллельная эволюция} \label{Fig:}
+\end{figure}
+
+
+
+%----------------------------------------------------------
+\end{frame}
+%----------------------------------------------------------
+
+
+%----------------------------------------------------------
+\begin{frame}[plain]\frametitle{Как байесиане дошли до жизни такой?}
+%----------------------------------------------------------
+
+\begin{center}
+\large Вспомним {\color{blue} модели с латентными переменными}. 
+
+\vspace{5mm}
+\begin{itemize}
+
+\item $x$ --- наблюдаемые переменные;
+
+\vspace{5mm}
+
+\item $z$ --- латентные переменные;
+
+\vspace{5mm}
+
+\item $\theta$ --- параметры модели.
+
+\end{itemize}
+
+\vspace{5mm}
+
+Мы знаем $x$, не знаем $z$ и ищем $\theta$. 
+
+\vspace{5mm}
+
+Совместное распределение обозначим через $p_{\theta}(x, z)$. 
+
+\end{center}
+
+%----------------------------------------------------------
+\end{frame}
+%----------------------------------------------------------
+
+
+%----------------------------------------------------------
+\begin{frame}[plain]\frametitle{Процедура сэмплирования}
+%----------------------------------------------------------
+
+Как сэмплировать объекты $x$? По правилу произведения \[ p_{\theta} (x, z) = p_{\theta} (x \mid z) p_{\theta} (z).\] 
+
+\pause
+
+
+\begin{itemize}
+
+\item Сэмплируем \textbf{латентный вектор} $z$ из $p_{\theta} (z)$. 
+
+
+\vspace{5mm}
+
+Неформально --- мы фиксируем ``факторы для генерации'' (цвет, размер и т.д.)
+
+\vspace{5mm}
+
+
+\item Сэмплируем \textbf{объекты} $x$ из $p_{\theta}(x \mid z)$. 
+
+\end{itemize} 
+
+
+\begin{figure}[h!]
+\center{\includegraphics[width=0.6\textwidth]{pic/lvm}}
+%\caption{\Large Параллельная эволюция} \label{Fig:}
+\end{figure}
+
+
+%----------------------------------------------------------
+\end{frame}
+%----------------------------------------------------------
+
+
+%----------------------------------------------------------
+\begin{frame}[plain]\frametitle{Процедура сэмплирования}
+%----------------------------------------------------------
+
+В VAE за сэмплирование отвечает декодер. 
+
+\begin{figure}[h!]
+\center{\includegraphics[width=0.5\textwidth]{pic/Decoder}}
+%\caption{\Large Параллельная эволюция} \label{Fig:}
+\end{figure}
+
+\vspace{3mm}
+
+\textbf{Q:} Как найти параметр модели $\theta$? 
+
+\vspace{5mm}
+
+\pause
+
+\textbf{A:} Естественная оценка --- {\color{blue} максимум правдоподобия} на наблюдаемых данных: \[\theta^{*} = \arg\max_\theta p_\theta(x)\]
+
+%----------------------------------------------------------
+\end{frame}
+%----------------------------------------------------------
+
+
+%----------------------------------------------------------
+\begin{frame}[plain]\frametitle{Маргинализация}
+%----------------------------------------------------------
+
+{\color{red} Нам нужно вычислить $p_\theta(x)$.} Это сложное распределение.
+
+\vspace{5mm}
+
+\textbf{Q:} Как перейти к более простому совместному распределению $p_\theta(x,z)$?
+
+
+\vspace{5mm}
+
+\textbf{A:} Маргинализуем по $z$: \[ p_\theta(x) =  \int p_\theta(x,z) dz =  \int \limits_{Z^M} p_\theta(x | z) p_\theta(z) dz.\]
+
+
+
+
+
+%----------------------------------------------------------
+\end{frame}
+%----------------------------------------------------------
+
+
+%----------------------------------------------------------
+\begin{frame}[plain]\frametitle{Монте-Карло}
+%----------------------------------------------------------
+
+Итак, нам нужно {\color{red} посчитать матожидание}
+\[ p_\theta(x) =    \int \limits_{Z^M} p_\theta(x | z) p_\theta(z) dz =\mathbb{E}_{z \sim p_\theta(z)} [p_\theta(x | z)] .\]
+
+\vspace{3mm}
+
+\textbf{Q:} Как можно оценить матожидание?
+
+\vspace{5mm}
+
+\textbf{A:} {\color{blue} Методом Монте-Карло}:
+\[\mathbb{E}_{z \sim p_\theta(z)} [p_\theta(x | z)] \approx \frac{1}{K} \sum_k p_\theta(x | z_k),\] где $z_k$ сэмплируются из $p_{\theta}(z)$. 
+
+
+%----------------------------------------------------------
+\end{frame}
+%----------------------------------------------------------
+
+
+%----------------------------------------------------------
+\begin{frame}[plain]\frametitle{Проклятие размерности}
+%----------------------------------------------------------
+
+\textbf{Q:} В чём проблема с суммой \[\mathbb{E}_{z \sim p_\theta(z)} [p_\theta(x | z)] \approx \frac{1}{K} \sum_k p_\theta(x | z_k)?\]
+
+\pause
+
+\vspace{2mm}
+
+\textbf{A:} {\color{red} Проклятие размерности}. 
+
+\vspace{5mm}
+
+Нужно много сэмплов, чтобы покрыть пространство $z$.
+
+\vspace{5mm}
+
+При этом вклад почти всех $z_k$ в $p_{\theta}(x \mid z)$ --- около 0.
+
+
+%----------------------------------------------------------
+\end{frame}
+%----------------------------------------------------------
+
+
+%----------------------------------------------------------
+\begin{frame}[plain]\frametitle{Encoder}
+%----------------------------------------------------------
+
+\textbf{Идея}. \textit{Для каждого $x$ брать те $z_k$, где велико апостериорное распределение} \[p_{\theta} (z\mid x) \propto p_\theta(x | z) p_\theta(z).\]
+
+
+\vspace{2mm}
+
+Апостериорное распределение трудно вычислимо. Поэтому аппроксимируем его \[q_{\phi}(z \mid x) \approx p_{\theta}(z\mid x).\] Это делает {\color{blue} энкодер}.
+
+
+
+\begin{figure}[h!]
+\center{\includegraphics[width=0.5\textwidth]{pic/Encoder}}
+%\caption{\Large Параллельная эволюция} \label{Fig:}
+\end{figure}
+
+
+%----------------------------------------------------------
+\end{frame}
+%----------------------------------------------------------
+
+
+%----------------------------------------------------------
+\begin{frame}[plain]\frametitle{Схема VAE}
+%----------------------------------------------------------
+
+\begin{center}
+\large Вот мы и получили схему VAE:
+\end{center}
+
+
+
+\begin{figure}[h!]
+\center{\includegraphics[width=0.8\textwidth]{pic/VAE3}}
+%\caption{\Large Параллельная эволюция} \label{Fig:}
+\end{figure}
+
+
+%----------------------------------------------------------
+\end{frame}
+%----------------------------------------------------------
+
+
+
+
+\subsection{Обучение VAE}
+
+
+\begin{frame}[plain]\frametitle{Обучение VAE} \tableofcontents[currentsubsection]\end{frame}
+
+
+%----------------------------------------------------------
+\begin{frame}[plain]\frametitle{Обучение нейронок}
+%----------------------------------------------------------
+
+
+\begin{center}
+\Large {\color{red} Как обучать VAE?}
+\end{center}
+
+\vspace{5mm}
+
+Энкодер и декодер --- это нейронные сети. Нужно найти их параметры $\phi $ и $\theta$.
+
+\vspace{5mm}
+
+\textbf{Q:} Как находятся веса нейронных сетей? 
+
+\vspace{5mm}
+
+\pause
+
+\textbf{A:} Градиентным спуском, оптимизируя функцию потерь $\mathcal{L}$. 
+
+ \begin{figure}[h!]
+\center{\includegraphics[height=0.5\textheight]{pic/BackProp}}
+%\caption{\Large Параллельная эволюция} \label{Fig:}
+\end{figure}
+
+
+
+%----------------------------------------------------------
+\end{frame}
+%----------------------------------------------------------
+
+
+%----------------------------------------------------------
+\begin{frame}[plain]\frametitle{Функция потерь}
+%----------------------------------------------------------
+
+Итак, нам нужно найти: 
+
+\vspace{5mm}
+
+\begin{enumerate}
+
+\item адекватную задаче {\color{blue} функцию потерь $\mathcal{L}$},
+
+\vspace{5mm}
+
+
+\item {\color{red} которую можно дифференцировать по $\phi$ и $\theta$},
+
+\vspace{5mm}
+
+
+\item и которую несложно посчитать.
+
+
+\end{enumerate}
+
+
+%----------------------------------------------------------
+\end{frame}
+%----------------------------------------------------------
+
+
+%----------------------------------------------------------
+\begin{frame}[plain]\frametitle{ELBO}
+%----------------------------------------------------------
+
+
+В качестве $\mathcal{L}$ возьмём {\color{blue} вариационную нижнюю оценку} (ELBO) \[ \mathcal L_{\theta, \phi} (x) =  \log p_\theta (x) - \operatorname{KL}(q_\phi (z | x) \parallel p_\theta(z | x)) \]  с прошлой лекции по EM-алгоритму. 
+
+\vspace{5mm}
+
+Напомним необходимые определения. 
+
+
+%----------------------------------------------------------
+\end{frame}
+%----------------------------------------------------------
+
+
+\subsubsection{KL-дивергенция}
+
+
+\begin{frame}[plain]\frametitle{KL-дивергенция} \tableofcontents[currentsubsection]\end{frame}
+
+
+%----------------------------------------------------------
+\begin{frame}[plain]\frametitle{KL-дивергенция}
+%----------------------------------------------------------
+
+
+Пусть $P$ и $Q$ --- распределения с плотностями $p(x)$ и $q(x)$. 
+
+\vspace{5mm}
+
+{\color{blue} Дивергенция Кульбака--Лейблера} суть
+\[  {\displaystyle \operatorname{KL}(P\parallel Q)=\int \,p(x)\ln {\frac {p(x)}{q(x)}}\,{\rm {d}}x}.\]
+
+
+\vspace{3mm}
+  
+
+KL-дивергенция несимметрична и неотрицательна
+\[\operatorname{KL}(P \parallel Q) \not = \operatorname{KL}(Q \parallel P),\qquad \operatorname{KL}(P \parallel Q) \geq 0. \]
+  
+
+
+
+  
+%----------------------------------------------------------
+\end{frame}
+%----------------------------------------------------------
+
+
+%----------------------------------------------------------
+\begin{frame}[plain]\frametitle{Две KL-дивергенции}
+%----------------------------------------------------------
+
+Пусть $P$ --- известное распределение, мы ищем близкое к нему $Q$. 
+
+
+\vspace{5mm}
+
+\textbf{Q:} \textit{А что оптимизировать --- $\operatorname{KL}(P \parallel Q)$ или $\operatorname{KL}(Q \parallel L)$}?
+
+
+\vspace{5mm}
+
+Посмотрим на их свойства.
+
+
+
+%----------------------------------------------------------
+\end{frame}
+%----------------------------------------------------------
+
+
+%----------------------------------------------------------
+\begin{frame}[plain]\frametitle{Forward KL}
+%----------------------------------------------------------
+  
+Стремимся минимизировать   \[ {\color{blue} \operatorname{KL}(P\parallel Q) = \int \,p(x)\ln {\frac {p(x)}{q(x)}}\,{\rm {d}}x}\]
+
+
+\textbf{Q:} Когда будет большое выражение под интегралом? 
+
+\pause
+
+\vspace{5mm}
+
+\textbf{A:} Если $p \not = 0, q = 0$. Значит, {\color{red} $Q$ будет ``размазываться'' по всему носителю $P$}. 
+  
+  
+   \begin{figure}[h!]
+\center{\includegraphics[height=0.5\textheight]{pic/ForKL}}
+%\caption{\Large Параллельная эволюция} \label{Fig:}
+\end{figure}
+
+
+  %----------------------------------------------------------
+\end{frame}
+%----------------------------------------------------------
+
+
+
+
+%----------------------------------------------------------
+\begin{frame}[plain]\frametitle{Reversed KL}
+%----------------------------------------------------------
+  
+Стремимся минимизировать   \[ {\color{blue}  \operatorname{KL}(Q\parallel P) = \int \,q(x)\ln {\frac {q(x)}{p(x)}}\,{\rm {d}}x}\]
+
+
+\textbf{Q:} Когда будет большое выражение под интегралом? 
+
+\pause
+
+\vspace{5mm}
+
+\textbf{A:} Если $p = 0, q \not = 0$. Значит, {\color{red} $Q$ будет ``локализовываться'' близ моды $P$}. 
+  
+  
+   \begin{figure}[h!]
+\center{\includegraphics[height=0.5\textheight]{pic/RevKL}}
+%\caption{\Large Параллельная эволюция} \label{Fig:}
+\end{figure}
+
+
+  %----------------------------------------------------------
+\end{frame}
+%----------------------------------------------------------
+
+
+\subsubsection{ELBO}
+
+
+\begin{frame}[plain]\frametitle{ELBO} \tableofcontents[currentsubsection]\end{frame}
+
+
+
+%----------------------------------------------------------
+\begin{frame}[plain]\frametitle{ELBO}
+%----------------------------------------------------------
+  
+
+\begin{center} Вспомним факт, который мы доказали на прошлой лекции. \end{center}
+  
+\vspace{5mm}  
+
+\begin{block}{}
+\[\ln  p_{\theta} (X) =  \mathcal L_{\theta, \phi} (x)  + \operatorname{KL}(q_\phi (z | x) \parallel p_\theta(z | x)) ,\] где 1ое слагаемое --- это {\color{blue} ELBO}
+\[ \mathcal L_{\theta, \phi} (x)  = \mathbb{E}_{q_\phi (z | x)} \ln   \frac{ p_\theta(z | x)}{q_\phi (z | x)  }.\]
+\end{block} 
+
+  %----------------------------------------------------------
+\end{frame}
+%----------------------------------------------------------
+
+
+%----------------------------------------------------------
+\begin{frame}[plain]\frametitle{Вывод ELBO}
+%----------------------------------------------------------
+
+\textbf{Напомним доказательство}. Для краткости $q_\phi (z | x) = q(z)$. 
+
+\[\log p_\theta(x) = \mathbb E_{q(z)} [\log p_\theta (x)]   = \mathbb{E}_{q(z)} \left[ \log \left( \frac{p_\theta (x, z)}{p_\theta(z | x)} \right) \right] \]
+    
+\pause    
+
+\vspace{2mm}
+    
+Единственный трюк   --- домножить числитель и знаменатель на $q(z)$:
+
+
+    
+\[ \mathbb E_{q(z)} \left[ \log \left( \frac{p_\theta (x, z)}{q(z)} \frac{q(z)}{p_\theta(z | x)}\right)  \right]  = \underbrace{\mathbb E_{q(z)} \left[ \log \left(  \frac{p_\theta (x, z)}{q(z)}\right) \right] }_{{\color{blue} ELBO} =\mathcal L_{\theta, \phi}(x)  } + \underbrace{ \mathbb E_{q(z)} \left[ \log \left( \frac{q(z)}{p_\theta(z | x)}\right) \right] }_{\operatorname{KL}(q(z) \parallel p_\theta (z | x))}\]
+
+
+  %----------------------------------------------------------
+\end{frame}
+%----------------------------------------------------------
+
+
+%----------------------------------------------------------
+\begin{frame}[plain]\frametitle{Разложение ELBO}
+%----------------------------------------------------------
+
+Посмотрим на ELBO повнимательней. 
+
+\vspace{5mm}
+
+\begin{itemize}
+
+
+\item Воспользуемся правилом произведения
+
+\[ ELBO = \mathbb E_{q(z)} \left[ \log \left(  \frac{p_\theta (x, z)}{q(z)}\right) \right] =\mathbb E_{q(z)} \left[ \log \left(  \frac{p_\theta (x \mid z) p_{\theta}(z)}{q(z)}\right) \right]  \] 
+
+\vspace{3mm}
+
+
+\pause
+
+\item выделим ещё KL-дивергенцию с априорным распределением:
+
+\[ ELBO = \underbrace{ \mathbb E_{q(z)} \left[  \log p_\theta (x | z)\right]}_{\text{\color{blue} Reconstruction Loss}} - \underbrace{\operatorname{KL} (q(z) \parallel p_\theta (z))}_{\text{\color{blue} Regularization Term}}  \] 
+
+
+\end{itemize}
+ 
+ 
+  %----------------------------------------------------------
+\end{frame}
+%----------------------------------------------------------
+
+%----------------------------------------------------------
+\begin{frame}[plain]\frametitle{Функция потерь для VAE}
+%----------------------------------------------------------
+  
+
+\begin{center} Всё, мы доказали самую важную теорему про VAE. \end{center}
+  
+\vspace{2mm}  
+
+\begin{block}{Теорема}
+\[\ln  p_{\theta} (X) - \operatorname{KL}(q_\phi (z | x) \parallel p_\theta(z | x)) =  \mathcal L_{\theta, \phi} (x),\] где справа стоит {\color{blue} ELBO}
+\[ \mathcal L_{\theta, \phi} (x)  =\underbrace{ \mathbb E_{q_\phi (z | x)} \left[  \log p_\theta (x | z)\right]}_{\text{\color{blue} Reconstruction Loss}} - \underbrace{\operatorname{KL} (q_\phi (z | x) \parallel p_\theta (z))}_{\text{\color{blue} Regularization Term}}.\]
+\end{block} 
+
+\vspace{2mm}  
+
+\begin{center}
+{\color{red} Эту функцию мы и возьмём за функцию потерь для VAE}.
+\end{center}
+
+  %----------------------------------------------------------
+\end{frame}
+%----------------------------------------------------------
+
+%----------------------------------------------------------
+\begin{frame}[plain]\frametitle{Максимизируем правдоподобие и аппроксимируем апостериорное}
+%----------------------------------------------------------
+  
+  
+  \textbf{Q:} Какие слагаемые стоят слева? \[\ln  p_{\theta} (X) - \operatorname{KL}(q_\phi (z | x) \parallel p_\theta(z | x))\]
+  
+  
+\vspace{5mm}
+
+  
+  \textbf{A:} Мы максимизируем ELBO. Поэтому:
+  
+  
+\vspace{5mm}
+
+\begin{itemize}
+
+
+\item  Мы {\color{blue} максимизируем правдоподобие} данных $\ln  p_{\theta} (X)$,
+
+\vspace{5mm}
+
+\pause
+
+\item  Мы минимизируем KL-дивергенцию $\operatorname{KL}(q_\phi (z | x) \parallel p_\theta(z | x))$ ,  т.е. {\color{blue} приближаем $q_\phi (z | x)$ к апостериорному распределению $p_\theta(z | x)$}.
+
+\end{itemize}
+
+
+
+
+  %----------------------------------------------------------
+\end{frame}
+%----------------------------------------------------------
+
+
+%----------------------------------------------------------
+\begin{frame}[plain]\frametitle{Reconstruction and Regularization}
+%----------------------------------------------------------
+  
+  
+Слагаемые справа тоже можно интерпретировать.  \[ \mathcal L_{\theta, \phi} (x)  =\underbrace{ \mathbb E_{q_\phi (z | x)} \left[  \log p_\theta (x | z)\right]}_{\text{\color{blue} Reconstruction Loss}} - \underbrace{\operatorname{KL} (q_\phi (z | x) \parallel p_\theta (z))}_{\text{\color{blue} Regularization Term}}.\]
+  
+\vspace{5mm}
+
+ 
+\begin{itemize}
+
+
+\item {\color{blue} Reconstruction Loss} --- ошибка при реконструкции объекта.
+
+
+\vspace{5mm}
+
+
+\item {\color{blue} Regularization Term} --- штраф за отклонение от априорного распределения. 
+
+\end{itemize}
+
+
+
+  %----------------------------------------------------------
+\end{frame}
+%----------------------------------------------------------
+
+
+
+
+\subsection{Reparameterization Trick}
+
+\begin{frame}[plain]\frametitle{Reparameterization Trick} \tableofcontents[currentsubsection]\end{frame}
+
+
+
+%----------------------------------------------------------
+\begin{frame}[plain]\frametitle{Градиент не течёт}
+%----------------------------------------------------------
+\begin{center}
+\Large  Есть проблема! {\color{red} У нас не течёт градиент!}
+\end{center}
+
+\begin{figure}[h!]
+\center{\includegraphics[width=0.8\textwidth]{pic/Wall}}
+%\caption{Итоговая оценка} \label{Fig:}
+\end{figure}
+
+
+
+%----------------------------------------------------------
+\end{frame}
+%----------------------------------------------------------
+
+
+%----------------------------------------------------------
+\begin{frame}[plain]\frametitle{Операция сэмплирования недифференцируема}
+%----------------------------------------------------------
+
+
+В чём проблема? ELBO имеет вид \[ \mathcal{L} = \mathbb{E}_{q_{\phi} (z)} f_{\theta}(x, z)\]
+
+\vspace{2mm}
+
+Интегралы не считаются, поэтому они заменяются Монте-Карло оценкой: \[ \mathcal{L} \approx  \frac{1}{K} \sum_{i=1}^k  f_{\theta}(x, z_k), \qquad z_k \sim q_{\phi} (z).\]
+
+\vspace{2mm}
+
+{\color{red} Пропала производная по $\phi$}. 
+
+
+\vspace{5mm}
+
+\begin{center}
+\noindent\fbox{%
+    \parbox{28em}{%
+
+
+\vspace{3mm}
+
+\Large \hspace{4mm} Операция сэмплирования недифференцируема.
+    
+\vspace{3mm}    
+    }%
+}
+
+
+\end{center}
+
+
+%----------------------------------------------------------
+\end{frame}
+%----------------------------------------------------------
+
+
+%----------------------------------------------------------
+\begin{frame}[plain]\frametitle{Reparameterization trick}
+%----------------------------------------------------------
+
+\begin{center}
+\Large {\color{blue} \textbf{Идея}. Отделим параметры и стохастичность. }
+\end{center}
+
+\vspace{3mm}
+
+\begin{center}
+Если $X \sim \mathcal{N}(\mu, \sigma)$, то $X = \mu + \sigma \cdot \varepsilon$, где $\varepsilon \sim \mathcal{N}(0, 1).$
+
+\vspace{5mm}
+
+По $\varepsilon$ дифференцировать нельзя --- это случайная величина.
+
+\vspace{5mm}
+
+А по параметрам $\mu, \sigma$ --- можно. 
+
+
+\end{center} 
+
+%----------------------------------------------------------
+\end{frame}
+%----------------------------------------------------------
+
+
+
+%----------------------------------------------------------
+\begin{frame}[plain]\frametitle{Reparameterization  trick}
+%----------------------------------------------------------
+
+В общем случае мы ищем замену \[ z = g(\varepsilon, \phi, x)\] 
+
+\vspace{3mm}
+
+В матожиданиях в ELBO параметр ``уйдёт из плотности в функцию'': \[ \mathbb{E}_{q_\phi (z)}[f_{\theta} (x,z)] =  \mathbb{E}_{ p(\epsilon)}[f_{\theta}(x,g(\varepsilon, \phi, x))].\] 
+
+\vspace{3mm}
+
+
+Интегралы можно заменить Монте-Карло оценкой \[  \frac{1}{K} \sum_{i=1}^K f_{\theta}(x,g(\varepsilon_k, \phi, x)), \]  которую можно диффенцировать по $\phi$ и $\theta$.
+
+
+%----------------------------------------------------------
+\end{frame}
+%----------------------------------------------------------
+
+
+
+%----------------------------------------------------------
+\begin{frame}[plain]\frametitle{Reparameterization trick}
+%----------------------------------------------------------
+
+\begin{center}
+\Large Этот трюк обычно иллюстрируется такой картинкой:
+\end{center}
+
+\begin{figure}[h!]
+\center{\includegraphics[width=\textwidth]{pic/Repar2}}
+%\caption{Итоговая оценка} \label{Fig:}
+\end{figure}
+
+%----------------------------------------------------------
+\end{frame}
+%----------------------------------------------------------
+
+
+
+
+%----------------------------------------------------------
+\begin{frame}[plain]\frametitle{Variational AutoEncoder}
+%----------------------------------------------------------
+\begin{center}
+\Large Итак, VAE принимает следующий вид:
+
+
+\end{center}
+
+
+\begin{figure}[h!]
+\center{\includegraphics[width=0.9\textwidth]{pic/VAE4}}
+%\caption{Итоговая оценка} \label{Fig:}
+\end{figure}
+
+%----------------------------------------------------------
+\end{frame}
+%----------------------------------------------------------
+
+
+
+\subsection{Пример VAE}
+
+\begin{frame}[plain]\frametitle{Пример VAE} \tableofcontents[currentsubsection]\end{frame}
+
+
+
+
+%----------------------------------------------------------
+\begin{frame}[plain]\frametitle{Нормальные распределения}
+%----------------------------------------------------------
+
+Рассмотрим простейший VAE, когда {\color{red} все распределения --- нормальные}. 
+
+\vspace{5mm}
+
+\begin{itemize}
+
+\item  {\color{blue}Априорное распределение }--- берём стандартное нормальное: \[ p_\theta(z) = \mathcal N(0, I)\]
+
+\vspace{3mm}
+
+\item {\color{blue}Правдоподобие.} Ковариация --- постоянная диагональная матрица. \[p_\theta(x | z) = \mathcal N(f_\theta(z), \sigma^2)\]
+
+
+\vspace{3mm}
+
+\item  {\color{blue}Апостериорное распределение}. Матрица ковариации --- диагональная: \[q_\phi(z | x) = \mathcal N(\mu_\phi(x), \sigma_\phi^2(x))\]
+\end{itemize}
+
+
+
+%----------------------------------------------------------
+\end{frame}
+%----------------------------------------------------------
+
+
+
+
+%----------------------------------------------------------
+\begin{frame}[plain]\frametitle{Функция потерь}
+%----------------------------------------------------------
+
+Посмотрим на ELBO:
+
+\[\mathcal L_{\theta, \phi} (x) 
+    = \mathbb E_{q_\phi(z | x)} \left[ 
+        \log p_\theta (x | z)
+    \right] - \operatorname{KL} (q_\phi(z | x) \parallel p_\theta (z))\]
+
+\vspace{5mm}
+
+
+2ое слагаемое вычисляется явно, 1ое --- оценивается {\color{blue} методом Монте-Карло}:
+
+\[ \mathbb E_{\mathcal N(\mu_\phi(x), \sigma_\phi^2(x))} \left[ 
+        \log p_\theta (x | z)
+    \right]    \approx \frac{1}{K} \sum_{k = 1}^K \log p_\theta (x | z_k), \] где $z_k \sim \mathcal N(\mu_\phi(x), \sigma_\phi^2(x))$.
+
+
+%----------------------------------------------------------
+\end{frame}
+%----------------------------------------------------------
+
+
+
+%----------------------------------------------------------
+\begin{frame}[plain]\frametitle{Ошибка при реконструкции}
+%----------------------------------------------------------
+
+Для гауссовской VAE 1ое слагаемое принимает вид \begin{gather*} \log p_\theta (x | z) = \sum_{j = 1}^D \log p_\theta(x_j | z) = \sum_{j = 1}^D \log \left( 
+        \frac{1}{\sqrt{2 \pi \sigma^2}} \exp \left( 
+            -\frac{(x_j - f_{\theta, j}(z))^2}{2 \sigma^2}
+        \right)
+    \right) = \\
+    = - \frac{D}{2} \log 2 \pi - D \log \sigma - {\color{blue} \frac{1}{2 \sigma^2} \sum_{j = 1}^D (x_j - f_{\theta, j}(z))^2}\end{gather*}
+    
+    \vspace{5mm}
+   
+ Выделено единственное неконстантное слагаемое.
+   
+
+%----------------------------------------------------------
+\end{frame}
+%----------------------------------------------------------
+
+
+
+
+%----------------------------------------------------------
+\begin{frame}[plain]\frametitle{KL-дивергенция}
+%----------------------------------------------------------
+
+2ое слагаемое --- это KL-дивергенция нормальных распределений.  
+
+\vspace{5mm}
+
+Формулу для него можно найти в \url{https://mr-easy.github.io/2020-04-16-kl-divergence-between-2-gaussian-distributions/} 
+
+\vspace{5mm}
+
+В данном случае
+
+
+\begin{gather*} \operatorname{KL} (q_\phi(z \| x) \parallel p_\theta (z)) =\operatorname{KL} (\mathcal N(\mu_\phi(x), \sigma_\phi^2(x)) \parallel \mathcal{N}(0, I))=  \\ = {\color{blue} \frac{1}{2} \sum_{j = 1}^M (\sigma_j^2 + \mu_j^2 - 1 - \ln \sigma_j^2)} \end{gather*}
+
+%----------------------------------------------------------
+\end{frame}
+%----------------------------------------------------------
+
+
+
+%----------------------------------------------------------
+\begin{frame}[plain]\frametitle{KL-дивергенция}
+%----------------------------------------------------------
+
+
+\begin{center}
+\Large {\color{blue} Итоговый лосс для VAE}
+\end{center}
+
+
+\begin{block}{}
+\[L_{VAE} =  \frac{1}{K} \sum_{k = 1}^K \left[  \frac{1}{2 \sigma^2} \sum_{j = 1}^D (x_j - f_{\theta, j}(z_k))^2 \right] + \frac{1}{2} \sum_{j = 1}^M (\sigma_j^2 + \mu_j^2 - 1 - \ln \sigma_j^2), \] где  \[z_k \sim \mathcal N(\mu_\phi(x), \sigma_\phi^2(x)).\] %\[ \mu_\phi(x) = (\mu_1, \ldots, \mu_M), \qquad \sigma^2_\phi(x) = \operatorname{diag}(\sigma^2_1, \ldots, \sigma^2_M).\]
+\end{block}
+
+
+\vspace{5mm}
+
+Согласно \url{https://arxiv.org/pdf/1312.6114.pdf} (Раздел 2.3), \\ если батч достаточно большой ($N \geq 100$), то можно положить $K =1$. 
+
+%----------------------------------------------------------
+\end{frame}
+%----------------------------------------------------------
+
+
+
+\subsection{Недостатки VAE}
+
+\begin{frame}[plain]\frametitle{Недостатки VAE} \tableofcontents[currentsubsection]\end{frame}
+
+
+%----------------------------------------------------------
+\begin{frame}[plain]\frametitle{Размытость}
+%----------------------------------------------------------
+
+\begin{center}
+\Large Типичная проблема VAE --- {\color{blue} размытость изображений}. 
+\end{center}
+
+
+\begin{figure}[h!]
+\center{\includegraphics[width=0.9\textwidth]{pic/VAEG1}}
+%\caption{} \label{Fig:}
+\end{figure}
+
+
+%----------------------------------------------------------
+\end{frame}
+%----------------------------------------------------------
+
+
+%----------------------------------------------------------
+\begin{frame}[plain]\frametitle{KL-дивергенция с распределением данных}
+%----------------------------------------------------------
+
+\begin{center}
+Это ожидаемо. Максимизация правдоподобия влечёт {\color{blue} минимизацию KL-дивергенции между реальными данными и генерируемыми}:
+\end{center}
+
+\begin{gather*} \theta = \arg \max_{\theta} p(x \mid \theta) = \arg \max_{\theta} \sum_{i=1}^n \log p(x_i \mid \theta) \to \arg \max_{\theta}  \int p_{real}(x) \log p(x\mid \theta) dx =\\
+= \arg \max_{\theta}  \int p_{real}(x) \left[ \log p(x\mid \theta) - \log p_{real}(x) \right] dx = \operatorname{KL} (p_{real} \parallel p(x \mid \theta) ).  \end{gather*}
+
+
+%----------------------------------------------------------
+\end{frame}
+%----------------------------------------------------------
+
+
+%----------------------------------------------------------
+\begin{frame}[plain]\frametitle{KL-дивергенция с распределением данных}
+%----------------------------------------------------------
+
+\begin{center}
+\Large А при минимизации Forward KL \\ распределение ``размазывается'' по всей области.
+
+ \vspace{2mm} 
+ 
+ Аппроксимируется всё, но ``кое-как''. 
+\end{center}
+
+\begin{figure}[h!]
+\center{\includegraphics[width=0.8\textwidth]{pic/VAEDist}}
+%\caption{} \label{Fig:}
+\end{figure}
+
+
+%----------------------------------------------------------
+\end{frame}
+%----------------------------------------------------------
+
+
+
+\section{VAE-GAN}
+
+
+
+\begin{frame}[plain]\frametitle{VAE-GAN} \tableofcontents[currentsection]\end{frame}
+
+
+%----------------------------------------------------------
+\begin{frame}[plain]\frametitle{Им несть числа}
+%----------------------------------------------------------
+
+Мир генеративных моделей не ограничивается VAE.
+
+\vspace{5mm}
+
+Упомянем одну из возможных модификаций --- VAE-GAN. 
+
+\vspace{5mm}
+
+Заодно  познакомимся с одной из важнейших генеративных моделей: \\{\color{blue} GAN (Generative Adversarial Networks)}.
+
+%----------------------------------------------------------
+\end{frame}
+%----------------------------------------------------------
+
+
+%----------------------------------------------------------
+\begin{frame}[plain]\frametitle{Mortal Kombat}
+%----------------------------------------------------------
+
+
+\begin{figure}[h!]
+\center{\includegraphics[width=0.8\textwidth]{pic/GAN}}
+%\caption{Итоговая оценка} \label{Fig:}
+\end{figure}
+
+%----------------------------------------------------------
+\end{frame}
+%----------------------------------------------------------
+
+
+
+
+%----------------------------------------------------------
+\begin{frame}[plain]\frametitle{Лекция-12}
+%----------------------------------------------------------
+ 
+ 
+GAN --- большая тема, мы не успеем на ней остановиться. Для ознакомления:
+\vspace{5mm}
+
+\url{https://lilianweng.github.io/posts/2017-08-20-gan/}
+
+\vspace{5mm}
+
+Про ``зоопарк различных GANов'':
+ 
+\vspace{5mm}
+ 
+\url{https://neptune.ai/blog/6-gan-architectures}
+
+ 
+ 
+%----------------------------------------------------------
+\end{frame}
+%----------------------------------------------------------
+
+
+
+
+
+%----------------------------------------------------------
+\begin{frame}[plain]\frametitle{Идея GAN}
+%----------------------------------------------------------
+
+
+\begin{center}
+\Large Как обучить хороший генератор?
+
+\vspace{5mm}
+
+\textbf{Идея}. {\color{blue} Одновременно обучать генератор и дискриминатор}, \\ отличающий ``фейк от правды''. 
+
+\vspace{5mm}
+
+
+Если мы обманем дискриминатор, то мы не можем отличить сгенерированные данные от истинных.
+\end{center}
+
+
+\begin{figure}[h!]
+\center{\includegraphics[width=\textwidth]{pic/GAN4}}
+%\caption{Итоговая оценка} \label{Fig:}
+\end{figure}
+
+
+%----------------------------------------------------------
+\end{frame}
+%----------------------------------------------------------
+
+
+
+
+
+%----------------------------------------------------------
+\begin{frame}[plain]\frametitle{Казаки-разбойники}
+%----------------------------------------------------------
+
+\begin{center}
+\Large По сути --- это противостояние фальшивомонетчиков и полицейских.
+\end{center}
+
+\begin{figure}[h!]
+\center{\includegraphics[width=\textwidth]{pic/GAN5}}
+%\caption{Итоговая оценка} \label{Fig:}
+\end{figure}
+
+
+%----------------------------------------------------------
+\end{frame}
+%----------------------------------------------------------
+
+
+
+
+
+%----------------------------------------------------------
+\begin{frame}[plain]\frametitle{GAN loss}
+%----------------------------------------------------------
+
+\begin{center}
+\Large В отличие от большинства нейронных сетей, \\ обучение GAN --- это \textbf{минимаксная игра}. 
+\end{center}
+
+
+\vspace{5mm}
+
+Формально, в качестве лосса берётся 
+
+\[\begin{aligned}
+\min_G \max_D L(D, G) 
+& = \mathbb{E}_{x \sim p_{r}(x)} [\log D(x)] + \mathbb{E}_{z \sim p_z(z)} [\log(1 - D(G(z)))] \\
+& = \mathbb{E}_{x \sim p_{r}(x)} [\log D(x)] + \mathbb{E}_{x \sim p_g(x)} [\log(1 - D(x)]
+\end{aligned}\]
+
+\vspace{2mm}
+
+\begin{itemize}
+
+\item 1ое слагаемое требует, чтобы на реальных данных дискриминатор $D =1$. 
+
+\vspace{2mm}
+
+\item 2ое слагаемое --- что на данных генератора $G(x)$ дискриминатор $D =0$. 
+
+\end{itemize}
+
+
+
+%----------------------------------------------------------
+\end{frame}
+%----------------------------------------------------------
+
+
+
+
+
+%----------------------------------------------------------
+\begin{frame}[plain]\frametitle{JS Divergence}
+%----------------------------------------------------------
+
+Пусть $p_{r}(x)$ --- распределение реальных данных, а $p_{g}(x)$ --- сгенерированных.
+
+\vspace{5mm}
+
+Можно показать (\url{https://lilianweng.github.io/posts/2017-08-20-gan/}), что 
+
+\vspace{5mm}
+
+\begin{itemize}
+
+\item идеальный дискриминатор имеет вид \[ D^*(x) = \frac{p_{r}(x)}{p_{r}(x) + p_{g}(x)}; \]
+
+\vspace{5mm}
+
+\item оптимизация лосса при идеальном дискриминаторе суть {\color{blue} минимизация дивергенции Йенсена — Шеннона} \[ L(G, D^*) = 2\operatorname{JS}(p_{r} \| p_g) - 2\log2,\] где \[ \operatorname{JS}(p \| q) = \frac{1}{2} \operatorname{KL}\left(p \| \frac{p + q}{2}\right) + \frac{1}{2} \operatorname{KL}\left(q \| \frac{p + q}{2}\right)\]
+
+\end{itemize}
+
+%----------------------------------------------------------
+\end{frame}
+%----------------------------------------------------------
+
+
+
+
+
+%----------------------------------------------------------
+\begin{frame}[plain]\frametitle{Mode Collapsing}
+%----------------------------------------------------------
+
+
+Обучение GAN --- трудоёмкое и нетривиальное занятие. 
+
+\vspace{5mm}
+
+У него есть склонность к {\color{blue} mode collapsing}.
+
+
+\vspace{5mm}
+
+В противоположность VAE, {\color{red} GANу гораздо выгоднее идеально подделывать небольшое подмножество элементов}, чем пытаться сгенерировать всё. 
+
+
+\begin{figure}[h!]
+\center{\includegraphics[width=0.6\textwidth]{pic/ModeCollapse}}
+%\caption{Итоговая оценка} \label{Fig:}
+\end{figure}
+
+%----------------------------------------------------------
+\end{frame}
+%----------------------------------------------------------
+
+
+
+
+
+%----------------------------------------------------------
+\begin{frame}[plain]\frametitle{VAE-GAN}
+%----------------------------------------------------------
+
+\begin{center}
+\Large А вот и обещанная схема VAE-GAN:
+\end{center}
+
+\begin{figure}[h!]
+\center{\includegraphics[width=0.8\textwidth]{pic/VAEGAN}}
+%\caption{Итоговая оценка} \label{Fig:}
+\end{figure}
+
+%----------------------------------------------------------
+\end{frame}
+%----------------------------------------------------------
+
+
+
+%----------------------------------------------------------
+\begin{frame}[plain]\frametitle{Котик Goodfellow}
+%----------------------------------------------------------
+
+
+\begin{center}
+\Large Финальный вопрос курса --- конечно будет про котика.  $\smiley{}$
+
+\vspace{5mm}
+
+\textbf{Q:} Откуда вязь вокруг кота?
+\end{center}
+
+\begin{figure}[h!]
+\center{\includegraphics[width=0.35\textwidth]{pic/CatGan}}
+%\caption{\Large } \label{Fig:}
+\end{figure}
+
+\pause
+
+
+\begin{center}
+\Large \textbf{A:} В обучающей выборке были мемасы с котиками.
+\end{center}
+
+
+
+%----------------------------------------------------------
+\end{frame}
+%----------------------------------------------------------
+
+
+
+
+
+\section{Эпилог}
+
+
+
+\begin{frame}[plain]\frametitle{Эпилог} \tableofcontents[currentsection]\end{frame}
+
+
+%----------------------------------------------------------
+\begin{frame}[plain]\frametitle{Читайте книги --- источник знаний}
+%----------------------------------------------------------
+
+\begin{center}
+\Large Наука не ограничивается университетскими курсами.
+
+\vspace{5mm}
+
+То, чему учат в ВУЗах --- малая доля того, что знают учёные и написано в статьях и монографиях.
+
+\end{center}
+
+
+\begin{figure}[h!]
+\center{\includegraphics[height=0.6\textheight]{pic/Book}}
+%\caption{Итоговая оценка} \label{Fig:}
+\end{figure}
+
+
+
+%----------------------------------------------------------
+\end{frame}
+%----------------------------------------------------------
+
+%----------------------------------------------------------
+\begin{frame}[plain]\frametitle{О дивный новый мир}
+%----------------------------------------------------------
+
+\begin{center}
+\Large IT динамично. 
+
+\vspace{2mm}
+
+Существуют много разных способов освоения новой информации.
+
+\vspace{2mm}
+
+Теория не заменяет опыта и практику.
+
+\end{center}
+
+
+\begin{figure}[h!]
+\center{\includegraphics[height=0.6\textheight]{pic/Habr}}
+%\caption{Итоговая оценка} \label{Fig:}
+\end{figure}
+
+
+
+%----------------------------------------------------------
+\end{frame}
+%----------------------------------------------------------
+
+%----------------------------------------------------------
+\begin{frame}[plain]\frametitle{The End}
+%----------------------------------------------------------
+
+
+
+
+\begin{center}
+\Huge {\color{blue}  Поздравляю с окончанием курса!}
+\end{center}
+
+\begin{figure}[h!]
+\center{\includegraphics[height=0.5\textheight]{pic/Cong2}}
+%\caption{Итоговая оценка} \label{Fig:}
+\end{figure}
+
+\begin{center}
+\Huge {\color{blue}  Спасибо за внимание!}
+\end{center}
+
+
+
+%----------------------------------------------------------
+\end{frame}
+%----------------------------------------------------------
+
+
+
+\end{document}
+
+
+

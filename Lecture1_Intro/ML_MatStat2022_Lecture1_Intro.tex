@@ -1,0 +1,2095 @@
+\documentclass[9pt]{beamer}
+
+
+
+
+\usepackage{beamerthemesplit}
+\usetheme{Boadilla}
+\usecolortheme{orchid}
+
+
+
+
+
+ % \usepackage[cp866]{inputenc}                %%% Є®¤Ёа®ўЄ  DOS
+  \usepackage[cp1251]{inputenc}
+%  \usepackage[T2A]{fontenc}                %%% ???
+%\usepackage[english,russian]{babel}
+%\usepackage[russian]{babel}
+ \usepackage[OT1]{fontenc}
+%\usepackage[english]{babel}
+\usepackage[russian]{babel}
+
+\usepackage{amssymb,latexsym, amsmath, mathdots}
+
+\usepackage{amscd}
+\usepackage{multirow}
+\usepackage{comment}
+
+\usepackage{epstopdf}
+
+
+
+%\usepackage[table]{xcolor} %colored cells
+
+%\usepackage{tikz}
+%\usetikzlibrary{tikzmark} %arrows in tables
+
+
+\usepackage{mnsymbol} % udots in matrices
+
+\usepackage{subcaption} % subfigures
+
+ \usepackage{pgfpages}
+%\setbeameroption{show notes}
+%\setbeameroption{show notes on second screen=bottom}
+%% \setbeameroption{show notes on second screen}
+
+%\setbeamercolor{alerted text}{fg=red!80!black}
+
+
+% \setbeamercolor{alerted text}{fg=blue!50!green}
+% \setbeamercolor{fortheorem}{bg=blue!15!white}
+% \setbeamercolor{EMPF}{bg=blue!25!white}
+% \setbeamercolor{EMPF2}{bg=blue!35!white}
+
+%\setbeamersize{text margin left=5.mm, text margin right=5.mm}
+
+
+%---------------------------------------------------------------------------------------------------------------------------
+
+%\def\emphbox#1#2#3{\begin{beamercolorbox}[wd=#2, ht=#1, center, colsep=1.mm]{EMPF} #3 \end{beamercolorbox}}
+
+%---------------------------------------------------------------------------------------------------------------------------
+
+
+%\advance\leftskip-5.mm
+
+
+
+%***************************************************************************************************************************
+
+\theoremstyle{theorem}
+\newtheorem{mytheorem}[theorem]{Теорема}
+\newtheorem{mylemma}[theorem]{Лемма}
+\newtheorem{mycorollary}[theorem]{Следствие}
+
+\newtheorem{proposition}[theorem]{Предложение}
+\newtheorem{assertion}[theorem]{Утверждение}
+\newtheorem{remark}[theorem]{Замечание}
+\newtheorem{assumption}[theorem]{Предположение}
+
+\newtheorem{convention}[theorem]{Договорённость}
+\newtheorem{question}[theorem]{Вопрос}
+%\newtheorem{mydefinition}{mydefinition}
+
+\theoremstyle{definition}
+\newtheorem{mydefinition}[theorem]{Определение}
+\newtheorem{myexample}[theorem]{Пример}
+
+
+
+%***************************************************************************************************************************
+
+\chardef\No=194
+\newcommand{\bd}{{\rm bd}}
+\newcommand{\cl}{{\rm cl}}
+\newcommand{\ind}{{\rm ind}}
+\newcommand{\id}{{\rm id}}
+\newcommand{\inj}{{\sl in}}
+\newcommand{\pr}{{\rm pr}}
+\newcommand{\st}{{\rm St}}
+
+
+\DeclareMathOperator{\sgrad}{sgrad}
+
+\DeclareMathOperator{\cnt}{const}
+
+\DeclareMathOperator{\Aut}{Aut}
+
+
+\DeclareMathOperator{\sgn}{sgn}
+
+\DeclareMathOperator{\Int}{Int}
+
+
+\DeclareMathOperator{\tr}{tr}
+
+\DeclareMathOperator{\Mat}{Mat}
+
+
+
+
+
+
+
+%****************************************************************************
+\newcommand{\Ker}{\mathrm{Ker}\,\,}
+\newcommand{\Ann}{\mathrm{Ann}\,\,}
+
+\newcommand{\Imm}{\mathrm{Im}\,\,}
+
+\newcommand{\rk}{\mathrm{rk}\,\,}
+
+\newcommand{\const}{\mathrm{const}}
+
+
+
+\DeclareMathOperator{\Pen}{\mathcal{P}}
+
+
+\DeclareMathOperator{\Core}{K}
+
+
+\DeclareMathOperator{\BLG}{\operatorname{BLG}}
+
+\DeclareMathOperator{\AutBP}{\operatorname{Aut}(V, \mathcal{P})}
+
+
+\def\minus{\hbox{-}}   %Sign of minus in big matrices
+
+\usepackage{multirow}  %Columns spanning multiple rows
+
+\usepackage[normalem]{ulem} %underline that can break lines
+
+%\usepackage[normalem]{ulem}
+
+%****************************************************************************
+
+
+
+\title% [] (optional, only for long titles)
+{Прикладная статистика в машинном обучении \\ Лекция 1}
+%\subtitle{}
+\author [И. \,К.~Козлов] %(optional, for multiple authors)
+{И. \,К.~Козлов \\ {\footnotesize(\textit{Мехмат МГУ})}}
+
+
+\date % [](optional)
+{2022}
+%\subject{Mathematics}
+
+
+
+
+
+
+
+
+\usepackage{hyperref}
+\hypersetup{unicode=true}
+
+
+
+\begin{document}
+
+%\includeonlyframes{}
+\frame{\titlepage}
+
+
+
+
+
+%----------------------------------------------------------
+\begin{frame}[plain]\frametitle{Прикладная статистика в машинном обучении}
+%----------------------------------------------------------
+
+
+В 1ой половине курса обсуждаются различные способы оценивания параметров и проверки гипотез.
+
+
+\vspace{3mm}
+
+\begin{enumerate}
+
+\item Введение. Точечные оценки. Метод максимального правдоподобия.
+
+\vspace{3mm}
+
+\item Вероятностный взгляд на машинное обучение.
+
+\vspace{3mm}
+
+\item Интервальные оценки. Бутстреп.
+
+\vspace{3mm}
+
+\item Проверка гипотез. Множественное тестирование гипотез.
+
+\vspace{3mm}
+
+\item Регрессионный анализ.
+
+\vspace{3mm}
+
+\item Непараметрическое оценивание.
+
+\vspace{3mm}
+
+\item $A/B$-тестирование.
+
+\end{enumerate}
+
+
+%----------------------------------------------------------
+\end{frame}
+%----------------------------------------------------------
+
+
+
+%----------------------------------------------------------
+\begin{frame}[plain]\frametitle{Прикладная статистика в машинном обучении}
+%----------------------------------------------------------
+
+
+2ая половина курса посвящена байесовскому подходу. 
+
+\vspace{5mm}
+
+\begin{enumerate}
+
+\setcounter{enumi}{7}
+
+\item Байесовский подход к теории вероятности. Теорема Байеса. Аналитический байесовский вывод.
+
+\vspace{5mm}
+
+\item Байесовский взгляд на подбор моделей.
+
+\vspace{5mm}
+
+\item Метод релевантных векторов (RVM).
+
+\vspace{5mm}
+
+\item Модели с латентными переменными. EM-алгоритм.
+
+\vspace{5mm}
+
+\item Генеративные модели.
+
+\end{enumerate}
+
+
+
+
+%----------------------------------------------------------
+\end{frame}
+%----------------------------------------------------------
+
+
+
+
+%----------------------------------------------------------
+\begin{frame}[plain]\frametitle{Сколько мучиться}
+%----------------------------------------------------------
+
+
+\begin{enumerate}
+
+\item 12 лекций и семинаров.
+
+\vspace{5mm}
+
+\item 3 теоретических задания.
+
+\vspace{5mm}
+
+\item 3 лабораторные работы.
+
+\end{enumerate}
+
+%----------------------------------------------------------
+\end{frame}
+%----------------------------------------------------------
+
+
+
+
+%----------------------------------------------------------
+\begin{frame}[plain]\frametitle{Не очень жёстко}
+%----------------------------------------------------------
+
+
+
+
+\textbf{Жёсткость дедлайна}. 
+
+\vspace{5mm}
+
+Задание можно досдавать неделю после дедлайна. 
+\[\text{Штраф  } = \min(50\%, 10\% * \text{число дней просрочки})\]
+
+%----------------------------------------------------------
+\end{frame}
+%----------------------------------------------------------
+
+
+
+
+%----------------------------------------------------------
+\begin{frame}[plain]\frametitle{Оценки}
+%----------------------------------------------------------
+
+
+\begin{center}
+
+\textbf{\Large Экзамена нет}! 
+
+
+\end{center}
+
+\begin{figure}[h!]
+\center{\includegraphics[width=\textwidth]{pic/Grade}}
+\caption{Итоговая оценка} \label{Fig:}
+\end{figure}
+
+
+
+
+%----------------------------------------------------------
+\end{frame}
+%----------------------------------------------------------
+
+
+%----------------------------------------------------------
+\begin{frame}[plain]\frametitle{Standing on the shoulders of giants}
+%----------------------------------------------------------
+
+
+\begin{center}
+Этот курс во многом основан на лекциях ШАД.
+\end{center}
+
+
+\begin{figure}[t!]
+    \centering
+    \begin{subfigure}[b]{0.3\textwidth}
+        \centering
+        \includegraphics[width=0.85\textwidth]{pic/Raigor}
+        \caption{А.\,М.~Райгородский}
+    \end{subfigure}%
+    ~ 
+    \begin{subfigure}[b]{0.3\textwidth}
+        \centering
+        \includegraphics[width=0.85\textwidth]{pic/Burnaev}
+        \caption{Е.\,В.~Бурнаев}
+    \end{subfigure}
+        ~ 
+    \begin{subfigure}[b]{0.3\textwidth}
+        \centering
+        \includegraphics[width=0.85\textwidth]{pic/Vetrov}
+        \caption{Д.\,П.~Ветров}
+    \end{subfigure}
+    \caption{Лекторы, которым я благодарен}
+\end{figure}
+
+
+
+%----------------------------------------------------------
+\end{frame}
+%----------------------------------------------------------
+
+
+%----------------------------------------------------------
+\begin{frame}[plain]\frametitle{Литература}
+%----------------------------------------------------------
+
+
+Некоторые полезные книжки:
+
+\vspace{5mm}
+
+\begin{thebibliography}{10}
+
+    
+  \beamertemplatebookbibitems
+  \bibitem{Wasserman} Wasserman L. 
+  
+  \newblock{\em All of Nonparametric Statistics}.
+
+
+
+
+ 
+    \vspace{3mm}
+    
+  \beamertemplatebookbibitems
+  \bibitem{Wasserman} Wasserman L. 
+  \newblock{\em All of Statistics}.
+
+
+    \vspace{3mm}
+
+  \beamertemplatebookbibitems
+    
+    \bibitem{Bishop}  Bishop C.M. 
+    
+    \newblock{\em Pattern Recognition and Machine Learning}.
+    
+    \vspace{3mm}
+
+    
+  \beamertemplatebookbibitems
+    
+    \bibitem{Murphy} Murphy  K.P. 
+    
+    \newblock{\em Machine Learning: A Probabilistic Perspective}.
+    
+    
+    \vspace{3mm}
+     \beamertemplatebookbibitems
+  \bibitem{Lagutin}  М.\,Б.~Лагутин, 
+    \newblock {\em Наглядная математическая статистика}.
+    
+    
+
+  \end{thebibliography}
+  
+  
+  %----------------------------------------------------------
+\end{frame}
+%----------------------------------------------------------
+
+
+
+
+%----------------------------------------------------------
+\begin{frame}[plain]\frametitle{Базовый тервер}
+%----------------------------------------------------------
+
+
+Базовые факты по теории вероятностей см. в Приложении к 
+
+\vspace{5mm}
+
+\begin{thebibliography}{10}
+  \beamertemplatebookbibitems
+  \bibitem{Lagutin}  М.\,Б.~Лагутин, 
+    \newblock {\em Наглядная математическая статистика}.
+ 
+  \end{thebibliography} 
+
+
+
+\vspace{3mm}
+
+или в начале книжки Вассермана
+
+\vspace{3mm} 
+
+\begin{thebibliography}{10}
+  \beamertemplatebookbibitems
+  \bibitem{Wasserman} Wasserman L. 
+  
+  \newblock{\em All of Nonparametric Statistics}.
+
+
+
+  \end{thebibliography} 
+  
+  
+  
+  %----------------------------------------------------------
+\end{frame}
+%----------------------------------------------------------
+
+
+
+
+%----------------------------------------------------------
+\begin{frame}[plain]\frametitle{Стандартные обозначения}
+%----------------------------------------------------------
+
+
+Распределения будут либо дискретными, либо абсолютно непрерывными.
+
+\vspace{5mm}
+
+Обозначения стандартные:
+
+\vspace{5mm}
+
+\begin{itemize}
+
+\item $F(x)$ --- функция распределения.
+
+\vspace{5mm}
+
+\item $f(x)$ --- плотность распределения (непр.) или функция вероятности (дискр.)
+
+\end{itemize}
+
+
+
+  %----------------------------------------------------------
+\end{frame}
+%----------------------------------------------------------
+
+
+
+
+%----------------------------------------------------------
+\begin{frame}[plain]\frametitle{Матожидание и дисперсия}
+%----------------------------------------------------------
+
+{\Large {\color{blue} Матожидание} и {\color{blue} дисперсия} --- вероятностные аналоги центра масс и момента инерции относительно него.}
+
+
+
+\begin{figure}[h!]
+\center{\includegraphics[width=0.5\textwidth]{pic/Moment}}
+%\caption{} \label{Fig:}
+\end{figure}
+
+
+
+  %----------------------------------------------------------
+\end{frame}
+%----------------------------------------------------------
+
+
+
+
+%----------------------------------------------------------
+\begin{frame}[plain]\frametitle{Матожидание и дисперсия}
+%----------------------------------------------------------
+
+
+{\color{blue} Матожидание} $a(x)$ --- либо интеграл, либо конечная сумма:
+
+\[ \mathbb{E} \left(a(x) \right) = \int a(x) dF (x) = \begin{cases} \int a(x) f(x) dx, \qquad \text{непрерывный случай}, \\ \sum_j a(x_j) f(x_j), \qquad \text{дискретный случай}. \end{cases} \]
+
+
+\vspace{5mm}
+
+{\color{blue} Дисперсия}:
+
+\[ \mathbb{V} (X)  = \mathbb{E} \left( X - \mathbb{E}(X)\right)^2.\]
+
+%----------------------------------------------------------
+\end{frame}
+%----------------------------------------------------------
+
+
+
+
+
+
+\section{Введение}
+
+
+
+\subsection{Что такое статистика?}
+
+
+
+\begin{frame}[plain]\frametitle{Что такое статистика?} \tableofcontents[currentsubsection]\end{frame}
+
+
+
+
+%----------------------------------------------------------
+\begin{frame}[plain]\frametitle{Основная задача статистики}
+%----------------------------------------------------------
+
+
+\begin{center}
+\textbf{\Large Основной вопрос статистики:}
+
+\vspace{5mm}
+
+
+\noindent\fbox{%
+    \parbox{25em}{%
+    \Huge Дана выборка $X_1, \dots, X_n \sim F$. 
+    
+    Что можно сказать о $F$?
+    }%
+}
+
+
+\end{center}
+
+%----------------------------------------------------------
+\end{frame}
+%----------------------------------------------------------
+
+
+%----------------------------------------------------------
+\begin{frame}[plain]\frametitle{Статистическая модель}
+%----------------------------------------------------------
+
+
+\begin{itemize}
+
+
+\item {\color{blue} Статистическая модель}. Фиксируем семейство распределений \[\mathcal{F} = \left\{ F_{\theta}(x), \quad \theta \in \Theta \right\}, \]  в котором лежит $F$. 
+
+\vspace{5mm}
+
+\item \textbf{Задача:} восстановить распределение $F_{\theta}$ (оценить параметры $\theta$).
+
+
+
+\end{itemize}
+
+
+
+%----------------------------------------------------------
+\end{frame}
+%----------------------------------------------------------
+
+
+%----------------------------------------------------------
+\begin{frame}[plain]\frametitle{Основная задача статистики}
+%----------------------------------------------------------
+
+\textbf{Пример 1}.
+
+\vspace{5mm}
+
+Курс будет по возможности наглядным и иметь отношение к ML. 
+
+\vspace{5mm}
+
+Поговорим о деньгах.
+
+\begin{figure}[h!]
+\center{\includegraphics[width=0.5\textwidth]{pic/dollar}}
+%\caption{} \label{Fig:}
+\end{figure}
+
+%----------------------------------------------------------
+\end{frame}
+%----------------------------------------------------------
+
+
+%----------------------------------------------------------
+\begin{frame}[plain]\frametitle{Пример с деньгами}
+%----------------------------------------------------------
+
+Курс будет по возможности наглядным и иметь отношение к ML. 
+
+\vspace{5mm}
+
+Поговорим о \sout{деньгах} монетках.
+
+\begin{figure}[h!]
+\center{\includegraphics[width=0.5\textwidth]{pic/coin}}
+%\caption{} \label{Fig:}
+\end{figure}
+
+%----------------------------------------------------------
+\end{frame}
+%----------------------------------------------------------
+
+%----------------------------------------------------------
+\begin{frame}[plain]\frametitle{Орел и решка}
+%----------------------------------------------------------
+
+{\color{blue} Распределение Бернулли} ${\textstyle \mathrm {Bernoulli} (p).}$  Орёл выпадает с вероятностью $p$.  
+
+
+
+\begin{figure}[h!]
+\center{\includegraphics[width=0.5\textwidth]{pic/HeadTail}}
+%\caption{} \label{Fig:}
+\end{figure}
+
+
+Реализация выборки --- исходы бросков монетки. 
+
+\vspace{5mm}
+
+Параметр $p$ = ? 
+
+
+%----------------------------------------------------------
+\end{frame}
+%----------------------------------------------------------
+
+
+%----------------------------------------------------------
+\begin{frame}[plain]\frametitle{ЗБЧ}
+%----------------------------------------------------------
+
+
+Пусть $X_1, \dots, X_n$ --- i.i.d. и  $\mu = \mathbb{E} X_1 < \infty$. 
+
+\vspace{5mm}
+
+Обозначим \[ {\overline {X}}_{n}=\frac {X_{1}+\cdots +X_{n}}{n}.\]
+
+
+\begin{block}{Закон больших чисел} \[{\overline {X}}_{n}\ \xrightarrow {\mathbb{P}} \ \mu.  \] \end{block}
+
+
+%----------------------------------------------------------
+\end{frame}
+%----------------------------------------------------------
+
+
+
+%----------------------------------------------------------
+\begin{frame}[plain]\frametitle{Для тех, кто забыл}
+%----------------------------------------------------------
+
+Случайные величины $X_1, \dots, X_n$ сходятся при $n \to \infty$  к случайной величине $X$
+
+
+\vspace{3mm}
+
+
+\begin{itemize}
+
+
+\item {\color{blue} по вероятности} $X_{n}\ {\xrightarrow {\mathbb{P}}}\ X$, если $\forall \epsilon >0$ \[ \mathbb{P} \left( \left| X_n - X \right| > \epsilon \right) \to 0; \]
+
+\item {\color{blue} почти наверное} $ X_{n}\ {\xrightarrow {a.s.}}\ X$,  если \[ \mathbb{P} \left\{ \omega: X_n(\omega) \to 
+X(\omega) \right\} =1; \]
+
+\item {\color{blue} в среднем квадратичном} ${\displaystyle X_{n}\ {\xrightarrow {\overset {}{L^{2}}}}\ X}$, если \[ \mathbb{E} \left( X_n - X\right)^2 \to 0; \]
+
+\item {\color{blue} по распределению} $X_{n}\ {\xrightarrow {d}}\ X$, если \[F_{X_n}(x) \to F_{X}(x)\] для каждой точки непрерывности $x$ функции  распределения $F_X(x)$.
+
+
+\end{itemize}
+
+%----------------------------------------------------------
+\end{frame}
+%----------------------------------------------------------
+
+
+
+%----------------------------------------------------------
+\begin{frame}[plain]\frametitle{Нормальный пример}
+%----------------------------------------------------------
+
+
+\textbf{Пример 2}.
+
+\vspace{5mm}
+
+Определить параметры $\mu$ и $\sigma$ у стандартного нормального распределения
+
+\[{\displaystyle f(x)={\frac {1}{\sigma {\sqrt {2\pi }}}}e^{-{\frac {1}{2}}\left({\frac {x-\mu }{\sigma }}\right)^{2}}} \] 
+
+\begin{figure}[h!]
+\center{\includegraphics[height=0.5\textheight]{pic/normaldist}}
+%\caption{Возникает 1ая развилка} \label{Fig:}
+\end{figure}
+
+%----------------------------------------------------------
+\end{frame}
+%----------------------------------------------------------
+
+
+%----------------------------------------------------------
+\begin{frame}[plain]\frametitle{ЦПТ}
+%----------------------------------------------------------
+
+
+\begin{center}
+\large Нормальное распределение повсюду!
+\end{center}
+
+\vspace{5mm}
+
+\begin{block}{Центральная предельная теорема.} Если ${\mathbb{V} X_{i} =\sigma ^{2}<\infty }$, то \[{\displaystyle {\sqrt {n}}\left({\bar {X}}_{n}-\mu \right)\ \xrightarrow {d} \ {\mathcal {N}}\left(0,\sigma ^{2}\right).}\] \end{block}
+
+
+%----------------------------------------------------------
+\end{frame}
+%----------------------------------------------------------
+
+
+%----------------------------------------------------------
+\begin{frame}[plain]\frametitle{Первая развилка}
+%----------------------------------------------------------
+
+
+
+\begin{figure}[h!]
+\center{\includegraphics[height=0.5\textheight]{pic/Vasnetsov}}
+\caption{Возникает 1ая развилка} \label{Fig:}
+\end{figure}
+
+\begin{center} Конечномерно ли пространство параметров $\Theta?$ \end{center}
+
+
+
+
+%----------------------------------------------------------
+\end{frame}
+%----------------------------------------------------------
+
+
+
+
+%----------------------------------------------------------
+\begin{frame}[plain]\frametitle{Два вида статистики}
+%----------------------------------------------------------
+
+\begin{figure}[h!]
+\center{\includegraphics[width=\textwidth]{pic/DimenTheta}}
+%\caption{Возникает 1ая развилка} \label{Fig:}
+\end{figure}
+
+%----------------------------------------------------------
+\end{frame}
+%----------------------------------------------------------
+
+
+
+\subsection{Непараметрическая статистика}
+
+
+
+\begin{frame}[plain]\frametitle{Непараметрическая статистика} \tableofcontents[currentsubsection]\end{frame}
+
+
+
+%----------------------------------------------------------
+\begin{frame}[plain]\frametitle{Непараметрическая статистика}
+%----------------------------------------------------------
+
+Задачи непараметрической статистики?
+
+\vspace{5mm}
+
+\begin{itemize}
+
+\item  Дана выборка $X_1, \dots, X_n \sim F$. 
+
+\vspace{5mm}
+
+Как \textbf{ восстановить функцию распределения} \[F(x) = \mathbb{P} \left( X \leq x \right) ?\]
+
+
+\vspace{2mm}
+
+Или \textbf{плотность} $f(x)$?
+
+\end{itemize}
+
+\pause
+
+\vspace{5mm}
+
+\textbf{Q:} Важнейший результат об этом?
+
+
+%----------------------------------------------------------
+\end{frame}
+%----------------------------------------------------------
+
+
+
+
+%----------------------------------------------------------
+\begin{frame}[plain]\frametitle{Эмпирическая функция распределений}
+%----------------------------------------------------------
+
+
+
+{\color{blue} Эмпирическая функция распределения} \[ \hat{F}(x)= \frac{\text{кол-во эл-тов в выборке $\leq$ x }}{n} ={\frac {1}{n}}\sum _{i=1}^{n}I \left( {X_{i}\leq x}\right). \]
+\begin{figure}[h!]
+\center{\includegraphics[width=0.85\textwidth]{pic/empirical}}
+%\caption{} \label{Fig:}
+\end{figure}
+
+
+
+%----------------------------------------------------------
+\end{frame}
+%----------------------------------------------------------
+
+
+
+
+%----------------------------------------------------------
+\begin{frame}[plain]\frametitle{Теорема Гливенко-Кантелли}
+%----------------------------------------------------------
+
+\begin{block}{Теорема Гливенко-Кантелли}
+ \[{\displaystyle \sup \limits _{x\in \mathbb {R} }\left|{\hat {F}}(x)-F(x)\right|\xrightarrow {a.s.} 0\;}.\] \end{block}
+
+%----------------------------------------------------------
+\end{frame}
+%----------------------------------------------------------
+
+
+%----------------------------------------------------------
+\begin{frame}[plain]\frametitle{Непараметрическая статистика}
+%----------------------------------------------------------
+
+Другая задача непараметрической статистики:
+
+\vspace{5mm}
+
+\begin{itemize}
+
+\item \textbf{Оценить статистики распределения} $T(F)$, например матожидание \[ T(F) = \int x dF(x).\]
+
+\end{itemize}
+
+\pause
+
+\vspace{5mm}
+
+\textbf{Q:} Простейший способ это сделать?
+
+
+%----------------------------------------------------------
+\end{frame}
+%----------------------------------------------------------
+
+%----------------------------------------------------------
+\begin{frame}[plain]\frametitle{Лекция 1}
+%----------------------------------------------------------
+
+{\color{blue} Статистический функционал} $T(F)$ --- это функция от распределения $F$. 
+
+\vspace{3mm}
+
+Примеры:
+
+\vspace{3mm}
+
+\begin{itemize}
+
+\item Среднее значение \[ \mu = \int x dF(x),\]
+
+\vspace{5mm}
+
+\item Дисперсия \[ \sigma^2 = \int ( x - \mu)^2 dF(x),\]
+
+
+\vspace{5mm}
+ 
+\item Медиана (квантиль распределения) \[ m = F^{-1}\left(\frac{1}{2} \right).\]
+
+\end{itemize}
+
+
+%----------------------------------------------------------
+\end{frame}
+%----------------------------------------------------------
+
+%----------------------------------------------------------
+\begin{frame}[plain]\frametitle{Plug-in оценивание}
+%----------------------------------------------------------
+
+\textbf{Выборочные оценки} --- подставить в интеграл эмпирическую функцию распределения $\hat{F}$.
+
+\vspace{5mm}
+
+Интеграл превращается в сумму 
+
+\[ T \left(\hat{F}_n\right)  = \int a(x) d \hat{F}_n(x) = \frac{1}{n} \sum_{i=1}^n  a( X_i).\]
+
+
+%----------------------------------------------------------
+\end{frame}
+%----------------------------------------------------------
+
+
+
+
+
+
+
+%----------------------------------------------------------
+\begin{frame}[plain]\frametitle{Регрессия}
+%----------------------------------------------------------
+
+
+Ещё одна задача непараметрической статистики:
+
+\vspace{5mm}
+
+\begin{itemize}
+
+\item  \textbf{Регрессия}. Даны пары $(x_1, Y_1), \dots, (x_n, Y_n)$, где \[ Y_i = r(x_i) + \varepsilon_i, \qquad \text{ и } \qquad \mathbb{E} \varepsilon_i = 0.\] Нужно восстановить функцию регрессии $r$.   
+
+\end{itemize}
+
+
+
+%----------------------------------------------------------
+\end{frame}
+%----------------------------------------------------------
+
+
+
+
+%----------------------------------------------------------
+\begin{frame}[plain]\frametitle{Логистическая регрессия}
+%----------------------------------------------------------
+
+
+
+\begin{center}
+Да, линейную и логистическую регрессию мы тоже обсудим. 
+\end{center}
+
+\begin{figure}[h!]
+\center{\includegraphics[width=\textwidth]{pic/LogRegSk}}
+%\caption{} \label{Fig:}
+\end{figure}
+
+%----------------------------------------------------------
+\end{frame}
+%----------------------------------------------------------
+
+
+\section{Способы оценки параметров}
+
+
+\subsection{Точечная оценка}
+
+
+
+\begin{frame}[plain]\frametitle{Точечная оценка} \tableofcontents[currentsubsection]\end{frame}
+
+
+
+
+%----------------------------------------------------------
+\begin{frame}[plain]\frametitle{Оценки параметров}
+%----------------------------------------------------------
+
+
+
+3 важнейших способа оценивать параметры:
+
+
+\vspace{5mm}
+
+\begin{itemize}
+
+\item Точечная оценка.
+
+\vspace{5mm}
+
+\item Доверительные интервалы.
+
+
+\vspace{5mm}
+
+\item Проверка гипотез.
+
+\end{itemize}
+
+
+
+%----------------------------------------------------------
+\end{frame}
+%----------------------------------------------------------
+
+
+%----------------------------------------------------------
+\begin{frame}[plain]\frametitle{Точечная оценка}
+%----------------------------------------------------------
+
+\textbf{Точечная оценка}. 
+
+\vspace{5mm}
+
+Оценка параметра $\theta$ --- случайная величина от выборки   \[\hat{\theta}_n = g(X_1, \dots, X_n).\]
+
+
+\vspace{5mm}
+
+По традиции обозначается $\hat{\theta}$ или $\hat{\theta}_n$. 
+
+
+%----------------------------------------------------------
+\end{frame}
+%----------------------------------------------------------
+
+
+%----------------------------------------------------------
+\begin{frame}[plain]\frametitle{Несмещённость}
+%----------------------------------------------------------
+
+
+Что мы хотим от оценки?
+
+\vspace{5mm}
+
+\begin{itemize}
+
+\item {\color{blue} Смещение} оценки: \[\operatorname {Bias}_{\theta} ({\hat {\theta }_n}) = \mathbb{E}_{\theta} \left(\hat{\theta}_n\right) - \theta \] 
+
+\end{itemize}
+
+\vspace{3mm}
+
+\textbf{Q}. Почему написано $\mathbb{E}_{\theta}$?
+
+
+%----------------------------------------------------------
+\end{frame}
+%----------------------------------------------------------
+
+
+%----------------------------------------------------------
+\begin{frame}[plain]\frametitle{Несмещённость}
+%----------------------------------------------------------
+
+
+\begin{itemize}
+
+\item
+$ \mathbb{E}_{\theta} \left(\hat{\theta}_n\right)$ --- среднее значение статистики $\hat{\theta}$ по всем реализациям выборок $X_1,\dots, X_n$ при фиксированном $\theta$. 
+\end{itemize}
+
+
+\vspace{5mm}
+
+\pause
+
+\textbf{Пример}. Кидаем монетку 2 раза. $\hat{\theta}$ --- доля выпавших орлов.
+
+\begin{figure}[h!]
+\center{\includegraphics[width=0.65\textwidth]{pic/2Coins}}
+%\caption{} \label{Fig:}
+\end{figure}
+
+\pause
+
+\[ \mathbb{E}_{\theta} \left(\hat{\theta}\right) = 0 * (1-p)^2 + 2 * 0,5 * p (1-p) + 1 * p^2 = p.  \] 
+
+
+%----------------------------------------------------------
+\end{frame}
+%----------------------------------------------------------
+
+
+%----------------------------------------------------------
+\begin{frame}[plain]\frametitle{Несмещённость}
+%----------------------------------------------------------
+
+
+
+В общем случае \[ \mathbb{E}_{\theta} \left(\hat{\theta}_n\right) =  \int  g(x_1, \dots, x_n) f_{\theta} (x_1) \dots f_{\theta} (x_n) dx_1 \dots dx_n.\]
+
+%----------------------------------------------------------
+\end{frame}
+%----------------------------------------------------------
+
+
+%----------------------------------------------------------
+\begin{frame}[plain]\frametitle{Несмещённость}
+%----------------------------------------------------------
+
+
+
+Оценка $\hat{\theta}_n$ {\color{blue} несмещенная}, если   $\operatorname {Bias}_{\theta} ({\hat {\theta }_n}) = 0$ для любого $\theta$.
+
+
+\vspace{5mm}
+
+Несмещённость --- неплохо, но необязательно.
+
+
+%----------------------------------------------------------
+\end{frame}
+%----------------------------------------------------------
+
+
+%----------------------------------------------------------
+\begin{frame}[plain]\frametitle{Стандартная ошибка}
+%----------------------------------------------------------
+
+Несмещённость = в среднем угадываем параметр. 
+
+\vspace{5mm}
+
+Но \sout{какой ценой} каков разброс?
+
+\vspace{5mm}
+
+{\color{blue} Стандартная ошибка} --- корень из {\color{blue} дисперсии} \[ \operatorname{se} = \operatorname{se} (\hat{\theta}_n) = \sqrt{\mathbb{V}_{\theta}(\hat{\theta}_n)}.\]
+
+
+%----------------------------------------------------------
+\end{frame}
+%----------------------------------------------------------
+
+
+%----------------------------------------------------------
+\begin{frame}[plain]\frametitle{Состоятельность}
+%----------------------------------------------------------
+
+\textit{Чем больше данных --- тем меньше вероятность сильного отклонения оценки}. 
+
+
+\vspace{5mm}
+
+\begin{itemize}
+
+\item Оценка $\hat{\theta}_n$  {\color{blue} состоятельная}, если \[  \hat{\theta}_n  \,{\xrightarrow {\mathbb{P}}}\, \theta \] 
+
+\pause 
+
+
+\end{itemize}
+
+\vspace{5mm}
+
+Напомним, сходимость \textit{по вероятности}: \[ \mathbb{P} \left( \left| \hat{\theta}_n - \theta \right| > \epsilon \right) \to 0, \qquad \forall \varepsilon > 0. \]
+
+
+%----------------------------------------------------------
+\end{frame}
+%----------------------------------------------------------
+
+
+
+
+%----------------------------------------------------------
+\begin{frame}[plain]\frametitle{Зависимость между видами сходимости}
+%----------------------------------------------------------
+
+\begin{center} 
+
+\textbf{Q:} Как проверять состоятельность оценки?
+
+\vspace{5mm}
+
+\pause 
+
+
+
+\textbf{Идея.} Вспомним зависимость между видами сходимости:
+\end{center}
+
+\begin{center}
+\Large
+
+\[{\displaystyle {\begin{matrix}{}&{}&{\xrightarrow {\overset {}{L^{2}}}}&&\\&&\Downarrow &&\\{\xrightarrow {\text{a.s.}}}&\Rightarrow &{\xrightarrow {\mathbb{P}}}&\Rightarrow &{\xrightarrow {d}}\end{matrix}}}\]
+
+\end{center}
+
+
+%----------------------------------------------------------
+\end{frame}
+%----------------------------------------------------------
+
+
+%----------------------------------------------------------
+\begin{frame}[plain]\frametitle{MSE}
+%----------------------------------------------------------
+
+
+\begin{itemize}
+
+\item {\color{blue} Среднеквадратичная ошибка}  \[ \operatorname {MSE}  = \mathbb{E}_{\theta} \left( \hat{\theta}  - \theta\right)^2  \] 
+
+
+\end{itemize}
+
+\vspace{2mm}
+
+\begin{block}{Теорема} 
+\[ {\displaystyle \operatorname {MSE} =\left(\operatorname {Bias}_{\theta} ({\hat {\theta }})\right)^{2}} + \mathbb{V}_{\theta }({\hat {\theta }}).\]
+\end{block}
+
+
+\vspace{5mm}
+
+
+\textbf{Следствие}. Если $\operatorname {Bias}_{\theta} ({\hat {\theta }} \to 0$ и $\mathbb{V}_{\theta }({\hat {\theta }}) \to 0$, то $\hat{\theta}$ --- состоятельная оценка.
+
+
+%----------------------------------------------------------
+\end{frame}
+%----------------------------------------------------------
+
+
+%----------------------------------------------------------
+\begin{frame}[plain]\frametitle{Bias-Variance trade-off}
+%----------------------------------------------------------
+
+\begin{block}{Теорема} 
+\[ \operatorname {MSE} =\mathbb{V}_{\theta }({\hat {\theta }})  +\left(\operatorname {Bias}_{\theta} ({\hat {\theta }})\right)^{2} .\]
+\end{block}
+
+
+\vspace{5mm}
+
+\textbf{Доказательство.}
+
+\vspace{5mm}
+
+Обозначим $\bar{\theta} = \mathbb{E}_{\theta}(\hat{\theta})$. 
+
+\vspace{5mm}
+
+Далее просто раскрываем скобки:
+
+
+\[ \operatorname {MSE} = \mathbb{E}_{\theta} \left( \hat{\theta}  - \bar{\theta} + \bar{\theta}  - \theta\right)^2 = \]
+\pause 
+\[= \mathbb{E}_{\theta} \left( \hat{\theta}  - \bar{\theta} \right)^2 + 2 \left( \bar{\theta}  - \theta \right) \mathbb{E}_{\theta }  \left( \hat{\theta}  - \bar{\theta}\right) + \mathbb{E}_{\theta} \left(\bar{\theta}  - \theta\right)^2 = \] 
+\pause
+\[ = \mathbb{V}_{\theta }({\hat {\theta }})  + \operatorname {Bias} ({\hat {\theta }})^{2}.\]
+
+
+
+
+
+%----------------------------------------------------------
+\end{frame}
+%----------------------------------------------------------
+
+
+%----------------------------------------------------------
+\begin{frame}[plain]\frametitle{К теореме Гливенко-Кантелли}
+%----------------------------------------------------------
+
+\textbf{Пример.} Эмпирическая функция распределения  $\hat{F}_n(x)$  --- несмещённая состоятельная оценка $F(x)$ в каждой точке $x$.
+
+\vspace{5mm}
+
+
+\begin{block}{Теорема}
+
+Для любой фиксированной точки $x$: 
+
+\addtolength{\jot}{2mm}
+\begin{gather*}  \mathbb{E} \left( \hat{F}_n(x)\right)  = F(x), \\ 
+\mathbb{V} \left( \hat{F}_n(x)\right)  = \frac{F(x)\left( 1 - F(x) \right)}{n}, 
+\end{gather*}
+\pause
+\begin{gather*} 
+\operatorname{MSE} =  \frac{F(x)\left( 1 - F(x) \right)}{n} \to 0, \\ 
+\hat{F}_n(x) \ {\xrightarrow {\mathbb{P}}}\  F(x).\end{gather*}
+\end{block} 
+
+
+%----------------------------------------------------------
+\end{frame}
+%----------------------------------------------------------
+
+
+%----------------------------------------------------------
+\begin{frame}[plain]\frametitle{Асимптотическая нормальность}
+%----------------------------------------------------------
+
+
+Зачастую нам достаточно выполнения статистических свойств в пределе.
+
+\vspace{5mm}
+
+Оценка $\hat{\theta}_n$  {\color{blue} асимптотически нормальна}, если \[  \frac{\hat{\theta}_n - \theta}{\operatorname{se} } \quad{\xrightarrow {d}}\quad{\mathcal {N}}(0,\,1). \] 
+
+
+
+%----------------------------------------------------------
+\end{frame}
+%----------------------------------------------------------
+
+
+
+
+\subsection{Доверительные интервалы}
+
+
+
+\begin{frame}[plain]\frametitle{Доверительные интервалы} \tableofcontents[currentsubsection]\end{frame}
+
+
+%----------------------------------------------------------
+\begin{frame}[plain]\frametitle{Точечные оценки не идеальны}
+%----------------------------------------------------------
+
+Монету подбросили 15 раз. Выпало 
+
+\vspace{5mm} 
+
+\begin{center} \large 4 орла, $\quad$  11 решек.  \end{center} 
+
+\vspace{5mm} 
+
+Готовы дать руку на отсечение, что $ \displaystyle p = \frac{4}{15}$?
+
+
+
+%----------------------------------------------------------
+\end{frame}
+%----------------------------------------------------------
+
+
+%----------------------------------------------------------
+\begin{frame}[plain]\frametitle{Доверительный интервал}
+%----------------------------------------------------------
+
+{\color{blue} Доверительный интервал} с доверительной вероятностью $1-\alpha$ для параметра $\theta$ --- это интервал \[ C_n = (a, b), \qquad a = a(X_1, \dots, X_n), \quad b = b(X_1, \dots, X_n),\] для которого \[ P_{\theta} (\theta \in C_n) \geq 1 - \alpha, \qquad \text{ для всех } \theta \in \Theta.\]
+
+
+\vspace{5mm}
+
+Подробнее поговорим про доверительные интервалы на {\color{cyan} Лекции 3.}
+
+
+
+
+%----------------------------------------------------------
+\end{frame}
+%----------------------------------------------------------
+
+
+
+
+%----------------------------------------------------------
+\begin{frame}[plain]\frametitle{Brace yourself}
+%----------------------------------------------------------
+
+
+Для построения точных доверительных интервалов нужно найти то или иное неравенство.
+
+\begin{figure}[h!]
+\center{\includegraphics[width=0.65\textwidth]{pic/Bean}}
+\caption{Неравенства страшные} \label{Fig:}
+\end{figure}
+
+%----------------------------------------------------------
+\end{frame}
+%----------------------------------------------------------
+
+
+%----------------------------------------------------------
+\begin{frame}[plain]\frametitle{Неравенство Хёфдинга}
+%----------------------------------------------------------
+
+Неравенство для отклонения от матожидания суммы ограниченных с.в.\footnote{Применимо для распределения Бернулли}:
+
+\vspace{5mm}
+
+\begin{block}{Неравенство Хёфдинга} Пусть $X_1, \dots, X_n$ --- i.i.d. и ${\displaystyle a_{i}\leq X_{i}\leq b_{i}}$. Положим \[ S_{n}=X_{1}+\cdots +X_{n}.\] Тогда для любого $t>0$ 
+\[{\displaystyle {\begin{aligned}\mathbb{P} \left(S_{n}-\mathrm {E} \left[S_{n}\right]\geq t\right)&\leq \exp \left(-{\frac {2t^{2}}{\sum _{i=1}^{n}(b_{i}-a_{i})^{2}}}\right)\\ \mathbb{P} \left(\left|S_{n}-\mathrm {E} \left[S_{n}\right]\right|\geq t\right)&\leq 2\exp \left(-{\frac {2t^{2}}{\sum _{i=1}^{n}(b_{i}-a_{i})^{2}}}\right)\end{aligned}}}\] \end{block}
+
+
+
+
+%----------------------------------------------------------
+\end{frame}
+%----------------------------------------------------------
+
+
+
+%----------------------------------------------------------
+\begin{frame}[plain]\frametitle{Dvoretzky–Kiefer–Wolfowitz–Massart inequality}
+%----------------------------------------------------------
+
+Для эмпирической функции распределения:
+
+\vspace{5mm}
+
+
+\begin{block}{Dvoretzky–Kiefer–Wolfowitz–Massart inequality}
+\[\mathbb{P} {\Bigl (}\sup _{{x\in {\mathbb  R}}}|F_{n}(x)-F(x)|>\varepsilon {\Bigr )}\leq 2e^{{-2n\varepsilon ^{2}}}\qquad {\text{для любого }}\varepsilon >0.\]
+\end{block}
+
+
+
+\begin{figure}[h!]
+\center{\includegraphics[width=0.5\textwidth]{pic/DKW}}
+%\caption{} \label{Fig:}
+\end{figure}
+
+%----------------------------------------------------------
+\end{frame}
+%----------------------------------------------------------
+
+
+\subsection{Проверка гипотез}
+
+
+
+\begin{frame}[plain]\frametitle{Проверка гипотез} \tableofcontents[currentsubsection]\end{frame}
+
+
+%----------------------------------------------------------
+\begin{frame}[plain]\frametitle{Проверка гипотез}
+%----------------------------------------------------------
+
+Частый вопрос --- насколько маловероятно то или иное значение $\theta = \theta_0$?
+
+\vspace{5mm} 
+
+\textbf{Пример}. Пусть \[ X_1, \dots, X_n \sim \operatorname{Bernoulli}(p).\]
+
+\vspace{5mm}
+
+\begin{itemize}
+
+\item {\color{blue} Нулевая гипотеза} $H_0$: обмана нет $p = \frac{1}{2}$. 
+
+\vspace{5mm}
+
+\item {\color{blue} Альтернативная гипотеза} $H_1$: $p \not = \frac{1}{2}$. 
+
+\end{itemize}
+
+\vspace{5mm}
+
+Обсудим проверки гипотез в {\color{cyan}Лекции 4}. 
+
+%----------------------------------------------------------
+\end{frame}
+%----------------------------------------------------------
+
+
+
+
+\section{Метод максимального правдоподобия}
+
+
+
+\begin{frame}[plain]\frametitle{Метод максимального правдоподобия} \tableofcontents[currentsection]\end{frame}
+
+
+
+
+
+%----------------------------------------------------------
+\begin{frame}[plain]\frametitle{Вспомним всё}
+%----------------------------------------------------------
+
+
+\begin{center} 
+Вспомним, как решаются статистические задачи.
+\end{center}
+
+\pause
+
+
+
+\begin{figure}[h!]
+\center{\includegraphics[height=0.5\textheight]{pic/recall}}
+%\caption{} \label{Fig:}
+\end{figure}
+
+\vspace{5mm}
+
+\begin{center} 
+Всё будет \textit{нормально} и \textbf{максимально правдоподобно}.
+\end{center}
+
+%----------------------------------------------------------
+\end{frame}
+%----------------------------------------------------------
+
+
+%----------------------------------------------------------
+\begin{frame}[plain]\frametitle{MLE}
+%----------------------------------------------------------
+
+
+\begin{itemize}
+
+\item Известна плотность вероятности: \[\mathcal{F} = \left\{ f(x, \theta), \theta \in \Theta\right\} \]
+
+
+\vspace{5mm}
+
+\item {\color{blue} Функция правдоподобия} = вероятность выборки \[ \mathcal{L}_n(\theta) = \prod_{i=1}^n f(X_i; \theta). \] 
+
+
+\vspace{5mm}
+
+\item {\color{blue} Оценка максимального правдоподобия} (MLE)  \[\displaystyle {\hat {\theta }_{ML}}={\underset {\theta \in \Theta }{\operatorname {arg\;max} }}\,\mathcal{L}_{n}(\theta).\]
+
+
+\end{itemize}
+
+%----------------------------------------------------------
+\end{frame}
+%----------------------------------------------------------
+
+
+%----------------------------------------------------------
+\begin{frame}[plain]\frametitle{Логарифмируем произведение}
+%----------------------------------------------------------
+
+
+На практике \textbf{малые величины лучше суммировать, чем перемножать.}
+
+\vspace{5mm}
+{\color{blue} Логарифм функции правдоподобия} \[ \ell_n(\theta) = \log \mathcal{L}_n(\theta).\]
+
+
+%----------------------------------------------------------
+\end{frame}
+%----------------------------------------------------------
+
+
+%----------------------------------------------------------
+\begin{frame}[plain]\frametitle{Заметём под ковёр}
+%----------------------------------------------------------
+
+
+\begin{center}
+Свойства MLE верны при определённых {\color{red} условиях регулярности}.
+\end{center}
+
+\begin{figure}[h!]
+\center{\includegraphics[height=0.5\textheight]{pic/carpet}}
+\caption{По традиции опустим их} \label{Fig:}
+\end{figure}
+
+
+%----------------------------------------------------------
+\end{frame}
+%----------------------------------------------------------
+
+
+%----------------------------------------------------------
+\begin{frame}[plain]\frametitle{Строгие формулировки}
+%----------------------------------------------------------
+
+
+Подробные формулировки и доказательство можно найти в 
+
+\vspace{5mm} 
+  \begin{thebibliography}  
+     \beamertemplatebookbibitems
+  \bibitem{Lagutin} R. Hogg, J. McKean, A. Craig, 
+    \newblock {\em  Introduction to Mathematical Statistics}.
+    Chapter 6.      
+  \end{thebibliography}
+  
+  
+%----------------------------------------------------------
+\end{frame}
+%----------------------------------------------------------
+
+
+%----------------------------------------------------------
+\begin{frame}[plain]\frametitle{Простейший случай}
+%----------------------------------------------------------
+
+Для простоты\footnote{Это не все условия. Некоторые условия можно ослабить.} предположим, что 
+
+\vspace{5mm}
+
+\begin{itemize}
+
+\item MLE существует и единственна;
+
+
+\vspace{5mm}
+
+\item $\hat{\theta}_{ML}$ --- внутренняя точка $\Theta$, и это единственное решение \[\frac{\partial L(\theta)}{\partial \theta} = 0; \] 
+
+\vspace{5mm}
+
+\item функции $f(x;\theta)$ и $\int f(x;\theta)$ дважды дифференцируемы по $\theta$ (и производную можно вносить под знак интеграла).
+
+\end{itemize}
+
+%----------------------------------------------------------
+\end{frame}
+%----------------------------------------------------------
+
+
+%----------------------------------------------------------
+\begin{frame}[plain]\frametitle{MLE инвариантна}
+%----------------------------------------------------------
+
+\begin{itemize}
+
+\item MLE \textbf{инвариантна.}
+
+\vspace{5mm}
+
+Если $\tau = g(\theta)$ и $\hat{\theta}_{ML}$ --- ML оценка для $\theta$, то $\hat{\tau} = g(\hat{\theta}_{ML})$ --- ML оценка для $\tau$.
+
+\vspace{5mm}
+	
+
+Если $g$ --- биекция, то очевидно. 
+
+\[\mathcal{L} (\theta) = \mathcal{L}(\tau), \] при замене координат максимум переходит в максимум.
+
+\vspace{5mm}
+
+Можно доказать для любой $g$. 
+
+\end{itemize}
+
+%----------------------------------------------------------
+\end{frame}
+%----------------------------------------------------------
+
+
+%----------------------------------------------------------
+\begin{frame}[plain]\frametitle{MLE состоятельна}
+%----------------------------------------------------------
+
+\begin{itemize}
+
+\item MLE \textbf{состоятельна} \[  \hat{\theta}_{ML}  \,{\xrightarrow {\mathbb{P}}}\, \theta \] 
+
+
+
+\end{itemize}
+
+\vspace{5mm}
+
+\pause
+
+Далее для простоты $\dim \Theta = 1$ (параметр $\theta$ --- число). 
+
+\vspace{5mm}
+
+Следующее свойство --- асимптотическая нормальность. Для оценки дисперсии нужно ввести несколько функций.
+
+
+%----------------------------------------------------------
+\end{frame}
+%----------------------------------------------------------
+
+
+%----------------------------------------------------------
+\begin{frame}[plain]\frametitle{Информация Фишера}
+%----------------------------------------------------------
+
+
+\begin{itemize}
+
+\item {\color{blue} Функция оценки} \[ s(X; \theta) = \frac{\partial \log f(X; \theta)}{\partial \theta}.\]
+
+
+\vspace{5mm}
+
+\item {\color{blue} Информация Фишера} \[ I_n(\theta) = \mathbb{V} (\sum_{i=1}^n s(X_i;\theta)) =  \sum_{i=1}^n  \mathbb{V} (s(X_i;\theta)) \]
+
+\end{itemize}
+
+
+\vspace{3mm}
+
+Часто обозначают $I_1(\theta) = I(\theta)$. Тогда $I_n(\theta) = n \, I(\theta)$.
+
+
+
+%----------------------------------------------------------
+\end{frame}
+%----------------------------------------------------------
+
+
+%----------------------------------------------------------
+\begin{frame}[plain]\frametitle{Асимптотическая нормальность}
+%----------------------------------------------------------
+
+
+\begin{itemize}
+
+\item MLE \textbf{асимптотически нормальна} \[ \sqrt{n} \left( \hat{\theta}_{ML} - \theta\right) \quad{\xrightarrow {d}}\quad{\mathcal {N}}\left(0,\,\frac{1}{I(\theta)}\right). \] 
+
+Матрицу Фишера можно заменить её оценкой \[ \frac{ \hat{\theta}_{ML} - \theta}{\hat{\operatorname{se} } } \quad{\xrightarrow {d}}\quad{\mathcal {N}}(0,\,1), \qquad \hat{\operatorname{se}}^2 = \frac{1}{I_n(\hat{\theta}_{ML})}. \] 
+
+\end{itemize}
+
+
+\pause
+
+\vspace{5mm}
+
+Итак, MLE асимтотически несмещена и дисперсия примерно равна $\displaystyle \frac{1}{I_n(\theta)}$.
+
+%----------------------------------------------------------
+\end{frame}
+%----------------------------------------------------------
+
+
+%----------------------------------------------------------
+\begin{frame}[plain]\frametitle{Неравенство Рао--Крамера}
+%----------------------------------------------------------
+
+
+\begin{block}{Неравенство Рао--Крамера} Пусть выполнены условия регулярности, а $T$ --- функция от выборки. Тогда \[ \mathbb{V} (T) \geq \frac{1 }{ I_n(\theta)} \left(\frac{\partial \mathbb{E} (T)}{\partial \theta}\right)^2.\] \end{block}
+
+\vspace{5mm}
+
+\pause
+
+Для несмещённых оценок $\mathbb{E} (\hat{\theta} ) = \theta$ получаем  \[\mathbb{V} (\hat{\theta}) \geq \frac{1}{I_n(\theta)}.\]
+
+
+
+%----------------------------------------------------------
+\end{frame}
+%----------------------------------------------------------
+
+
+%----------------------------------------------------------
+\begin{frame}[plain]\frametitle{MLE оптимальна}
+%----------------------------------------------------------
+
+
+
+
+
+{\color{blue} Оптимальная оценка}--- несмещённая оценка с минимальной дисперсией. 
+
+\vspace{5mm}
+
+
+\begin{itemize}
+
+\item MLE \textbf{асимптотически оптимальна}.
+
+
+\vspace{5mm}
+
+\begin{itemize}
+
+
+\item Она асимптотически несмещенна (т.к. асимпт. норм.)
+
+\vspace{5mm}
+
+\item Её дисперия стремится к $\mathbb{V} (\hat{\theta}) \geq \frac{1}{I_n(\theta)}.$
+
+\vspace{5mm}
+
+\item По неравенству Рао-Крамера дисперсия $\geq \mathbb{V} (\hat{\theta}) \geq \frac{1}{I_n(\theta)}$.
+
+\end{itemize}
+
+\end{itemize}
+
+
+
+%----------------------------------------------------------
+\end{frame}
+%----------------------------------------------------------
+
+
+
+\section{Байесовский подход}
+
+
+
+\begin{frame}[plain]\frametitle{Байесовский подход} \tableofcontents[currentsection]\end{frame}
+
+
+%----------------------------------------------------------
+\begin{frame}[plain]\frametitle{Допустимый уровень ошибок}
+%----------------------------------------------------------
+
+
+\begin{center}
+
+\textbf{Q:} Какой доверительный интервал взять?
+
+\vspace{5mm} 
+
+\pause
+
+\textbf{A:} {\Huge $95\%$} или {\Huge $99\%$. }
+
+\vspace{5mm}
+
+Это традиция) 
+
+
+\end{center}
+
+
+%----------------------------------------------------------
+\end{frame}
+%----------------------------------------------------------
+
+
+%----------------------------------------------------------
+\begin{frame}[plain]\frametitle{Многомодальность}
+%----------------------------------------------------------
+
+
+\begin{center} 
+Почемы мы ограничиваемся интервалом для $\theta?$ 
+\end{center} 
+
+
+\begin{figure}[h!]
+\center{\includegraphics[height=0.5\textheight]{pic/modes}}
+\caption{У $\theta$ могут быть разные моды} \label{Fig:}
+\end{figure}
+
+
+
+%----------------------------------------------------------
+\end{frame}
+%----------------------------------------------------------
+
+
+%----------------------------------------------------------
+\begin{frame}[plain]\frametitle{Байесовский подход}
+%----------------------------------------------------------
+
+
+
+\begin{figure}[h!]
+\center{\includegraphics[height=0.5\textheight]{pic/deeper}}
+%\caption{} \label{Fig:}
+\end{figure}
+
+\vspace{5mm}
+
+\begin{center}
+
+\Large
+\textbf{Идея.} Значение $\theta$ определяется распределением $p(\theta)$.
+\end{center}
+
+
+%----------------------------------------------------------
+\end{frame}
+%----------------------------------------------------------
+
+%----------------------------------------------------------
+\begin{frame}[plain]\frametitle{И треснул мир на пополам}
+%----------------------------------------------------------
+
+\begin{figure}[h!]
+\center{\includegraphics[width=\textwidth]{pic/StatFrB}}
+%\caption{} \label{Fig:}
+\end{figure}
+%----------------------------------------------------------
+\end{frame}
+%----------------------------------------------------------
+
+
+
+
+%----------------------------------------------------------
+\begin{frame}[plain]\frametitle{ Формула Байеса}
+%----------------------------------------------------------
+
+
+При поступлении данных от {\color{blue} априорного распределения}  $p(\theta)$ мы переходим к {\color{blue} апостериорному} $P(\theta \mid X)$.
+
+\vspace{5mm}
+
+\begin{center}
+
+{\color{blue}\Large Формула Байеса} \[{\displaystyle P(\theta \mid X)={\frac {P(X\mid \theta)\,P(\theta)}{ \int P(X\mid \theta)\,P(\theta) d \theta }}}.\]
+
+\end{center}
+
+\vspace{3mm}
+
+Обсудим байесовский подход {\color{cyan} во 2ой части курса}.
+
+
+%----------------------------------------------------------
+\end{frame}
+%----------------------------------------------------------
+
+
+\section{Резюме 1ой лекции}
+
+
+
+\begin{frame}[plain]\frametitle{Резюме 1ой лекции} \tableofcontents[currentsection]\end{frame}
+
+
+
+%----------------------------------------------------------
+\begin{frame}[plain]\frametitle{Дилемма смещения–дисперсии}
+%----------------------------------------------------------
+
+\[ {\color{red} \displaystyle \operatorname {MSE} ({\hat {\theta }})=\operatorname {Var}_{\theta }({\hat {\theta }})+\operatorname {Bias}_{\theta} ({\hat {\theta }})^{2}.}\]
+
+\begin{center} Одна из ключевых проблем в обучении с учителем (\textbf{переобучение}). \end{center}
+
+\begin{figure}[h!]
+\center{\includegraphics[height=0.5\textheight]{pic/BiasVariance}}
+\caption{Bias–variance tradeoff} \label{Fig:}
+\end{figure}
+
+
+
+%----------------------------------------------------------
+\end{frame}
+%----------------------------------------------------------
+
+%----------------------------------------------------------
+\begin{frame}[plain]\frametitle{Оценка максимального правдоподобия}
+%----------------------------------------------------------
+
+\begin{center} Оценка максимального правдоподобия  \[\color{red} {\displaystyle {\hat {\theta }_{ML}}={\underset {\theta \in \Theta }{\operatorname {arg\;max} }}\,\mathcal{L}_{n}(\theta)} \] \end{center}
+
+
+\begin{itemize}
+
+
+\item Состоятельна.
+
+\vspace{5mm}
+
+\item Инвариантна.
+
+\vspace{5mm}
+
+\item Асимптотически нормальна.
+
+\vspace{5mm}
+
+\item Асимптотически оптимальна.
+
+\end{itemize}
+
+
+
+
+
+%----------------------------------------------------------
+\end{frame}
+%----------------------------------------------------------
+
+%----------------------------------------------------------
+\begin{frame}[plain]\frametitle{Разделы статистики}
+%----------------------------------------------------------
+
+
+\begin{figure}[h!]
+\center{\includegraphics[width=\textwidth]{pic/FourStat}}
+\caption{Разделы статистики, которые мы обсудим} \label{Fig:}
+\end{figure}
+
+
+
+
+%----------------------------------------------------------
+\end{frame}
+%----------------------------------------------------------
+
+
+%----------------------------------------------------------
+\begin{frame}[plain]\frametitle{To be continued}
+%----------------------------------------------------------
+
+
+\begin{figure}[h!]
+\center{\includegraphics[width=\textwidth]{pic/FourStat2}}
+%\caption{Разделы статистики, которые мы обсудили} \label{Fig:}
+\end{figure}
+
+
+
+
+%----------------------------------------------------------
+\end{frame}
+%----------------------------------------------------------
+
+
+\end{document}

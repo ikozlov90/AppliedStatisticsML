@@ -1,0 +1,890 @@
+\documentclass[9pt]{beamer}
+
+
+
+
+\usepackage{beamerthemesplit}
+\usetheme{Boadilla}
+\usecolortheme{orchid}
+
+
+
+
+
+ % \usepackage[cp866]{inputenc}                %%% Є®¤Ёа®ўЄ  DOS
+  \usepackage[cp1251]{inputenc}
+%  \usepackage[T2A]{fontenc}                %%% ???
+%\usepackage[english,russian]{babel}
+%\usepackage[russian]{babel}
+ \usepackage[OT1]{fontenc}
+%\usepackage[english]{babel}
+\usepackage[russian]{babel}
+
+\usepackage{amssymb,latexsym, amsmath, mathdots}
+
+\usepackage{amscd}
+\usepackage{multirow}
+\usepackage{comment}
+
+\usepackage{epstopdf}
+
+
+
+%\usepackage[table]{xcolor} %colored cells
+
+%\usepackage{tikz}
+%\usetikzlibrary{tikzmark} %arrows in tables
+
+
+\usepackage{mnsymbol} % udots in matrices
+
+
+ \usepackage{pgfpages}
+%\setbeameroption{show notes}
+%\setbeameroption{show notes on second screen=bottom}
+%% \setbeameroption{show notes on second screen}
+
+%\setbeamercolor{alerted text}{fg=red!80!black}
+
+
+% \setbeamercolor{alerted text}{fg=blue!50!green}
+% \setbeamercolor{fortheorem}{bg=blue!15!white}
+% \setbeamercolor{EMPF}{bg=blue!25!white}
+% \setbeamercolor{EMPF2}{bg=blue!35!white}
+
+%\setbeamersize{text margin left=5.mm, text margin right=5.mm}
+
+
+%---------------------------------------------------------------------------------------------------------------------------
+
+%\def\emphbox#1#2#3{\begin{beamercolorbox}[wd=#2, ht=#1, center, colsep=1.mm]{EMPF} #3 \end{beamercolorbox}}
+
+%---------------------------------------------------------------------------------------------------------------------------
+
+
+%\advance\leftskip-5.mm
+
+
+
+%***************************************************************************************************************************
+
+\theoremstyle{theorem}
+\newtheorem{mytheorem}[theorem]{Теорема}
+\newtheorem{mylemma}[theorem]{Лемма}
+\newtheorem{mycorollary}[theorem]{Следствие}
+
+\newtheorem{proposition}[theorem]{Предложение}
+\newtheorem{assertion}[theorem]{Утверждение}
+\newtheorem{remark}[theorem]{Замечание}
+\newtheorem{assumption}[theorem]{Предположение}
+
+\newtheorem{convention}[theorem]{Договорённость}
+\newtheorem{question}[theorem]{Вопрос}
+%\newtheorem{mydefinition}{mydefinition}
+
+\theoremstyle{definition}
+\newtheorem{mydefinition}[theorem]{Определение}
+\newtheorem{myexample}[theorem]{Пример}
+
+
+
+%***************************************************************************************************************************
+
+\chardef\No=194
+\newcommand{\bd}{{\rm bd}}
+\newcommand{\cl}{{\rm cl}}
+\newcommand{\ind}{{\rm ind}}
+\newcommand{\id}{{\rm id}}
+\newcommand{\inj}{{\sl in}}
+\newcommand{\pr}{{\rm pr}}
+\newcommand{\st}{{\rm St}}
+
+
+\DeclareMathOperator{\sgrad}{sgrad}
+
+\DeclareMathOperator{\cnt}{const}
+
+\DeclareMathOperator{\Aut}{Aut}
+
+
+\DeclareMathOperator{\sgn}{sgn}
+
+\DeclareMathOperator{\Int}{Int}
+
+
+\DeclareMathOperator{\tr}{tr}
+
+\DeclareMathOperator{\Mat}{Mat}
+
+
+
+
+
+
+
+%****************************************************************************
+\newcommand{\Ker}{\mathrm{Ker}\,\,}
+\newcommand{\Ann}{\mathrm{Ann}\,\,}
+
+\newcommand{\Imm}{\mathrm{Im}\,\,}
+
+\newcommand{\rk}{\mathrm{rk}\,\,}
+
+\newcommand{\const}{\mathrm{const}}
+
+
+
+\DeclareMathOperator{\Pen}{\mathcal{P}}
+
+
+\DeclareMathOperator{\Core}{K}
+
+
+\DeclareMathOperator{\BLG}{\operatorname{BLG}}
+
+\DeclareMathOperator{\AutBP}{\operatorname{Aut}(V, \mathcal{P})}
+
+
+\def\minus{\hbox{-}}   %Sign of minus in big matrices
+
+\usepackage{multirow}  %Columns spanning multiple rows
+
+\usepackage[normalem]{ulem} %underline that can break lines
+
+%\usepackage[normalem]{ulem}
+
+%****************************************************************************
+
+
+
+\title% [] (optional, only for long titles)
+{Прикладная статистика в машинном обучении \\ Лекция 10. Часть 2 \\ Метод опорных векторов (SVM)}
+%\subtitle{}
+\author [И. \,К.~Козлов] %(optional, for multiple authors)
+{И. \,К.~Козлов \\ {\footnotesize(\textit{Мехмат МГУ})}}
+
+
+\date % [](optional)
+{2022}
+%\subject{Mathematics}
+
+
+
+
+
+
+
+
+\usepackage{hyperref}
+\hypersetup{unicode=true}
+
+
+
+\begin{document}
+
+%\includeonlyframes{}
+\frame{\titlepage}
+
+
+
+%----------------------------------------------------------
+\begin{frame}[plain]\frametitle{SVM и RVM}
+%----------------------------------------------------------
+
+\begin{center}
+\Large Сегодня мы изучим 2 схожие модели: 
+
+\vspace{5mm}
+
+ {\color{blue} Support Vector Machine} (SVM) и {\color{blue} Relevance Vector Machine} (RVM). 
+
+\vspace{5mm}
+
+Подробнее о них --- см. Главу 7
+\end{center}
+\vspace{5mm}
+
+\begin{thebibliography}{10}
+
+
+  \beamertemplatebookbibitems
+    
+    \bibitem{Bishop}  Bishop C.M. 
+    
+    \newblock{\em Pattern Recognition and Machine Learning}.
+    
+
+
+  \end{thebibliography}
+  
+  
+  %----------------------------------------------------------
+\end{frame}
+%----------------------------------------------------------
+
+
+%----------------------------------------------------------
+\begin{frame}[plain]\frametitle{Back to the 90s}
+%----------------------------------------------------------
+
+
+\begin{center}
+\Large В 2ой части лекции мы поговорим  об одной \\ олдскульной ML-модели из очень страшных времён - 90ых. 
+\end{center}
+
+\begin{figure}[h!]
+\center{\includegraphics[width=\textwidth]{Pic/90s}}
+\caption{\Large До глубоких нейронок был SVM} \label{Fig:}
+\end{figure}
+
+
+
+%----------------------------------------------------------
+\end{frame}
+%----------------------------------------------------------
+
+
+
+%----------------------------------------------------------
+\begin{frame}[plain]\frametitle{SVM}
+%----------------------------------------------------------
+
+
+\begin{center}
+\large \textbf{Q:} Как может выглядеть ``промежуточное  звено'' между нейронками и KNN?
+\end{center}
+
+\begin{figure}[h!]
+\center{\includegraphics[width=\textwidth]{Pic/Models1}}
+%\caption{\Large До глубоких нейронок был SVM} \label{Fig:}
+\end{figure}
+
+
+
+%----------------------------------------------------------
+\end{frame}
+%----------------------------------------------------------
+
+
+%----------------------------------------------------------
+\begin{frame}[plain]\frametitle{SVM}
+%----------------------------------------------------------
+
+
+\begin{figure}[h!]
+\center{\includegraphics[width=\textwidth]{Pic/Models2}}
+%\caption{\Large До глубоких нейронок был SVM} \label{Fig:}
+\end{figure}
+
+
+
+%----------------------------------------------------------
+\end{frame}
+%----------------------------------------------------------
+
+
+
+
+
+
+
+
+\section{Линейный SVM}
+
+
+
+\begin{frame}[plain]\frametitle{Линейный SVM} \tableofcontents[currentsection]\end{frame}
+
+
+
+
+
+
+%----------------------------------------------------------
+\begin{frame}[plain]\frametitle{Разделяющая гиперплоскость}
+%----------------------------------------------------------
+
+
+SVM --- не вероятностная модель. Рассмотрим её в простейшем случае. 
+
+
+\vspace{5mm}
+
+Рассмотрим \textbf{задачу классификации}. Даны точки \[ (x_1, y_1), \dots, (x_n, y_n).\] Метки классов $y_i = 1$ или $-1$. 
+
+%----------------------------------------------------------
+\end{frame}
+%----------------------------------------------------------
+
+
+
+%----------------------------------------------------------
+\begin{frame}[plain]\frametitle{Линейный SVM}
+%----------------------------------------------------------
+
+\begin{center}
+\noindent\fbox{%
+    \parbox{12em}{%
+
+
+\vspace{3mm}
+
+
+    \large \textbf{\hspace{3mm} Линейный SVM}
+    
+\vspace{3mm}    
+    }%
+}
+\end{center}
+
+
+\vspace{5mm}
+
+\textit{Попробуем разделить классы гиперплоскостью}. 
+
+\vspace{5mm}
+
+
+\textbf{Q:} Какой вид имеет уравнение гиперплоскости? \pause \textbf{A:} \[ y = w^T x + b.\]
+
+%----------------------------------------------------------
+\end{frame}
+%----------------------------------------------------------
+
+
+
+
+%----------------------------------------------------------
+\begin{frame}[plain]\frametitle{Hard-Margin SVM}
+%----------------------------------------------------------
+\begin{center}
+\noindent\fbox{%
+    \parbox{12em}{%
+
+
+\vspace{3mm}
+
+
+    \large \textbf{\hspace{3mm} Hard-Margin SVM}
+    
+\vspace{3mm}    
+    }%
+}
+\end{center}
+
+\vspace{2mm}
+
+ Предположим, что \textbf{классы линейно разделимы}. Отнормируем $w$ и $b$ так, чтобы 
+ 
+ \vspace{2mm}
+ 
+ \begin{itemize}
+ \item Если $y_i=1$, то $w^T x_i -b \geq 1$;
+ 
+ \vspace{2mm}
+ 
+ \item Если $y_i=-1$, то $w^T x_i -b \leq 1$,
+ 
+ \end{itemize}
+ 
+ \vspace{2mm}
+ 
+ и в обоих случаях равенство достигается.
+ 
+
+\begin{figure}[h!]
+\center{\includegraphics[width=0.35\textwidth]{Pic/SVM3}}
+%\caption{} \label{Fig:}
+\end{figure}
+
+
+
+%----------------------------------------------------------
+\end{frame}
+%----------------------------------------------------------
+
+
+
+
+
+%----------------------------------------------------------
+\begin{frame}[plain]\frametitle{Hard-Margin SVM}
+%----------------------------------------------------------
+
+ 
+ 
+Найдём {\color{blue} оптимальную гиперплоскость} --- с наименьшим зазором (margin = ``ширина полосы'') между классами.  Несложно посчитать, что зазор равен $\displaystyle \frac{2}{\left\| w\right\|}$.
+
+\vspace{5mm}
+
+\begin{figure}[h!]
+\center{\includegraphics[width=0.45\textwidth]{Pic/SVM1}}
+%\caption{} \label{Fig:}
+\end{figure}
+
+%----------------------------------------------------------
+\end{frame}
+%----------------------------------------------------------
+
+
+
+
+
+%----------------------------------------------------------
+\begin{frame}[plain]\frametitle{Классная задача оптимизации}
+%----------------------------------------------------------
+
+В итоге мы получаем задачу оптимизации вида 
+
+\begin{align*} \min  & \quad \frac{1}{2}\left\| w\right\|^2 \\
+%
+\text{subject to} & \quad y_i (w^T x_i + b) \geq 1.
+\end{align*}
+
+\vspace{5mm}
+
+Это задача \textbf{квадратичной оптимизации} с линейными ограничениями. Такие задачи отлично решаются.
+
+\vspace{5mm}
+
+\textbf{Q:} А как найти $b$?
+
+\pause
+\vspace{5mm}
+
+\textbf{A:} Найти опорную точку, где $y_i (w^T x_i +b) =  1$ и выразить $b$.
+
+
+%----------------------------------------------------------
+\end{frame}
+%----------------------------------------------------------
+
+
+
+
+
+%----------------------------------------------------------
+\begin{frame}[plain]\frametitle{Предсказание модели}
+%----------------------------------------------------------
+
+
+
+\textbf{Q:} К какому классу относится новая точка $x$?
+
+\pause
+
+\vspace{5mm}
+
+\textbf{A:} Определяется знаком \[  {\displaystyle x \mapsto \operatorname {sgn}(w^{T}x -b)}.\]
+
+
+
+%----------------------------------------------------------
+\end{frame}
+%----------------------------------------------------------
+
+
+
+
+\section{Kernel Trick}
+
+
+
+\begin{frame}[plain]\frametitle{Kernel Trick} \tableofcontents[currentsection]\end{frame}
+
+
+
+%----------------------------------------------------------
+\begin{frame}[plain]\frametitle{Kernel Trick}
+%----------------------------------------------------------
+
+Классы редко когда разделимы. 
+
+\vspace{5mm}
+
+\textbf{Идея}. А пусть существует вложение \[ x \to {\color{red} \varphi(x)},\] в результате которого данные разделяются. 
+
+
+\begin{figure}[h!]
+\center{\includegraphics[width=0.65\textwidth]{Pic/SVM4}}
+%\caption{} \label{Fig:}
+\end{figure}
+
+
+
+%----------------------------------------------------------
+\end{frame}
+%----------------------------------------------------------
+
+
+
+
+%----------------------------------------------------------
+\begin{frame}[plain]\frametitle{Условия Каруша — Куна — Таккера}
+%----------------------------------------------------------
+
+Задача оптимизации принимает вид 
+
+\begin{align*} \min  & \quad \frac{1}{2}\left\| w\right\|^2 \\
+%
+\text{subject to} & \quad y_i (w^T {\color{red} \varphi(x_i)}  + b) \geq 1.
+\end{align*}
+
+\textbf{Проблема}. Отображение ${\color{red} \varphi(x)}$ мы не знаем.
+
+
+%----------------------------------------------------------
+\end{frame}
+%----------------------------------------------------------
+
+
+
+%----------------------------------------------------------
+\begin{frame}[plain]\frametitle{Kernel Trick}
+%----------------------------------------------------------
+
+\begin{center}
+\noindent\fbox{%
+    \parbox{12em}{%
+
+
+\vspace{3mm}
+
+
+    \large \textbf{\hspace{3mm} Двойственность}
+    
+\vspace{3mm}    
+    }%
+}
+\end{center}
+
+\vspace{5mm}
+
+\begin{center}
+Следующие несколько слайдов могут показаться ``шаманством''. 
+
+\vspace{5mm}
+
+На самом деле стандартный приём в оптимизации: перейти  \\ от исходной задачи оптимизации к {\color{blue} двойственной задачи}. \end{center}
+
+
+%----------------------------------------------------------
+\end{frame}
+%----------------------------------------------------------
+
+
+%----------------------------------------------------------
+\begin{frame}[plain]\frametitle{Условия Каруша — Куна — Таккера}
+%----------------------------------------------------------
+
+Оптимум задачи  \begin{align*} \min  & \qquad f(x) \\
+%
+\text{subject to} & \qquad  g_i(x) \geq 0.
+\end{align*}
+
+находится при помощи {\color{blue} условий Каруша — Куна — Таккера}. 
+
+
+\pause
+
+\vspace{2mm}
+
+\begin{itemize} 
+
+\item Вводится \textbf{функция Лагранжа} \[ L = f(x) - \sum_i \alpha_i g_i(x).\]
+
+
+\pause
+
+\item У него находятся экстремумы \[ \frac{\partial L}{\partial x} = 0, \qquad \frac{\partial L}{\partial \alpha_i} = 0\]
+
+\item при условиях \begin{align*} g_i(x) \geq 0, \qquad  \alpha_i \geq 0, \qquad  \alpha_i g_i(x) = 0.\end{align*}
+
+\end{itemize}
+
+
+%----------------------------------------------------------
+\end{frame}
+%----------------------------------------------------------
+
+
+
+
+
+%----------------------------------------------------------
+\begin{frame}[plain]\frametitle{Функция Лагранжа}
+%----------------------------------------------------------
+
+Для SVM получаем \textbf{функция Лагранжа} \[ L(w, b, \alpha) = \frac{1}{2}\left\| w\right\|^2 - \sum_i \alpha_i \left[ y_i (w^T {\color{red} \varphi(x_i)}  + b) - 1\right]. \] 
+
+\pause
+
+Условия на экстремум \begin{align*} \frac{\partial L}{\partial w} &= w - \sum_i \alpha_i {\color{red} \varphi(x_i)}  \qquad \Rightarrow \qquad  {\color{blue} w = \sum_i \alpha_i y_i \varphi(x_i)}.  \\ \frac{\partial L}{\partial b} &= \sum \alpha_i y_i = 0.\end{align*}
+
+\pause
+
+\vspace{2mm}
+
+Подставляя $\displaystyle \frac{\partial L}{\partial w}$ и $\displaystyle  \frac{\partial L}{\partial b}$ в $L$, получаем \[  L =  \sum_i \alpha_i -  \frac{1}{2} \sum_i \alpha_i \alpha_j y_i y_j {\color{red} \varphi(x_i)^T \varphi(x_j)}.\]
+
+
+
+%----------------------------------------------------------
+\end{frame}
+%----------------------------------------------------------
+
+
+
+
+
+%----------------------------------------------------------
+\begin{frame}[plain]\frametitle{Двойственная задача}
+%----------------------------------------------------------
+
+Введём {\color{blue} ядро} \[{\color{red} K(x, x') =  \varphi(x)^T \varphi(x')}.\] 
+
+\pause
+
+\begin{block}{Двойственная задача}
+ \begin{align*} \max  & \qquad \tilde{L}(\alpha) =  \sum_i \alpha_i -  \frac{1}{2} \sum_i \alpha_i \alpha_j y_i y_j {\color{red} K(x_i, x_j)} \\
+%
+\text{subject to} & \qquad \alpha_i \geq 0 \\ 
+				& \qquad  \sum \alpha_i y_i = 0.
+\end{align*}
+\end{block}
+
+
+\pause
+
+
+\vspace{5mm}
+
+Опять же, это квадратичная задача оптимизации с развитыми методами решениями. Например, SMO --- последовательная оптимизация по паре $\alpha_i, \alpha_j$: 
+
+\begin{center}
+\url{https://en.wikipedia.org/wiki/Sequential_minimal_optimization}  . 
+\end{center}
+
+%----------------------------------------------------------
+\end{frame}
+%----------------------------------------------------------
+
+
+
+
+
+%----------------------------------------------------------
+\begin{frame}[plain]\frametitle{Kernel Trick}
+%----------------------------------------------------------
+
+
+\begin{itemize}
+
+
+\item Находим $\alpha_i$ из \textbf{двойственной задачи}.
+
+\vspace{5mm}
+
+\item Тип новой точки $\mathbf {x}$ определяется \[{\displaystyle \mathbf {x} \mapsto \operatorname {sgn}(\mathbf {w} ^{T}\varphi (\mathbf {x} )-b)=\operatorname {sgn} \left(\left[\sum _{i=1}^{n}\alpha_{i}y_{i} {\color{red} K(\mathbf {x} _{i},\mathbf {x} )}\right]-b\right).}\]
+
+\end{itemize}
+
+%----------------------------------------------------------
+\end{frame}
+%----------------------------------------------------------
+
+
+
+
+
+%----------------------------------------------------------
+\begin{frame}[plain]\frametitle{Kernel Trick}
+%----------------------------------------------------------
+
+
+\begin{center}
+\textit{В формулах больше нет вложения $\varphi(x)$. Только ядро ${\color{red} K(x, x')}$. }
+\end{center}
+
+\vspace{5mm}
+
+\begin{figure}[h!]
+\center{\includegraphics[width=0.35\textwidth]{Pic/Magic}}
+%\caption{} \label{Fig:}
+\end{figure}
+
+
+%----------------------------------------------------------
+\end{frame}
+%----------------------------------------------------------
+
+
+
+
+
+%----------------------------------------------------------
+\begin{frame}[plain]\frametitle{Kernel Trick}
+%----------------------------------------------------------
+
+\begin{center} \textit{Иногда ядро задать проще, чем вложение}.
+\end{center}
+
+\vspace{5mm}
+
+Например, популярное RBF ядро \[ {\displaystyle K(\mathbf {x} ,\mathbf {x'} )=\exp(-\gamma \|\mathbf {x} -\mathbf {x'} \|^{2})}\] 
+
+\pause
+
+\vspace{3mm}
+
+
+задаёт вложение в бесконечномерное (!) пространство, поскольку \[ \exp \left(-{\frac {1}{2}}\|\mathbf {x} -\mathbf {x'} \|^{2}\right)=\sum _{j=0}^{\infty }\sum _{\sum n_{i}=j}\exp \left(-{\frac {1}{2}}\|\mathbf {x} \|^{2}\right){\frac {x_{1}^{n_{1}}\cdots x_{k}^{n_{k}}}{\sqrt {n_{1}!\cdots n_{k}!}}}\exp \left(-{\frac {1}{2}}\|\mathbf {x'} \|^{2}\right){\frac {{x'}_{1}^{n_{1}}\cdots {x'}_{k}^{n_{k}}}{\sqrt {n_{1}!\cdots n_{k}!}}}.\] 
+
+%----------------------------------------------------------
+\end{frame}
+%----------------------------------------------------------
+
+
+
+
+
+%----------------------------------------------------------
+\begin{frame}[plain]\frametitle{Kernel Trick}
+%----------------------------------------------------------
+
+Остаётся заметить: \[\alpha_i \left[ y_i (w^T \varphi(x_i)  + b) - 1\right] \geq 0.\] 
+
+\pause
+
+\begin{itemize}
+
+\item Если $\alpha_i \not =0$, то $x_i$ --- {\color{blue} опорный вектор}, лежит на границе.
+
+\vspace{2mm}
+
+\item Если $\alpha_i =0$, то $x_i$ --- внутри полуплоскости, \textit{не влияет на классификацию}.
+
+\end{itemize}
+
+\vspace{2mm}
+
+
+\begin{figure}[h!]
+\center{\includegraphics[width=0.5\textwidth]{Pic/SVM6}}
+%\caption{} \label{Fig:}
+\end{figure}
+
+
+%----------------------------------------------------------
+\end{frame}
+%----------------------------------------------------------
+
+
+\section{SVM vs RVM}
+
+
+
+\begin{frame}[plain]\frametitle{SVM vs RVM} \tableofcontents[currentsection]\end{frame}
+
+
+%----------------------------------------------------------
+\begin{frame}[plain]\frametitle{SVM}
+%----------------------------------------------------------
+
+{\color{blue} Преимущества SVM}:
+
+\vspace{2mm}
+
+\begin{itemize}
+
+
+\item У задачи квадратичной оптимизации единственное решение. \\ (В отличие от нейронок!)
+
+\vspace{2mm}
+
+\item Есть отбор опорных векторов. 
+
+\end{itemize}
+
+\vspace{2mm}
+
+{\color{red} Недостатки SVM}:
+
+\vspace{2mm}
+
+\begin{itemize}
+
+
+\item Трудно подбирать ядро $K(x, x')$. 
+
+\vspace{2mm}
+
+\item Нет предсказания вероятностей.
+
+\vspace{2mm}
+
+\item Не предназначен для мультиклассовой классификации. 
+
+%\item Есть гиперпараметр $C$, который нужно подбирать. 
+
+
+\end{itemize}
+
+
+
+%----------------------------------------------------------
+\end{frame}
+%----------------------------------------------------------
+
+%----------------------------------------------------------
+\begin{frame}[plain]\frametitle{SVM}
+%----------------------------------------------------------
+
+{\color{blue} Преимущества RVM}:
+
+\vspace{2mm}
+
+\begin{itemize}
+
+
+\item Обычно меньше опорных векторов, чем у SVM.
+
+\vspace{2mm}
+
+
+\item Опорные векторы не на границе классов (более устойчивое решение). 
+
+\vspace{2mm}
+
+\item Все параметры подбираются автоматически. 
+
+\vspace{2mm}
+
+\item Можно добавить ядра как в SVM, заменив в Likelihood \[ \mu = w^T x \to \mu_i = \sum_j w_i K(x_i, x_j) + b\]
+
+\end{itemize}
+\vspace{2mm}
+
+{\color{red} Недостатки RVM}:
+
+\vspace{2mm}
+\begin{itemize}
+
+
+\item Обучается медленее  $SVM$.
+\vspace{2mm}
+
+\item Не всегда эффективней $SVM$.
+
+
+\end{itemize}
+
+
+
+%----------------------------------------------------------
+\end{frame}
+%----------------------------------------------------------
+
+
+
+\end{document}

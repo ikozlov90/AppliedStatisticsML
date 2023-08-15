@@ -1,0 +1,2191 @@
+\documentclass[9pt]{beamer}
+
+
+
+
+\usepackage{beamerthemesplit}
+\usetheme{Boadilla}
+\usecolortheme{orchid}
+
+
+
+
+
+ % \usepackage[cp866]{inputenc}                %%% Є®¤Ёа®ўЄ  DOS
+  \usepackage[cp1251]{inputenc}
+%  \usepackage[T2A]{fontenc}                %%% ???
+%\usepackage[english,russian]{babel}
+%\usepackage[russian]{babel}
+ \usepackage[OT1]{fontenc}
+%\usepackage[english]{babel}
+\usepackage[russian]{babel}
+
+\usepackage{amssymb,latexsym, amsmath, mathdots}
+
+\usepackage{amscd}
+\usepackage{multirow}
+\usepackage{comment}
+
+\usepackage{epstopdf}
+
+
+
+%\usepackage[table]{xcolor} %colored cells
+
+%\usepackage{tikz}
+%\usetikzlibrary{tikzmark} %arrows in tables
+
+
+\usepackage{mnsymbol} % udots in matrices
+
+
+ \usepackage{pgfpages}
+%\setbeameroption{show notes}
+%\setbeameroption{show notes on second screen=bottom}
+%% \setbeameroption{show notes on second screen}
+
+%\setbeamercolor{alerted text}{fg=red!80!black}
+
+
+% \setbeamercolor{alerted text}{fg=blue!50!green}
+% \setbeamercolor{fortheorem}{bg=blue!15!white}
+% \setbeamercolor{EMPF}{bg=blue!25!white}
+% \setbeamercolor{EMPF2}{bg=blue!35!white}
+
+%\setbeamersize{text margin left=5.mm, text margin right=5.mm}
+
+
+%---------------------------------------------------------------------------------------------------------------------------
+
+%\def\emphbox#1#2#3{\begin{beamercolorbox}[wd=#2, ht=#1, center, colsep=1.mm]{EMPF} #3 \end{beamercolorbox}}
+
+%---------------------------------------------------------------------------------------------------------------------------
+
+
+%\advance\leftskip-5.mm
+
+
+
+%***************************************************************************************************************************
+
+\theoremstyle{theorem}
+\newtheorem{mytheorem}[theorem]{Теорема}
+\newtheorem{mylemma}[theorem]{Лемма}
+\newtheorem{mycorollary}[theorem]{Следствие}
+
+\newtheorem{proposition}[theorem]{Предложение}
+\newtheorem{assertion}[theorem]{Утверждение}
+\newtheorem{remark}[theorem]{Замечание}
+\newtheorem{assumption}[theorem]{Предположение}
+
+\newtheorem{convention}[theorem]{Договорённость}
+\newtheorem{question}[theorem]{Вопрос}
+%\newtheorem{mydefinition}{mydefinition}
+
+\theoremstyle{definition}
+\newtheorem{mydefinition}[theorem]{Определение}
+\newtheorem{myexample}[theorem]{Пример}
+
+
+
+%***************************************************************************************************************************
+
+\chardef\No=194
+\newcommand{\bd}{{\rm bd}}
+\newcommand{\cl}{{\rm cl}}
+\newcommand{\ind}{{\rm ind}}
+\newcommand{\id}{{\rm id}}
+\newcommand{\inj}{{\sl in}}
+\newcommand{\pr}{{\rm pr}}
+\newcommand{\st}{{\rm St}}
+
+
+\DeclareMathOperator{\sgrad}{sgrad}
+
+\DeclareMathOperator{\cnt}{const}
+
+\DeclareMathOperator{\Aut}{Aut}
+
+
+\DeclareMathOperator{\sgn}{sgn}
+
+\DeclareMathOperator{\Int}{Int}
+
+
+\DeclareMathOperator{\tr}{tr}
+
+\DeclareMathOperator{\Mat}{Mat}
+
+
+
+
+
+
+
+%****************************************************************************
+\newcommand{\Ker}{\mathrm{Ker}\,\,}
+\newcommand{\Ann}{\mathrm{Ann}\,\,}
+
+\newcommand{\Imm}{\mathrm{Im}\,\,}
+
+\newcommand{\rk}{\mathrm{rk}\,\,}
+
+\newcommand{\const}{\mathrm{const}}
+
+
+
+\DeclareMathOperator{\Pen}{\mathcal{P}}
+
+
+\DeclareMathOperator{\Core}{K}
+
+
+\DeclareMathOperator{\BLG}{\operatorname{BLG}}
+
+\DeclareMathOperator{\AutBP}{\operatorname{Aut}(V, \mathcal{P})}
+
+
+\def\minus{\hbox{-}}   %Sign of minus in big matrices
+
+\usepackage{multirow}  %Columns spanning multiple rows
+
+\usepackage[normalem]{ulem} %underline that can break lines
+
+%\usepackage[normalem]{ulem}
+
+\usepackage{wasysym} %smile
+
+%****************************************************************************
+
+
+
+\title% [] (optional, only for long titles)
+{Прикладная статистика в машинном обучении \\ Лекция 4. \\ Проверка гипотез}
+%\subtitle{}
+\author [И. \,К.~Козлов] %(optional, for multiple authors)
+{И. \,К.~Козлов \\ {\footnotesize(\textit{Мехмат МГУ})}}
+
+
+\date % [](optional)
+{2022}
+%\subject{Mathematics}
+
+
+
+
+
+
+
+
+\usepackage{hyperref}
+\hypersetup{unicode=true}
+
+
+
+\begin{document}
+
+%\includeonlyframes{}
+\frame{\titlepage}
+
+
+
+%----------------------------------------------------------
+\begin{frame}[plain]\frametitle{Тестирование гипотез}
+%----------------------------------------------------------
+
+Тестирование гипотез --- огромная область. 
+
+
+\vspace{5mm}
+
+
+Мы рассмотрим простейшие тесты, в основном из
+
+
+\vspace{3mm}
+
+\begin{thebibliography}{10}
+  \beamertemplatebookbibitems
+  \bibitem{Wasserman} Wasserman L. 
+  
+  \newblock{\em All of Statistics}.
+
+  \end{thebibliography}
+  
+
+\vspace{5mm}
+
+Много других тестов описано в Главах 12, 13
+
+\vspace{3mm}
+
+\begin{thebibliography}{10}
+  \beamertemplatebookbibitems
+  \bibitem{Lagutin}  М.\,Б.~Лагутин, 
+    \newblock {\em Наглядная математическая статистика}.   
+
+  \end{thebibliography}
+
+
+%----------------------------------------------------------
+\end{frame}
+%----------------------------------------------------------
+
+
+
+
+\section{Статистические гипотезы}
+
+
+
+\begin{frame}[plain]\frametitle{Статистика. Ликбез} \tableofcontents[currentsection]\end{frame}
+
+
+%----------------------------------------------------------
+\begin{frame}[plain]\frametitle{Проверка гипотез}
+%----------------------------------------------------------
+
+
+{\color{blue} Статистическая гипотеза} --- любое предположение о распределении и свойствах случайной величины. 
+
+\vspace{5mm}
+
+\begin{center}
+Скажем, подбросили монетку 20 раз. Орёл выпал 4 раза.
+
+
+\begin{figure}[h!]
+\center{\includegraphics[width=0.85\textwidth]{pic/Coins}}
+%\caption{} \label{Fig:}
+\end{figure}
+
+Возникает сомнение --- \textit{а не бракованная ли монетка}?
+
+\vspace{5mm}
+
+Точно ли это выборка из $\operatorname{Bernoulli}(p)$, где $p = \frac{1}{2}$?
+
+\end{center}
+
+
+%----------------------------------------------------------
+\end{frame}
+%----------------------------------------------------------
+
+
+%----------------------------------------------------------
+\begin{frame}[plain]\frametitle{Проверка гипотез}
+%----------------------------------------------------------
+
+\textit{Проверка гипотез похожа на судебное разбирательство.}
+
+\vspace{2mm}
+
+
+\begin{itemize}
+
+\item {\color{blue} Нулевая гипотеза} $H_0$ (обмана нет, $p = \frac{1}{2}$)
+
+\end{itemize}
+
+\vspace{2mm}
+
+сталкивается c 
+
+\vspace{2mm}
+
+\begin{itemize}
+
+\item {\color{blue} альтернативной гипотезой} $H_1$ (есть обман, $p \not = \frac{1}{2}$). 
+
+\end{itemize}
+
+
+\begin{figure}[h!]
+\center{\includegraphics[width=0.7\textwidth]{pic/Trial}}
+%\caption{} \label{Fig:}
+\end{figure}
+
+
+%----------------------------------------------------------
+\end{frame}
+%----------------------------------------------------------
+
+
+%----------------------------------------------------------
+\begin{frame}[plain]\frametitle{Проверка гипотез}
+%----------------------------------------------------------
+
+\begin{center} 
+В общем случае: 
+\end{center} 
+
+
+\begin{itemize}
+
+\item Разбиваем пространство параметров на 2 непересекающихся подмножества \[ \Theta = \Theta_0 \cup \Theta_1. \]  
+
+\vspace{3mm}
+
+\item Сравниваем две гипотезы: \[H_0: \theta \in \Theta_0 \qquad \text{VS} \qquad  H_1: \theta \in \Theta_1. \] 
+
+\vspace{3mm}
+
+\begin{itemize}
+
+\item $H_0$ --- {\color{blue} нулевая (основная) гипотеза}.
+
+\vspace{5mm}
+
+\item $H_1$ --- {\color{blue} альтернативная гипотеза}.
+
+\end{itemize}
+
+\end{itemize}
+
+
+
+%----------------------------------------------------------
+\end{frame}
+%----------------------------------------------------------
+
+
+%----------------------------------------------------------
+\begin{frame}[plain]\frametitle{Простые и сложные гипотезы}
+%----------------------------------------------------------
+
+
+
+\begin{itemize}
+
+\item Гипотеза вида $\theta = \theta_0$ называется {\color{blue} простой гипотезой}. (Иначе гипотеза {\color{blue} сложная}).
+
+\vspace{5mm}
+
+\item Обычно тест {\color{blue} двусторонний} \[ H_0: \theta = \theta_0 \qquad \text{VS} \qquad  H_1: \theta \not =  \theta_0. \] 
+
+\vspace{3mm}
+
+\item Бывают {\color{blue} односторонние} тесты  \[ H_0: \theta \leq \theta_0 \qquad \text{VS} \qquad  H_1: \theta \geq \theta_0 \] или \[ H_0: \theta \geq \theta_0 \qquad \text{VS} \qquad  H_1: \theta \leq \theta_0 \]
+
+
+\end{itemize}
+
+
+
+%----------------------------------------------------------
+\end{frame}
+%----------------------------------------------------------
+
+
+
+%----------------------------------------------------------
+\begin{frame}[plain]\frametitle{Равенство средних}
+%----------------------------------------------------------
+
+Могут быть самые разные гипотезы. Мы рассмотрим простейшие примеры. 
+
+
+\vspace{5mm}
+
+Частый вопрос --- \textit{равны ли средние значения}: \[ H_0 = \left\{ \mathbb{E} X = \mathbb{E} Y\right\}, \qquad H_1 = \left\{ \mathbb{E} X \not = \mathbb{E} Y\right\}\]
+
+\vspace{2mm}
+
+
+Вопрос из серии --- \textit{если поменять цвет кнопки в приложении, то будем ли больше зарабатывать?}
+
+\begin{figure}[h!]
+\center{\includegraphics[width=0.5\textwidth]{pic/ABTesting}}
+%\caption{} \label{Fig:}
+\end{figure}
+
+
+
+
+%----------------------------------------------------------
+\end{frame}
+%----------------------------------------------------------
+
+
+%----------------------------------------------------------
+\begin{frame}[plain]\frametitle{Статистический критерий}
+%----------------------------------------------------------
+
+
+{\color{blue} Статистический критерий} --- математическое правило, по которому отвергают/не отвергают нулевую гипотезу (с заданным уровнем значимости). 
+
+
+\vspace{5mm}
+
+\textbf{Q:} Как ``доказать'', что статистическая гипотеза {\color{red} не} верна?
+
+
+%----------------------------------------------------------
+\end{frame}
+%----------------------------------------------------------
+
+
+%----------------------------------------------------------
+\begin{frame}[plain]\frametitle{Критическая область}
+%----------------------------------------------------------
+
+
+
+\begin{itemize}
+
+\item Пытаемся найти статистику $X$, что
+
+\vspace{5mm} 
+
+\begin{itemize}
+
+\item  $H_0$ ``маловероятно'' (значения $X$ велики), 
+
+\vspace{5mm} 
+
+\item  $H_1$ ``достаточно вероятно'' (значения $X$ невелики). 
+
+\end{itemize}
+
+\vspace{5mm} 
+
+\item Формально, строим {\color{blue} критическую область} $R$.
+
+ 
+\vspace{3mm}
+
+\begin{itemize}
+
+\item $X \in R \quad \Rightarrow \quad$ отклоняем $H_0$.
+
+\vspace{5mm}
+
+\item $X \not \in R \quad \Rightarrow \quad$ гипотеза $H_0$ не противоречит экспериментальным данным.
+
+\end{itemize}
+
+
+
+
+\end{itemize}
+
+
+
+%----------------------------------------------------------
+\end{frame}
+%----------------------------------------------------------
+
+
+%----------------------------------------------------------
+\begin{frame}[plain]\frametitle{Проверка гипотез}
+%----------------------------------------------------------
+
+Обычно критическая область имеет вид \[ R = \left\{x: T(x) > c \right\} \qquad \text{ или } \qquad \left\{x: \left|T(x)\right| > c \right\} \] 
+
+
+
+\begin{figure}[h!]
+\center{\includegraphics[width=\textwidth]{pic/CritRegion}}
+%\caption{} \label{Fig:}
+\end{figure}
+
+
+%----------------------------------------------------------
+\end{frame}
+%----------------------------------------------------------
+
+
+
+
+
+%----------------------------------------------------------
+\begin{frame}[plain]\frametitle{Презумпция невиновности}
+%----------------------------------------------------------
+
+\textbf{Презумпция невиновности}. 
+
+\vspace{5mm}
+
+Основная гипотеза верна, пока не доказано обратное. 
+
+\vspace{5mm}
+
+\begin{figure}[h!]
+\center{\includegraphics[width=0.5\textwidth]{pic/NotGuilty}}
+\caption{Гипотезу нельзя ``доказать''. Только не найти достаточно ``улик'' против неё.} \label{Fig:}
+\end{figure}
+
+
+%----------------------------------------------------------
+\end{frame}
+%----------------------------------------------------------
+
+
+
+
+\subsection{2 типа ошибок}
+
+
+\begin{frame}[plain]\frametitle{2 типа ошибок} \tableofcontents[currentsubsection]\end{frame}
+
+
+%----------------------------------------------------------
+\begin{frame}[plain]\frametitle{Ошибки тестирования}
+%----------------------------------------------------------
+
+
+\begin{center}
+\Large \textbf{Q:} Какие ошибки мы можем допустить при тестировании гипотез?
+\end{center}
+
+
+\pause
+
+
+\begin{figure}[h!]
+\center{\includegraphics[width=0.75\textwidth]{pic/StatErrors}}
+%\caption{Два типа ошибок.} \label{Fig:}
+\end{figure}
+
+
+
+
+%----------------------------------------------------------
+\end{frame}
+%----------------------------------------------------------
+
+
+
+
+%----------------------------------------------------------
+\begin{frame}[plain]\frametitle{Два типа ошибок}
+%----------------------------------------------------------
+
+\begin{figure}[h!]
+\center{\includegraphics[width=0.85\textwidth]{pic/TwoErrors}}
+\caption{Два типа ошибок.} \label{Fig:}
+\end{figure}
+
+
+%----------------------------------------------------------
+\end{frame}
+%----------------------------------------------------------
+
+
+
+
+%----------------------------------------------------------
+\begin{frame}[plain]\frametitle{Стандартные обозначения ошибок}
+%----------------------------------------------------------
+
+Стандартные обозначения:
+
+\vspace{5mm}
+
+\begin{itemize}
+
+\item $\alpha$ --- вероятность ошибки I рода (False Positive).
+
+\vspace{5mm}
+
+\item $\beta$ --- вероятность ошибки II рода (False Negative).
+
+\end{itemize}
+
+
+
+%----------------------------------------------------------
+\end{frame}
+%----------------------------------------------------------
+
+
+
+
+
+
+%----------------------------------------------------------
+\begin{frame}[plain]\frametitle{Мощность теста}
+%----------------------------------------------------------
+
+
+Более формально, 
+
+\vspace{5mm}
+
+\begin{itemize}
+
+\item {\color{blue} Функция мощности}\footnote{У Вассермана обозначена $\beta(\theta)$.} = вероятность отклонить $H_0$: \[\pi(\theta) = \mathbb{P}_{\theta}(X \in R).\]
+
+
+\vspace{3mm}
+
+Это вероятность попасть в критическую область.
+
+\vspace{5mm}
+
+Если $\theta \in \Theta_0$, то $\alpha = \pi(\theta)$ --- вероятность \textit{ошибки I рода}.
+
+\vspace{5mm}
+
+Если  $\theta \in \Theta_1$, то $\beta = 1 - \pi(\theta)$ ---  вероятность \textit{ошибки II рода}.
+
+
+\end{itemize}
+
+
+%----------------------------------------------------------
+\end{frame}
+%----------------------------------------------------------
+
+
+%----------------------------------------------------------
+\begin{frame}[plain]\frametitle{Размер критерия}
+%----------------------------------------------------------
+
+
+\begin{itemize}
+
+
+\item {\color{blue} Размер критерия} = вероятность \textit{ошибки I рода} \[\alpha = \sup_{\theta \in \Theta_0} \pi(\theta).\] 
+
+\vspace{3mm} 
+
+Критерий имеет {\color{blue} уровень значимости}  $\alpha$, если его размер $<= \alpha$. 
+
+\end{itemize}
+
+
+%----------------------------------------------------------
+\end{frame}
+%----------------------------------------------------------
+
+
+
+
+
+
+%----------------------------------------------------------
+\begin{frame}[plain]\frametitle{Повторение - мать учения}
+%----------------------------------------------------------
+
+\begin{center}
+Изобразим гипотезы как два нормальных распределения.
+
+\vspace{5mm}
+
+\textbf{Q:} Каким ошибкам/понятиям соответствуют  закрашенные на рис. области?
+
+\end{center}
+
+
+
+\begin{figure}[h!]
+\center{\includegraphics[width=0.9\textwidth]{pic/Hypo1}}
+%\caption{Два типа ошибок.} \label{Fig:}
+\end{figure}
+
+
+
+%----------------------------------------------------------
+\end{frame}
+%----------------------------------------------------------
+
+
+
+%----------------------------------------------------------
+\begin{frame}[plain]\frametitle{Ошибки и мощность теста}
+%----------------------------------------------------------
+
+
+\begin{figure}[h!]
+\center{\includegraphics[width=0.9\textwidth]{pic/Hypo2}}
+%\caption{Два типа ошибок.} \label{Fig:}
+\end{figure}
+
+
+
+%----------------------------------------------------------
+\end{frame}
+%----------------------------------------------------------
+
+
+
+
+\subsection{p-value}
+
+
+\begin{frame}[plain]\frametitle{p-value} \tableofcontents[currentsubsection]\end{frame}
+
+
+
+%----------------------------------------------------------
+\begin{frame}[plain]\frametitle{p-value}
+%----------------------------------------------------------
+
+Ответ ``гипотеза отклоняется/не отклоняется'' неинформативен. 
+\vspace{5mm}
+
+
+\begin{itemize}
+
+\item {\color{blue} p-value} --- наименьший уровень значимости, при котором принимается $H_0$. 
+
+\end{itemize}
+
+
+
+\begin{figure}[h!]
+\center{\includegraphics[width=0.75\textwidth]{pic/Pval}}
+%\caption{А.Н. Колмогоров} \label{Fig:}
+\end{figure}
+
+%----------------------------------------------------------
+\end{frame}
+%----------------------------------------------------------
+
+
+
+
+%----------------------------------------------------------
+\begin{frame}[plain]\frametitle{p-value}
+%----------------------------------------------------------
+
+\begin{center}
+\noindent\fbox{%
+    \parbox{25em}{%
+
+
+\vspace{3mm}
+
+\Large \hspace{4mm} {\color{blue} p-value} = вероятность наблюдать 
+
+\vspace{5mm}  ещё большие значения тестовой статистики, 
+
+\vspace{5mm}
+
+ если верна нулевая гипотеза $H_0$.
+    
+\vspace{3mm}    
+    }%
+}
+
+
+\end{center}
+
+
+ 
+%----------------------------------------------------------
+\end{frame}
+%----------------------------------------------------------
+
+
+%----------------------------------------------------------
+\begin{frame}[plain]\frametitle{p-value}
+%----------------------------------------------------------
+
+
+Формально, если 
+
+\vspace{5mm}
+
+\begin{itemize}
+
+\item статистический критерий $T(X) > c$, 
+
+\vspace{5mm}
+
+\item $x^n$ --- наблюдаемая реализация выборки $X$
+
+\end{itemize}
+
+\vspace{5mm}
+
+то \[ \operatorname{p-value} = \sup_{\theta \in \Theta_0} \mathbb{P}_{\theta} \left(T(X^n) \geq T(x^n) \right).\]
+
+
+ 
+%----------------------------------------------------------
+\end{frame}
+%----------------------------------------------------------
+
+
+%----------------------------------------------------------
+\begin{frame}[plain]\frametitle{p-value на практике}
+%----------------------------------------------------------
+
+\begin{center}
+С какой вероятностью мы готовы ошибиться?
+\end{center}
+
+\vspace{5mm}
+
+Обычно на практике $p$-value:
+
+\vspace{5mm} 
+
+\begin{itemize}
+
+\item $< 0.01 \Rightarrow$  $H_0$ заведомо не верна,
+
+\vspace{5mm}
+
+\item $0.01-0.05 \Rightarrow$ $H_0$ не верна,
+
+\vspace{5mm}
+
+\item $0.05-0.1 \Rightarrow$ $H_0$ скорее всего не верна,
+
+\vspace{5mm}
+
+\item $>0.1 \Rightarrow$ не найдено свидетельств против $H_0$. 
+
+
+\end{itemize}
+
+
+%----------------------------------------------------------
+\end{frame}
+%----------------------------------------------------------
+
+
+%----------------------------------------------------------
+\begin{frame}[plain]\frametitle{p-value}
+%----------------------------------------------------------
+
+
+\textbf{WARNING!} \textit{Большой $\operatorname{p-value}$ {\color{red} НЕ} означает, что нулевая гипотеза верна.}
+
+\vspace{5mm}
+
+Возможно: $H_0$ неверно, а у теста маленькая мощность.
+
+\pause
+
+\vspace{5mm}
+
+
+\textbf{WARNING-2!} \textit{$\operatorname{p-value}$ это {\color{red} НЕ}   $\mathbb{P} (H_0 | Data)$} и вообще  \[\mathbb{P} (Data | H_0 ) \not = \mathbb{P} (H_0 | Data).\]
+
+
+
+
+%----------------------------------------------------------
+\end{frame}
+%----------------------------------------------------------
+
+\subsection{Пайплайн}
+
+
+\begin{frame}[plain]\frametitle{Пайплайн} \tableofcontents[currentsubsection]\end{frame}
+
+
+%----------------------------------------------------------
+\begin{frame}[plain]\frametitle{Пайплайн}
+%----------------------------------------------------------
+
+\begin{center}
+\Large Пайплайн для проверки гипотез:
+\end{center}
+
+\vspace{-2mm}
+
+\begin{figure}[h!]
+\center{\includegraphics[width=0.9\textwidth]{pic/Workflow1}}
+%\caption{\Large Осторожно! Грядут страшные формулы!} \label{Fig:}
+\end{figure}
+
+
+
+
+%----------------------------------------------------------
+\end{frame}
+%----------------------------------------------------------
+
+
+%----------------------------------------------------------
+\begin{frame}[plain]\frametitle{Повторим пайплайн}
+%----------------------------------------------------------
+
+\begin{figure}[h!]
+\center{\includegraphics[width=0.9\textwidth]{pic/Hypo3}}
+%\caption{\Large Осторожно! Грядут страшные формулы!} \label{Fig:}
+\end{figure}
+
+
+%----------------------------------------------------------
+\end{frame}
+%----------------------------------------------------------
+
+
+
+%----------------------------------------------------------
+\begin{frame}[plain]\frametitle{Перерыв}
+%----------------------------------------------------------
+
+
+\begin{center}
+\Huge Перерыв
+\end{center}
+%----------------------------------------------------------
+\end{frame}
+%----------------------------------------------------------
+
+
+
+\section{Тест Вальда}
+
+
+
+\begin{frame}[plain]\frametitle{Тест Вальда} \tableofcontents[currentsection]\end{frame}
+
+
+
+%----------------------------------------------------------
+\begin{frame}[plain]\frametitle{Тестирование гипотез}
+%----------------------------------------------------------
+
+\textbf{Q:} Как построить стат-тест?
+
+\vspace{5mm}
+
+\textbf{A:} Нужно знать распределение для $T(X)$.
+
+\vspace{5mm}
+
+\textbf{Q-2:} В каких известных теоремах возникает распределение?
+
+\vspace{5mm}
+
+\pause
+
+\textbf{A:}  Ну конечно ЦПТ!
+
+\[{\displaystyle {\sqrt {n}}\left({\bar {X}}_{n}-\mu \right)\ \xrightarrow {d} \ {\mathcal {N}}\left(0,\sigma ^{2}\right).}\] 
+
+%----------------------------------------------------------
+\end{frame}
+%----------------------------------------------------------
+
+
+%----------------------------------------------------------
+\begin{frame}[plain]\frametitle{Тест Вальда}
+%----------------------------------------------------------
+
+
+\begin{block}{Тест Вальда}
+
+\begin{itemize}
+
+\item Тестируем гипотезы: \[ H_0: \theta = \theta_0 \qquad \text{VS} \qquad  H_1: \theta \not =  \theta_0. \] 
+
+\vspace{3mm}
+
+\item $\hat{\theta}$ --- оценка параметра $\theta$, $\hat{\operatorname{se}}$ --- оценка стандартной ошибки $\hat{\theta}$.
+
+\vspace{5mm}
+
+\item Пусть $\hat{\theta}$ {\color{red} асимптотически нормально}: \[ \frac{\hat{\theta} - \theta_0}{\hat{\operatorname{se}}}  \xrightarrow {d} \ {\mathcal {N}}\left(0,1\right).\]
+
+\vspace{3mm}
+
+\item {\color{blue} Тест Вальда} размера $\alpha$: отклоняем $H_0$ тогда и только тогда, когда \[ \left| W \right| > z_{\alpha/2}, \qquad W = \frac{\hat{\theta} - \theta_0}{\hat{\operatorname{se}}}.\]
+
+\end{itemize}
+
+\end{block}
+
+
+%----------------------------------------------------------
+\end{frame}
+%----------------------------------------------------------
+
+%----------------------------------------------------------
+\begin{frame}[plain]\frametitle{Тест Вальда}
+%----------------------------------------------------------
+
+
+\textit{Замечание.} Можно использовать другой критерий --- заменить в \[W = \frac{\hat{\theta} - \theta_0}{\hat{\operatorname{se}}},\] знаменатель $\hat{\operatorname{se}}$ на $\operatorname{se}_0$ --- значение стандартной ошибки при $\theta = \theta_0$.
+
+\vspace{5mm}
+
+Особой разницы не будет.
+
+%----------------------------------------------------------
+\end{frame}
+%----------------------------------------------------------
+
+
+
+\subsection{Свойства теста Вальда}
+
+
+
+\begin{frame}[plain]\frametitle{Свойства теста Вальда} \tableofcontents[currentsubsection]\end{frame}
+
+
+
+%----------------------------------------------------------
+\begin{frame}[plain]\frametitle{Свойства теста Вальда}
+%----------------------------------------------------------
+
+
+\begin{itemize}
+
+\item Поскольку $W \xrightarrow {d} \ {\mathcal {N}}\left(0,1\right)$, асимптотически размер критерия Вальда равен $\alpha$: \[ P_{\theta} (\left|W \right| > z_{\alpha/2}) \to \alpha.\]
+
+\vspace{3mm}
+
+
+\begin{figure}[h!]
+\center{\includegraphics[width=0.5\textwidth]{pic/WaldP1}}
+%\caption{А.Н. Колмогоров} \label{Fig:}
+\end{figure}
+
+\end{itemize}
+
+
+%----------------------------------------------------------
+\end{frame}
+%----------------------------------------------------------
+
+
+%----------------------------------------------------------
+\begin{frame}[plain]\frametitle{Свойства теста Вальда}
+%----------------------------------------------------------
+
+
+
+\begin{itemize}
+
+\item Пусть $\displaystyle w = \frac{\hat{\theta} - \theta_0}{\hat{\operatorname{se}}}$ --- наблюдаемое значение статистики Вальда. 
+
+\vspace{5mm}
+
+\textbf{Q:} Чему равно $\operatorname{p-value}$?
+
+
+
+\begin{figure}[h!]
+\center{\includegraphics[width=0.5\textwidth]{pic/WaldP2}}
+%\caption{А.Н. Колмогоров} \label{Fig:}
+\end{figure}
+
+
+\pause
+
+\vspace{5mm}
+
+\textbf{A:} Пусть $Z \sim \mathcal{N}(0,1)$, тогда  \[ \operatorname{p-value} = P_{\theta_0} (\left| W\right| > |w| ) \approx P(\left|Z\right| > |w|) = 2 \Phi(-|w|).\] 
+
+\end{itemize}
+
+%----------------------------------------------------------
+\end{frame}
+%----------------------------------------------------------
+
+
+
+%----------------------------------------------------------
+\begin{frame}[plain]\frametitle{Теста Вальда и доверительный интервал}
+%----------------------------------------------------------
+
+
+\begin{itemize}
+
+
+\item {\color{red} Критерий Вальда $\Leftrightarrow$ попадание в доверительный интервал.}
+
+
+\vspace{5mm}
+
+
+Гипотеза $H_0$ отклоняется $\Leftrightarrow$ $\theta_0$ не попадает в доверительный интервал \[ C_n = \left(\hat{\theta} - \hat{\operatorname{se}} \,\, z_{\alpha/2}, \quad \hat{\theta} + \hat{\operatorname{se}} \,\, z_{\alpha/2}, \right) \] 
+
+\vspace{2mm}
+
+
+\textbf{Доказательство:}
+
+\[\left| W \right| =  \left| \frac{\hat{\theta} - \theta_0}{\hat{\operatorname{se}}} \right| > z_{\alpha/2}, \qquad \Leftrightarrow \qquad  \hat{\theta} \in C_n.\]
+
+
+
+\end{itemize}
+
+%----------------------------------------------------------
+\end{frame}
+%----------------------------------------------------------
+
+
+%----------------------------------------------------------
+\begin{frame}[plain]\frametitle{Практическая значимость}
+%----------------------------------------------------------
+
+Доверительный интервал зачастую несёт больше информации. 
+
+
+\begin{figure}[h!]
+\center{\includegraphics[width=0.5\textwidth]{pic/StatZnach}}
+%\caption{А.Н. Колмогоров} \label{Fig:}
+\end{figure}
+
+
+%----------------------------------------------------------
+\end{frame}
+%----------------------------------------------------------
+
+
+\subsection{Примеры}
+
+
+
+\begin{frame}[plain]\frametitle{Примеры} \tableofcontents[currentsubsection]\end{frame}
+
+%----------------------------------------------------------
+\begin{frame}[plain]\frametitle{Сравнение средних}
+%----------------------------------------------------------
+
+\textbf{Пример 1}. {\color{blue} Сравнение двух средних}. 
+
+\vspace{5mm}
+
+\begin{itemize}
+
+\item Пусть $X_1, \dots, X_n$  и $Y_1, \dots, Y_m$ --- две независимые выборки со средними $\mu_X$ и $\mu_Y$ соответственно.
+\vspace{2mm}
+
+\begin{figure}[h!]
+\center{\includegraphics[width=0.5\textwidth]{pic/MeanCat}}
+%\caption{А.Н. Колмогоров} \label{Fig:}
+\end{figure}
+
+\vspace{2mm}
+
+\pause
+
+\item Обозначим $\delta = \mu_X - \mu_Y$. Гипотезы: \[ H_0: \quad \delta = 0 \qquad VS \qquad H_1: \delta \not = 0.\]
+
+\end{itemize}
+
+
+
+
+%----------------------------------------------------------
+\end{frame}
+%----------------------------------------------------------
+
+
+%----------------------------------------------------------
+\begin{frame}[plain]\frametitle{Сравнение средних}
+%----------------------------------------------------------
+
+
+
+
+\begin{itemize}
+
+\item \textbf{Q:} К чему согласно ЦПТ стремится $\bar{X} - \bar{Y}$? 
+
+\pause
+
+\vspace{5mm}
+
+\item \textbf{A:} $\bar{X}$ и $\bar{Y}$ независимы и асимпт. нормальны, поэтому \[ \bar{X} - \bar{Y} \approx \mathcal{N} ( \delta, \mathbb{V}(\bar{X}) + \mathbb{V}(\bar{Y})).\]
+
+\pause
+
+\vspace{5mm}
+
+
+\item Получаем, оценка стандартной  ошибки
+
+\[ \hat{\operatorname{se}} = \sqrt{\frac{S_X^2}{n} + \frac{S_Y^2}{m}}, \]  где $S_X^2$ и $S_Y^2$ --- выборочные дисперсии. 
+
+\end{itemize}
+
+%----------------------------------------------------------
+\end{frame}
+%----------------------------------------------------------
+
+
+%----------------------------------------------------------
+\begin{frame}[plain]\frametitle{Сравнение средних}
+%----------------------------------------------------------
+
+
+\begin{itemize}
+
+\item \textbf{Тест Вальда размера $\alpha$} отклоняет $H_0$, если \[ \left|W\right| >z_{\alpha/2},\]  где \[ W = \frac{\hat{\delta} - 0} {\hat{\operatorname{se}}} = \frac{\bar{X} - \bar{Y} } {\sqrt{\frac{S_X^2}{n} + \frac{S_Y^2}{m}}}.\]
+
+
+\end{itemize}
+
+%----------------------------------------------------------
+\end{frame}
+%----------------------------------------------------------
+
+
+%----------------------------------------------------------
+\begin{frame}[plain]\frametitle{Сравнение медиан}
+%----------------------------------------------------------
+
+\textbf{Пример 2}. {\color{blue} Сравнение медиан}. 
+
+\vspace{5mm}
+
+Вместо средних в Примере 1 берём медианы $\nu_X$ и $\nu_Y$. 
+
+\vspace{5mm}
+
+Берём разницу выборочных оценок $\hat{\delta} = \hat{\nu}_X - \hat{\nu}_Y$.
+ 
+ \vspace{2mm}
+ 
+\begin{figure}[h!]
+\center{\includegraphics[width=0.6\textwidth]{pic/MedCat}}
+%\caption{А.Н. Колмогоров} \label{Fig:}
+\end{figure}
+
+
+%----------------------------------------------------------
+\end{frame}
+%----------------------------------------------------------
+
+
+%----------------------------------------------------------
+\begin{frame}[plain]\frametitle{Сравнение медиан}
+%----------------------------------------------------------
+
+Тест Вальда по сути тот же \[ W = \frac{\hat{\delta}}{\hat{\operatorname{se}}}\]
+
+\vspace{5mm}
+
+\textbf{Q:} Как оценить $\hat{\operatorname{se}}$?
+
+
+%----------------------------------------------------------
+\end{frame}
+%----------------------------------------------------------
+
+
+%----------------------------------------------------------
+\begin{frame}[plain]\frametitle{Bootstrap that i used to know}
+%----------------------------------------------------------
+
+
+\begin{center}
+\Large Нет аналитической формулы --- используем {\color{blue} бутстреп}. 
+\end{center}
+
+\begin{figure}[h!]
+\center{\includegraphics[width=0.35\textwidth]{pic/Bootstrap}}
+\caption{\Large Bootstrap that I used to know} \label{Fig:}
+\end{figure}
+
+
+
+%----------------------------------------------------------
+\end{frame}
+%----------------------------------------------------------
+
+
+
+%----------------------------------------------------------
+\begin{frame}[plain]\frametitle{Сравнение алгоритмов}
+%----------------------------------------------------------
+
+\textbf{Пример 3}. Сравниваем предсказания 2 алгоритмов на 2 множествах. 
+
+\begin{figure}[h!]
+\center{\includegraphics[width=0.75\textwidth]{pic/ControlTrial2}}
+%\caption{\Huge Bootstrap that i use to know} \label{Fig:}
+\end{figure}
+
+\vspace{2mm}
+
+\textbf{Q:} Какие распределения у $X$ и $Y$?
+
+
+
+
+%----------------------------------------------------------
+\end{frame}
+%----------------------------------------------------------
+
+
+%----------------------------------------------------------
+\begin{frame}[plain]\frametitle{Сравнение алгоритмов}
+%----------------------------------------------------------
+
+\begin{figure}[h!]
+\center{\includegraphics[width=0.75\textwidth]{pic/ControlTrial3}}
+%\caption{\Huge Bootstrap that i use to know} \label{Fig:}
+\end{figure}
+
+\vspace{5mm}
+
+
+
+\textbf{Q:} Как протестировать $p_1 = p_2$? 
+
+
+%----------------------------------------------------------
+\end{frame}
+%----------------------------------------------------------
+
+
+%----------------------------------------------------------
+\begin{frame}[plain]\frametitle{Сравнение алгоритмов}
+%----------------------------------------------------------
+
+\textbf{A:} Биномиальные распределения --- суммы распределений Бернулли.  
+
+\vspace{5mm}
+
+
+Если $X = X_1 + \dots + X_m$ и $Y = Y_1 + \dots + Y_n$, то \[ p_1 - p_2  = \frac{X_1 + \dots + X_m}{m} - \frac{Y_1 + \dots + Y_n}{n}  \ \xrightarrow{d} \ \] \[ \ \xrightarrow{d} \  \mathcal{N}\left(p_1 - p_2, \frac{p_1(1-p_1)}{m} + \frac{p_2(1-p_2)}{n}\right). \]
+
+
+
+%----------------------------------------------------------
+\end{frame}
+%----------------------------------------------------------
+
+%----------------------------------------------------------
+\begin{frame}[plain]\frametitle{Зависимые алгоритмы}
+%--------
+
+
+\textbf{Тест Вальда}: \[ W = \frac{\hat{\delta} } {\hat{\operatorname{se}}}.\] 
+
+\begin{itemize}
+
+\item Оценка разности матожиданий: \[ \hat{\delta} = \hat{p}_1 - \hat{p}_2, \] 
+
+\item Оценка стандартной ошибки: \[\hat{\operatorname{se}} = \sqrt{ \frac{\hat{p}_1(1-\hat{p}_1)}{m} + \frac{\hat{p}_2(1-\hat{p}_2)}{n}}.   \]
+
+\end{itemize}
+%----------------------------------------------------------
+\end{frame}
+%----------------------------------------------------------
+
+%----------------------------------------------------------
+\begin{frame}[plain]\frametitle{Зависимые алгоритмы}
+%----------------------------------------------------------
+
+\textbf{Пример 4}. А если оба алгоритма --- на одном множестве. Есть разница?
+
+\begin{figure}[h!]
+\center{\includegraphics[width=0.75\textwidth]{pic/ControlTrial1}}
+%\caption{\Huge Bootstrap that i use to know} \label{Fig:}
+\end{figure}
+
+\vspace{2mm}
+
+\pause
+
+{\Large \textbf{A:} Да, $X_i$ и $Y_j$ теперь {\color{red}  зависимы}.}
+
+
+
+
+%----------------------------------------------------------
+\end{frame}
+%----------------------------------------------------------
+
+%----------------------------------------------------------
+\begin{frame}[plain]\frametitle{Зависимые алгоритмы}
+%----------------------------------------------------------
+
+\textbf{Идея.} Вместо $X_i$ и $Y_i$ рассматриваем $X_i - Y_i$. 
+
+
+\begin{figure}[h!]
+\center{\includegraphics[width=0.6\textwidth]{pic/Diff}}
+%\caption{\Huge Bootstrap that i use to know} \label{Fig:}
+\end{figure}
+
+%----------------------------------------------------------
+\end{frame}
+%----------------------------------------------------------
+
+%----------------------------------------------------------
+\begin{frame}[plain]\frametitle{Зависимые алгоритмы}
+%--------
+
+
+\textbf{Тест Вальда}: \[ W = \frac{\hat{\delta} } {\hat{\operatorname{se}}}.\] 
+
+\begin{itemize}
+
+\item Оценка разности матожиданий: \[ \hat{\delta} = \frac{1}{n} \sum_{i=1}^n D_i, \] 
+
+\item Оценка стандартной ошибки: \[\hat{\operatorname{se}} = \frac{S}{\sqrt{n}}, \qquad S^2 = \frac{1}{n} \sum_{i=1}^n \left(D_i - \bar{D}\right)^2.   \]
+
+\end{itemize}
+%----------------------------------------------------------
+\end{frame}
+%----------------------------------------------------------
+
+
+\section{Тест Колмогорова}
+
+
+
+\begin{frame}[plain]\frametitle{Тест Колмогорова} \tableofcontents[currentsection]\end{frame}
+
+
+
+%----------------------------------------------------------
+\begin{frame}[plain]\frametitle{Колмогоров}
+%----------------------------------------------------------
+
+\begin{center}
+\Large Раз лекции на мехмате, нужно упомянуть Колмогорова)
+\end{center}
+
+
+\begin{figure}[h!]
+\center{\includegraphics[width=0.5\textwidth]{pic/Kolmogorov}}
+\caption{ \Large  А.Н. Колмогоров} \label{Fig:}
+\end{figure}
+
+\vspace{1mm}
+
+\begin{center}
+
+{\color{red} \Large  Не будем использовать этот тест.}
+
+\end{center}
+
+%----------------------------------------------------------
+\end{frame}
+%----------------------------------------------------------
+
+%----------------------------------------------------------
+\begin{frame}[plain]\frametitle{Теорема Колмогорова}
+%----------------------------------------------------------
+
+Пусть $F(x)$ --- \textit{непрерывная} функция распределения. 
+
+\vspace{5mm}
+
+\begin{block}{Теорема Колмогорова}
+\[{\displaystyle {\sqrt {n}}\sup \limits _{x\in \mathbb {R} }\left|F_{n}(x)-F(x)\right| \xrightarrow {d} K} \]
+\end{block}
+
+
+\vspace{5mm}
+
+Где $K$ --- распределение Колмогорова \[ {\displaystyle K(x)={\begin{cases}\sum \limits _{k=-\infty }^{\infty }(-1)^{k}e^{-2k^{2}x^{2}},&x>0;\\0,&x\leqslant 0.\end{cases}}}\]
+
+
+%----------------------------------------------------------
+\end{frame}
+%----------------------------------------------------------
+
+%----------------------------------------------------------
+\begin{frame}[plain]\frametitle{Тест Колмогорова}
+%----------------------------------------------------------
+
+\textit{Проверка принадлежности выборки распределению}.
+
+\vspace{5mm}
+
+
+Дана выборка $X_1, \dots, X_n \sim F$. 
+
+\vspace{5mm}
+
+Отвергаем гипотезу, что $F = F_0$, если \[ t(X^n) = {\sqrt {n}}\sup \limits _{x\in \mathbb {R} }\left|F_{n}(x)-F(x)\right|  \geq C.\] 
+
+
+
+%----------------------------------------------------------
+\end{frame}
+%----------------------------------------------------------
+
+
+
+
+%----------------------------------------------------------
+\begin{frame}[plain]\frametitle{Перерыв}
+%----------------------------------------------------------
+
+
+\begin{center}
+\Huge Перерыв
+\end{center}
+%----------------------------------------------------------
+\end{frame}
+%----------------------------------------------------------
+
+
+
+\section{$\chi^2$ критерий Пирсона}
+
+
+
+\begin{frame}[plain]\frametitle{$\chi^2$ критерий Пирсона} \tableofcontents[currentsection]\end{frame}
+
+
+
+\subsection{Распределение хи-квадрат}
+
+
+
+\begin{frame}[plain]\frametitle{Распределение хи-квадрат} \tableofcontents[currentsubsection]\end{frame}
+
+
+
+%----------------------------------------------------------
+\begin{frame}[plain]\frametitle{Три ``Богатыря'' Статистики }
+%----------------------------------------------------------
+
+\begin{center}
+\Large Сейчас мы познакомимся с 3 очень важными распределениями.
+\end{center}
+
+\begin{figure}[h!]
+\center{\includegraphics[width=0.75\textwidth]{pic/Bogatyr}}
+\caption{ \Large  Три ``Богатыря'' Статистики --- Стьюдент, Фишер и Хи-квадрат} \label{Fig:}
+\end{figure}
+
+%----------------------------------------------------------
+\end{frame}
+%----------------------------------------------------------
+
+%----------------------------------------------------------
+\begin{frame}[plain]\frametitle{Три важных распределения}
+%----------------------------------------------------------
+
+
+Есть 3 важных распределения:
+
+\vspace{5mm}
+
+\begin{enumerate}
+
+\item {\color{blue} Хи-квадрат} $\chi^2$. 
+
+\vspace{5mm}
+
+\item {\color{blue} $t$-распределение Стьюдента}.
+
+\vspace{5mm}
+
+\item Распределение {\color{blue} Фишера-Снедекора} $F_{d_1,d_2}$  (F-распределение).
+
+\end{enumerate}
+
+%----------------------------------------------------------
+\end{frame}
+%----------------------------------------------------------
+
+
+
+%----------------------------------------------------------
+\begin{frame}[plain]\frametitle{Три важных распределения}
+%----------------------------------------------------------
+
+
+\begin{figure}[h!]
+\center{\includegraphics[width=\textwidth]{pic/Dist1}}
+%\caption{ \Large  А.Н. Колмогоров} \label{Fig:}
+\end{figure}
+%----------------------------------------------------------
+\end{frame}
+%----------------------------------------------------------
+
+
+
+%----------------------------------------------------------
+\begin{frame}[plain]\frametitle{Контрольный вопрос}
+%----------------------------------------------------------
+
+
+\textbf{Q:} Рассмотрим многомерное нормальное распределение \[\xi = (\xi_1, \dots, \xi_k) \sim \mathcal{N} (0, I_k).\]
+\textit{Где распределение хи-квадрат?}
+
+\begin{figure}[h!]
+\center{\includegraphics[width=0.5\textwidth]{pic/Mult}}
+%\caption{ \Large  А.Н. Колмогоров} \label{Fig:}
+\end{figure}
+
+
+\pause
+
+
+\textbf{A:} Квадрат длины вектора \[\left\|\xi \right\|^2 = \xi_1^2 + \dots + \xi_k^2.\]
+
+
+
+%----------------------------------------------------------
+\end{frame}
+%----------------------------------------------------------
+
+
+
+
+\subsection{Мультиномиальное распределение}
+
+
+
+\begin{frame}[plain]\frametitle{Мультиномиальное распределение} \tableofcontents[currentsubsection]\end{frame}
+
+
+
+%----------------------------------------------------------
+\begin{frame}[plain]\frametitle{$\chi^2$-критерий Пирсона}
+%----------------------------------------------------------
+
+
+\begin{center}
+{\color{blue} $\chi^2$-критерий Пирсона} используется, когда \\ данные ``раскладываются по коробочкам''.
+
+\vspace{5mm}
+
+Мы проверяем --- \textit{совпадают ли эмпирические частоты с теоретическими}.
+\end{center}
+
+\begin{figure}[h!]
+\center{\includegraphics[width=0.5\textwidth]{pic/Boxes}}
+%\caption{ \Large  А.Н. Колмогоров} \label{Fig:}
+\end{figure}
+
+
+
+
+%----------------------------------------------------------
+\end{frame}
+%----------------------------------------------------------
+
+
+
+%----------------------------------------------------------
+\begin{frame}[plain]\frametitle{Мультиномиальное распределение}
+%----------------------------------------------------------
+
+
+\textbf{Q:} Какое самое известное распределение с возможными исходами $1, \dots, k$. 
+
+\vspace{5mm}
+
+\textbf{A:} Пусть $X = (X_1, \dots, X_k)$ имеют \textit{мультиномиальное $(n, p)$ распределение}. 
+
+%\vspace{5mm}
+
+%Легко проверить, MLE \[\hat{p} = \left( \hat{p}_1, \dots, \hat{p}_k \right) =\left( \frac{X_1}{n}, \dots, \frac{X_k}{n} \right)\]
+
+\[ p(\mathbf {x} )= {\frac {n!}{x_{1}!\ldots x_{k}!}} p_{1}^{x_{1}}\ldots p_{k}^{x_{k}}, \qquad \sum \limits _{j=1}^{k}x_{j}=n \]
+
+
+\begin{figure}[h!]
+\center{\includegraphics[width=0.75\textwidth]{pic/Dice}}
+\caption{\large От монеток переходим к кубикам} \label{Fig:}
+\end{figure}
+
+
+%----------------------------------------------------------
+\end{frame}
+%----------------------------------------------------------
+
+
+
+%----------------------------------------------------------
+\begin{frame}[plain]\frametitle{$\chi^2$-статистика Пирсона}
+%----------------------------------------------------------
+
+
+Проверяем гипотезу \[ H_0:  p = p_0 \qquad VS \qquad H_1: p \not = p_0. \]
+
+\vspace{3mm}
+
+{\color{blue} $\chi^2$ статистика Пирсона} \[ T = \sum_{j=1}^k \frac{(X_j - np_{0j})^2 }{np_{0j}} = \sum_{j=1}^k \frac{(X_j - E_j)^2 }{E_j}.\] 
+
+\vspace{3mm}
+
+Здесь $E_j = \mathbb{E} X_j  = np_{0j}$ --- матожидание при $H_0$.
+
+
+
+%----------------------------------------------------------
+\end{frame}
+%----------------------------------------------------------
+
+%----------------------------------------------------------
+\begin{frame}[plain]\frametitle{$\chi^2$-статистика Пирсона}
+%----------------------------------------------------------
+
+
+\begin{block}
+
+
+
+\begin{itemize}
+
+\item  При выполнении $H_0$: \[ T  \xrightarrow {d} \chi^2_{k-1}  \]
+
+\vspace{3mm}
+
+\item Тест: отвергаем $H_0$, если $ \chi^2_{k-1} > \chi^2_{k-1, \alpha}$ соответствующей квантили. 
+
+\vspace{5mm}
+
+\item $p-value = \mathbb{P}( \chi^2_{k-1}  >t)$, где $t$ --- наблюдаемое значение статистики. 
+
+\end{itemize}
+
+\end{block}
+
+
+
+%----------------------------------------------------------
+\end{frame}
+%----------------------------------------------------------
+
+
+
+
+
+\subsection{Критерий согласия}
+
+
+
+\begin{frame}[plain]\frametitle{Критерий согласия} \tableofcontents[currentsubsection]\end{frame}
+
+
+%----------------------------------------------------------
+\begin{frame}[plain]\frametitle{Тест параметрической модели}
+%----------------------------------------------------------
+
+
+Фиксируем параметрическую модель  \[\mathcal{F} = \left\{ F(x;\theta), \quad \theta \in \Theta \right\}. \]
+
+\vspace{3mm}
+
+\textbf{Принадлежит ли выборка этой модели?}
+
+
+%----------------------------------------------------------
+\end{frame}
+%----------------------------------------------------------
+
+
+%----------------------------------------------------------
+\begin{frame}[plain]\frametitle{Создаём мультиномиальное распределение}
+%----------------------------------------------------------
+
+
+\begin{center}
+\textit{Идея!} ``Разложим выборку $X_i$ по коробочкам'', \\ чтобы получить мультиномиальное распределение.
+\end{center}
+
+\begin{figure}[h!]
+\center{\includegraphics[width=0.75\textwidth]{pic/Boxes3}}
+%\caption{\large От монеток переходим к кубикам} \label{Fig:}
+\end{figure}
+
+
+
+
+%----------------------------------------------------------
+\end{frame}
+%----------------------------------------------------------
+
+
+%----------------------------------------------------------
+\begin{frame}[plain]\frametitle{Создаём мультиномиальное распределение}
+%----------------------------------------------------------
+
+
+Делим прямую на $k$ непересекающихся отрезков $I_1, \dots, I_k$
+
+\vspace{5mm}
+
+
+\textbf{Q:} Вероятность попасть в отрезок?
+
+
+\begin{figure}[h!]
+\center{\includegraphics[width=0.5\textwidth]{pic/Boxes2}}
+%\caption{ \Large  А.Н. Колмогоров} \label{Fig:}
+\end{figure}
+
+
+\pause
+
+\textbf{A:} Вероятность: \[ p_j(\theta) = \int_{I_j} f(x;\theta) dx\]
+
+
+%----------------------------------------------------------
+\end{frame}
+%----------------------------------------------------------
+
+%----------------------------------------------------------
+\begin{frame}[plain]\frametitle{Создаём мультиномиальное распределение}
+%----------------------------------------------------------
+
+
+
+Вероятность зависит от параматра: \[ p_j(\theta) = \int_{I_j} f(x;\theta) dx\]
+
+\vspace{3mm}
+
+\textbf{Q:} Какой параметр  $\theta$ взять?
+
+\pause
+
+\vspace{5mm}
+
+\textbf{A:} Это Статистика --- поэтому {\color{red} самый правдоподобный} (в описанном ниже смысле). 
+
+
+%----------------------------------------------------------
+\end{frame}
+%----------------------------------------------------------
+
+
+%----------------------------------------------------------
+\begin{frame}[plain]\frametitle{Правдоподобие}
+%----------------------------------------------------------
+
+\begin{itemize}
+
+
+\item Пусть в отрезок $I_j$ попало $N_j$ наблюдений.  
+
+\vspace{5mm}
+
+\item \textbf{Q:} Какова вероятность этого?
+
+
+\vspace{5mm}
+
+\pause
+
+
+\item \textbf{A:} \textit{Правдоподобие:} \[ Q(\theta) = \prod_{j=1}^k p_j(\theta)^{N_j}.\] 
+
+
+\end{itemize}
+
+%----------------------------------------------------------
+\end{frame}
+%----------------------------------------------------------
+
+
+%----------------------------------------------------------
+\begin{frame}[plain]\frametitle{Выбираем самое правдоподобное}
+%----------------------------------------------------------
+
+\begin{itemize}
+
+
+\item \textit{Выбираем самое правдоподобное}: \[(\tilde{\theta}_1, \dots,  \tilde{\theta}_s ) = \operatorname{argmax}_{\theta} Q(\theta)\]
+
+
+\vspace{5mm}
+
+\textbf{Замечание}. $\tilde{\theta}$ --- это НЕ MLE $\hat{\theta}$, не перепутайте. 
+
+\end{itemize}
+
+%----------------------------------------------------------
+\end{frame}
+%----------------------------------------------------------
+
+
+%----------------------------------------------------------
+\begin{frame}[plain]\frametitle{Goodness-of-fit Test}
+%----------------------------------------------------------
+
+\begin{block}{Критерий согласия}
+
+Рассмотрим статистику  \[ Q = \sum_{j=1}^k \frac{(N_j - np_j(\tilde{\theta}))^2}{np_j(\tilde{\theta})}.\] 
+
+\vspace{3mm}
+
+\pause
+
+\begin{itemize}
+
+\item При выполнении $H_0$ \[{\color{red} Q  \xrightarrow {d} \chi^2_{k-1-s}. } \] 
+
+\vspace{3mm}
+
+\item Поэтому (приближённо) \[\operatorname{p-value} = \mathbb{P}( \chi^2_{k-1-s} > q),\] где $q$ --- наблюдаемое значение статистики. 
+
+
+
+\end{itemize}
+
+\end{block}
+
+\pause
+
+
+\vspace{2mm}
+
+Здесь $k$ --- число отрезков $I_1, \dots, I_k$, 
+
+\vspace{3mm}
+
+$s$ --- число параметров $\theta_1, \dots, \theta_s$. 
+
+
+%----------------------------------------------------------
+\end{frame}
+%----------------------------------------------------------
+
+
+\subsection{Тест на однородность}
+
+
+
+\begin{frame}[plain]\frametitle{Тест на однородность} \tableofcontents[currentsubsection]\end{frame}
+
+
+
+
+%----------------------------------------------------------
+\begin{frame}[plain]\frametitle{Читайте хорошие книжки}
+%----------------------------------------------------------
+
+
+\begin{figure}[h!]
+\center{\includegraphics[width=\textwidth]{pic/JustNo}}
+%\caption{} \label{Fig:}
+\end{figure}
+
+
+\begin{center}
+\Large Книжка так себе, но местами иллюстрации наглядные.
+\end{center}
+
+%----------------------------------------------------------
+\end{frame}
+%----------------------------------------------------------
+
+
+%----------------------------------------------------------
+\begin{frame}[plain]\frametitle{Тест на однородность}
+%----------------------------------------------------------
+
+
+\begin{center}
+Кроме ``коробочек'' аналогичный критерий можно применять к ``табличкам''. 
+
+\vspace{5mm}
+
+Проверяем --- \textit{одинаковые ли распределения в столбиках}?
+\end{center}
+
+\begin{figure}[h!]
+\center{\includegraphics[width=0.5\textwidth]{pic/Cat1}}
+%\caption{ \Large  А.Н. Колмогоров} \label{Fig:}
+\end{figure}
+
+
+
+%----------------------------------------------------------
+\end{frame}
+%----------------------------------------------------------
+
+
+%----------------------------------------------------------
+\begin{frame}[plain]\frametitle{Тест на однородность}
+%----------------------------------------------------------
+
+
+\begin{center}
+\Large Составляем 2 таблицы
+\end{center}
+
+\begin{figure}[h!]
+\center{\includegraphics[width=0.75\textwidth]{pic/Cat2}}
+%\caption{ \Large  А.Н. Колмогоров} \label{Fig:}
+\end{figure}
+
+
+%----------------------------------------------------------
+\end{frame}
+%----------------------------------------------------------
+
+
+
+
+%----------------------------------------------------------
+\begin{frame}[plain]\frametitle{Тест на однородность}
+%----------------------------------------------------------
+
+
+\begin{center}
+\Large Теоретические частоты вычисляем так:
+\end{center}
+
+\begin{figure}[h!]
+\center{\includegraphics[width=0.85\textwidth]{pic/Cat3}}
+%\caption{ \Large  А.Н. Колмогоров} \label{Fig:}
+\end{figure}
+
+
+%----------------------------------------------------------
+\end{frame}
+%----------------------------------------------------------
+
+
+
+%----------------------------------------------------------
+\begin{frame}[plain]\frametitle{Тест на однородность}
+%----------------------------------------------------------
+
+
+\begin{center}
+\Large Вычисляем расхождения частот:
+\end{center}
+
+\begin{figure}[h!]
+\center{\includegraphics[width=0.85\textwidth]{pic/Cat4}}
+%\caption{ \Large  А.Н. Колмогоров} \label{Fig:}
+\end{figure}
+
+
+
+
+%----------------------------------------------------------
+\end{frame}
+%----------------------------------------------------------
+
+
+
+%----------------------------------------------------------
+\begin{frame}[plain]\frametitle{Тест на однородность}
+%----------------------------------------------------------
+
+
+\begin{center}
+\Large Сумма расхождений частот имеет распределение $\chi^2$.
+
+\vspace{5mm}
+
+В общем случае число степеней свободы $df =  (Rows - 1) \times (Cols - 1)$.
+\end{center}
+
+\begin{figure}[h!]
+\center{\includegraphics[width=0.5\textwidth]{pic/Cat5}}
+%\caption{ \Large  А.Н. Колмогоров} \label{Fig:}
+\end{figure}
+
+
+
+%----------------------------------------------------------
+\end{frame}
+%----------------------------------------------------------
+
+\subsection{Точный тест Фишера}
+
+
+
+\begin{frame}[plain]\frametitle{ Точный тест Фишера} \tableofcontents[currentsubsection]\end{frame}
+
+
+%----------------------------------------------------------
+\begin{frame}[plain]\frametitle{Точный тест Фишера}
+%----------------------------------------------------------
+
+
+\begin{center}
+\Large \textit{Дополнительный материал}
+\end{center}
+
+\vspace{5mm}
+
+Критерий хи-квадрат асимптотический ({\color{red} НЕ точный}). 
+
+\vspace{5mm}
+
+\textbf{Rule of Thumb}. Тест не годится, если значение в таблице сопряжённости меньше 5 (или 10 для 1 степени свободы).
+
+
+%----------------------------------------------------------
+\end{frame}
+%----------------------------------------------------------
+
+
+%----------------------------------------------------------
+\begin{frame}[plain]\frametitle{Точный тест Фишера}
+%----------------------------------------------------------
+
+\begin{center}
+\large Если хочется точного теста, можно фиксировать суммы в строках \\ и/или столбцах таблицы. 
+
+\vspace{5mm}
+
+Пример: {\color{blue} Точный тест Фишера.} 
+\end{center}
+
+ \begin{figure}[h!]
+\center{\includegraphics[width=0.25\textwidth]{pic/Lady}}
+\caption{ \large  см. также {\color{blue} ``Lady tasting tea'' experiment}} \label{Fig:}
+\end{figure}
+
+
+
+%----------------------------------------------------------
+\end{frame}
+%----------------------------------------------------------
+
+
+%----------------------------------------------------------
+\begin{frame}[plain]\frametitle{Точный тест Фишера}
+%----------------------------------------------------------
+\begin{center}
+Суммы в строках и столбцах фиксированы.
+\end{center}
+ \begin{figure}[h!]
+\center{\includegraphics[width=0.85\textwidth]{pic/Tea3}}
+%\caption{ \Large  см. также {\color{blue} ``Lady tasting tea'' experiment}} \label{Fig:}
+\end{figure}
+
+
+\begin{center}
+Вероятность набора задаётся гипергеометрическим распределением:
+
+\[{\displaystyle p={{{a+b} \choose {a}}{{c+d} \choose {c}}}\left/{{n} \choose {a+c}}\right.={\frac {(a+b)!\,(c+d)!\,(a+c)!\,(b+d)!}{n!\,a!\,b!\,c!\,d!}}}\]
+
+$p-value$ = сумма вероятностей для наблюдаемого $a$ и более экстремальных.
+\end{center}
+
+
+%----------------------------------------------------------
+\end{frame}
+%----------------------------------------------------------
+
+
+
+%----------------------------------------------------------
+\begin{frame}[plain]\frametitle{Конец 1ой части лекции}
+%----------------------------------------------------------
+
+
+\begin{center}
+\Huge Конец 1ой части лекции.
+\end{center}
+
+\begin{figure}[h!]
+\center{\includegraphics[width=0.5\textwidth]{pic/TeaBreak}}
+\caption{\Huge Time for Tea Break} \label{Fig:}
+\end{figure}
+
+
+%----------------------------------------------------------
+\end{frame}
+%----------------------------------------------------------
+
+
+
+\end{document}
+
+

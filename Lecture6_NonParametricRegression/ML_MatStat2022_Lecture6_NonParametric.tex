@@ -1,0 +1,2003 @@
+\documentclass[9pt]{beamer}
+
+
+
+
+\usepackage{beamerthemesplit}
+\usetheme{Boadilla}
+\usecolortheme{orchid}
+
+
+
+
+
+ % \usepackage[cp866]{inputenc}                %%% Є®¤Ёа®ўЄ  DOS
+  \usepackage[cp1251]{inputenc}
+%  \usepackage[T2A]{fontenc}                %%% ???
+%\usepackage[english,russian]{babel}
+%\usepackage[russian]{babel}
+ \usepackage[OT1]{fontenc}
+%\usepackage[english]{babel}
+\usepackage[russian]{babel}
+
+\usepackage{amssymb,latexsym, amsmath, mathdots}
+
+\usepackage{amscd}
+\usepackage{multirow}
+\usepackage{comment}
+
+\usepackage{epstopdf}
+
+
+
+%\usepackage[table]{xcolor} %colored cells
+
+%\usepackage{tikz}
+%\usetikzlibrary{tikzmark} %arrows in tables
+
+
+\usepackage{mnsymbol} % udots in matrices
+
+
+ \usepackage{pgfpages}
+%\setbeameroption{show notes}
+%\setbeameroption{show notes on second screen=bottom}
+%% \setbeameroption{show notes on second screen}
+
+%\setbeamercolor{alerted text}{fg=red!80!black}
+
+
+% \setbeamercolor{alerted text}{fg=blue!50!green}
+% \setbeamercolor{fortheorem}{bg=blue!15!white}
+% \setbeamercolor{EMPF}{bg=blue!25!white}
+% \setbeamercolor{EMPF2}{bg=blue!35!white}
+
+%\setbeamersize{text margin left=5.mm, text margin right=5.mm}
+
+
+%---------------------------------------------------------------------------------------------------------------------------
+
+%\def\emphbox#1#2#3{\begin{beamercolorbox}[wd=#2, ht=#1, center, colsep=1.mm]{EMPF} #3 \end{beamercolorbox}}
+
+%---------------------------------------------------------------------------------------------------------------------------
+
+
+%\advance\leftskip-5.mm
+
+
+
+%***************************************************************************************************************************
+
+\theoremstyle{theorem}
+\newtheorem{mytheorem}[theorem]{Теорема}
+\newtheorem{mylemma}[theorem]{Лемма}
+\newtheorem{mycorollary}[theorem]{Следствие}
+
+\newtheorem{proposition}[theorem]{Предложение}
+\newtheorem{assertion}[theorem]{Утверждение}
+\newtheorem{remark}[theorem]{Замечание}
+\newtheorem{assumption}[theorem]{Предположение}
+
+\newtheorem{convention}[theorem]{Договорённость}
+\newtheorem{question}[theorem]{Вопрос}
+%\newtheorem{mydefinition}{mydefinition}
+
+\theoremstyle{definition}
+\newtheorem{mydefinition}[theorem]{Определение}
+\newtheorem{myexample}[theorem]{Пример}
+
+
+
+%***************************************************************************************************************************
+
+\chardef\No=194
+\newcommand{\bd}{{\rm bd}}
+\newcommand{\cl}{{\rm cl}}
+\newcommand{\ind}{{\rm ind}}
+\newcommand{\id}{{\rm id}}
+\newcommand{\inj}{{\sl in}}
+\newcommand{\pr}{{\rm pr}}
+\newcommand{\st}{{\rm St}}
+
+
+\DeclareMathOperator{\sgrad}{sgrad}
+
+\DeclareMathOperator{\cnt}{const}
+
+\DeclareMathOperator{\Aut}{Aut}
+
+
+\DeclareMathOperator{\sgn}{sgn}
+
+\DeclareMathOperator{\Int}{Int}
+
+
+\DeclareMathOperator{\tr}{tr}
+
+\DeclareMathOperator{\Mat}{Mat}
+
+
+
+
+
+
+
+%****************************************************************************
+\newcommand{\Ker}{\mathrm{Ker}\,\,}
+\newcommand{\Ann}{\mathrm{Ann}\,\,}
+
+\newcommand{\Imm}{\mathrm{Im}\,\,}
+
+\newcommand{\rk}{\mathrm{rk}\,\,}
+
+\newcommand{\const}{\mathrm{const}}
+
+
+
+\DeclareMathOperator{\Pen}{\mathcal{P}}
+
+
+\DeclareMathOperator{\Core}{K}
+
+
+\DeclareMathOperator{\BLG}{\operatorname{BLG}}
+
+\DeclareMathOperator{\AutBP}{\operatorname{Aut}(V, \mathcal{P})}
+
+
+\def\minus{\hbox{-}}   %Sign of minus in big matrices
+
+\usepackage{multirow}  %Columns spanning multiple rows
+
+\usepackage[normalem]{ulem} %underline that can break lines
+
+%\usepackage[normalem]{ulem}
+
+\usepackage{wasysym} %smile
+
+%****************************************************************************
+
+
+
+\title% [] (optional, only for long titles)
+{Прикладная статистика в машинном обучении \\ Лекция 6 \\ Непараметрическое оценивание}
+%\subtitle{}
+\author [И. \,К.~Козлов] %(optional, for multiple authors)
+{И. \,К.~Козлов \\ {\footnotesize(\textit{Мехмат МГУ})}}
+
+
+\date % [](optional)
+{2022}
+%\subject{Mathematics}
+
+
+
+
+
+
+
+\usepackage{hyperref}
+%\hypersetup{unicode=true}
+\hypersetup{
+  colorlinks=true,
+  linkcolor=green!70!black, %blue!50!red,
+  urlcolor=green!70!black,
+  unicode=true
+}
+
+
+\begin{document}
+
+%\includeonlyframes{}
+\frame{\titlepage}
+
+
+
+\section{Непараметрическая регрессия}
+
+\begin{frame}[plain]\frametitle{Непараметрическая регрессия} \tableofcontents[currentsection]\end{frame}
+
+
+
+
+
+%----------------------------------------------------------
+\begin{frame}[plain]\frametitle{Эмпирическая функция распределения}
+%----------------------------------------------------------
+
+\begin{center}
+
+\large \textbf{Q:} Как аппроксимировать функцию распределения $F(x)$?
+
+\vspace{5mm}
+
+\textbf{A:} Конечно, эмпирической функцией распределения $\hat{F}(x)$!
+
+
+\end{center}
+
+
+\begin{figure}[h!]
+\center{\includegraphics[width=\textwidth]{pic/Empirical}}
+%\caption{\Large Таблица из главы 14 Лагутина} \label{Fig:}
+\end{figure}
+
+  
+  %----------------------------------------------------------
+\end{frame}
+%----------------------------------------------------------
+
+
+%----------------------------------------------------------
+\begin{frame}[plain]\frametitle{Плотность --- сумма дельта-функций}
+%----------------------------------------------------------
+
+\begin{center}
+
+\large  \textbf{Q:} А какая у $\hat{F}(x)$ плотность?
+
+\vspace{5mm}
+
+\pause
+
+\textbf{A:} Сумма дельта-функций. 
+
+\end{center}
+
+
+\begin{figure}[h!]
+\center{\includegraphics[height=0.5\textheight]{pic/Empirical2}}
+%\caption{\Large {\color{red} Не гладко!}} \label{Fig:}
+\end{figure}
+
+  
+  \begin{center}
+  Почти всюду - ноль!  {\color{red} Не гладко!}
+\end{center}
+
+  
+  
+  %----------------------------------------------------------
+\end{frame}
+%----------------------------------------------------------
+
+
+
+%----------------------------------------------------------
+\begin{frame}[plain]\frametitle{2 задачи}
+%----------------------------------------------------------
+
+
+\begin{center}
+Рассмотрим 2 задачи.
+\end{center}
+
+\begin{figure}[h!]
+\center{\includegraphics[width=\textwidth]{pic/TwoProb}}
+%\caption{\Large {\color{red} Не гладко!}} \label{Fig:}
+\end{figure}
+
+
+%----------------------------------------------------------
+\end{frame}
+%----------------------------------------------------------
+
+%----------------------------------------------------------
+\begin{frame}[plain]\frametitle{Оценка функции}
+%----------------------------------------------------------
+
+\begin{center}
+\Large Мы изучаем оценку $\hat{g}(x)$  функции $g(x)$. 
+\end{center}
+
+
+\begin{figure}[h!]
+\center{\includegraphics[width=0.85\textwidth]{pic/Estimate}}
+%\caption{\Large {\color{red} Не гладко!}} \label{Fig:}
+\end{figure}
+
+%----------------------------------------------------------
+\end{frame}
+%----------------------------------------------------------
+
+\subsection{Риск}
+
+
+
+\begin{frame}[plain]\frametitle{Риск} \tableofcontents[currentsubsection]\end{frame}
+
+
+
+
+%----------------------------------------------------------
+\begin{frame}[plain]\frametitle{Функция потерь}
+%----------------------------------------------------------
+
+\textbf{Q:} Как оценить --- насколько хорошо приближение? 
+
+\vspace{5mm}
+
+\pause
+
+
+\textbf{A:} Функция потерь --- {\color{blue} интегральный квадрат ошибки} (ISE): \[ L(g, \hat{g}_n) = \int (g(u) - \hat{g}(u))^2 du.\]  
+
+\vspace{3mm}
+
+Так будут самые лучшие формулы.
+
+\pause
+
+\vspace{5mm}
+
+Мы хотим минимизировать {\color{blue} риск} = {\color{blue} средний интегральный квадрат ошибки} (MISE)  \[ R(g, \hat{g}_n(x)) = \mathbb{E} \left( L(g, \hat{g}_n) \right). \]
+
+
+
+%----------------------------------------------------------
+\end{frame}
+%----------------------------------------------------------
+
+
+
+
+
+
+
+%----------------------------------------------------------
+\begin{frame}[plain]\frametitle{Смещение и дисперсия}
+%----------------------------------------------------------
+
+
+
+\textbf{Теорема}. {\color{blue} Риск} может быть записан в виде \[ R(g, \hat{g}_n) = \int b^2(x) dx + \int v(x) dx\] 
+
+
+\vspace{3mm}
+
+
+\begin{enumerate}
+
+\item 1ое слагаемое --- это {\color{blue} смещение} $\hat{g}(x)$ в точке $x$: \[ b(x) = \mathbb{E}\left[\hat{g}_n(x)\right] - g(x). \]
+
+\vspace{3mm}
+
+\item 2ое слагаемое --- это {\color{blue} дисперсия} $\hat{g}(x)$ в точке $x$: \[ v(x) =\mathbb{V}\left[\hat{g}_n(x)\right] = \mathbb{E}\left[\hat{g}_n(x) - \mathbb{E}\left( \hat{g}_n(x)\right) \right]^2. \]
+
+\end{enumerate}
+
+
+
+%----------------------------------------------------------
+\end{frame}
+%----------------------------------------------------------
+
+
+%----------------------------------------------------------
+\begin{frame}[plain]\frametitle{Дилемма смещения-дисперсия}
+%----------------------------------------------------------
+
+\begin{center}
+\Large Это всё тот же {\color{red} Bias-Variance Tradeoff} 
+\end{center}
+
+\begin{figure}[h!]
+\center{\includegraphics[width=0.85\textwidth]{pic/BiasVarianceRisk}}
+%\caption{Итоговая оценка} \label{Fig:}
+\end{figure}
+
+%----------------------------------------------------------
+\end{frame}
+%----------------------------------------------------------
+
+
+%----------------------------------------------------------
+\begin{frame}[plain]\frametitle{Знакомые все лица}
+%----------------------------------------------------------
+
+\begin{center}
+\noindent\fbox{%
+    \parbox{21em}{%
+
+
+\vspace{3mm}
+
+\Large 
+    \Huge \hspace{7mm}$  \operatorname{Risk} = {\color{red} \operatorname{Bias}^2} + {\color{blue} \operatorname{Variance}}$
+    
+\vspace{3mm}    
+    }%
+}
+
+
+\end{center}
+
+%----------------------------------------------------------
+\end{frame}
+%----------------------------------------------------------
+
+
+
+\section{Гистограммы}
+
+
+
+\begin{frame}[plain]\frametitle{Гистограммы} \tableofcontents[currentsection]\end{frame}
+
+
+
+%----------------------------------------------------------
+\begin{frame}[plain]\frametitle{Демонстрация ЦПТ}
+%----------------------------------------------------------
+
+
+Начнём с восстановления плотности $f(x)$. 
+
+\vspace{5mm}
+
+Какое самое важное распределение? Нормальное $\mathcal{N}(0,1)$. 
+
+\vspace{5mm}
+
+\textbf{Q:}  Где возникает $\mathcal{N}(0,1)$?
+
+
+\vspace{5mm}
+
+\pause
+
+\textbf{A:}  В ЦПТ. 
+
+
+\vspace{5mm}
+
+
+\textbf{Q-2:} Сталкивались ли Вы с устройствами для демонстраций ЦПТ?
+
+  
+  %----------------------------------------------------------
+\end{frame}
+%----------------------------------------------------------
+
+
+%----------------------------------------------------------
+\begin{frame}[plain]\frametitle{Доска Гальтона}
+%----------------------------------------------------------
+
+
+\begin{center}
+\Large {\color{blue} Доска Гальтона}. Падающие шарики реализуют плотность $\mathcal{N}(0,1)$.
+
+
+\vspace{5mm}
+
+\textbf{Q:} Можно ли  аппроксимировать столбиками произвольную плотность?
+
+\end{center}
+
+
+\begin{figure}[h!]
+\center{\includegraphics[height=0.6\textheight]{pic/Galton}}
+%\caption{\Large Таблица из главы 14 Лагутина} \label{Fig:}
+\end{figure}
+
+
+  
+  %----------------------------------------------------------
+\end{frame}
+%----------------------------------------------------------
+
+
+
+
+%----------------------------------------------------------
+\begin{frame}[plain]\frametitle{Гистограмма}
+%----------------------------------------------------------
+
+Строим {\color{blue} гистограмму}.
+
+
+
+\begin{figure}[h!]
+\center{\includegraphics[width=\textwidth]{pic/Bins}}
+%\caption{\Large Таблица из главы 14 Лагутина} \label{Fig:}
+\end{figure}
+
+    %----------------------------------------------------------
+\end{frame}
+%----------------------------------------------------------
+
+
+
+
+%----------------------------------------------------------
+\begin{frame}[plain]\frametitle{Гистограмма}
+%----------------------------------------------------------
+
+
+\begin{itemize}
+
+\item Пусть $X_1, \dots, X_n$ --- i.i.d. выборка из $[0,1]$ с плотностью $f(x)$. 
+
+\vspace{5mm}
+
+\item Разбиваем отрезок на $m \in \mathbb{N}$ ячеек: \[ B_1 = \left[0, \frac{1}{m} \right), \qquad B_2 = \left[\frac{1}{m}, \frac{2}{m} \right), \qquad \dots, \qquad B_m = \left[\frac{m-1}{m}, 1\right].\]
+
+\vspace{5mm}
+
+\item {\color{blue} Ширина} (binwidth) $\displaystyle h = \frac{1}{m}$. 
+
+\end{itemize}
+
+  %----------------------------------------------------------
+\end{frame}
+%----------------------------------------------------------
+
+
+
+%----------------------------------------------------------
+\begin{frame}[plain]\frametitle{Гистограмма}
+%----------------------------------------------------------
+
+\begin{itemize}
+
+\item Пусть в $B_j$ попадает $\nu_j$ элементов. Полагаем $\displaystyle \hat{p}_j = \frac{\nu_j}{n}$.
+
+\vspace{5mm}
+
+
+{\color{blue} Гистограмма} (оценка плотности): \[ \hat{f}_n(x) = \sum_{j=1}^n \frac{\hat{p}_j}{h} I(x\in B_j). \] 
+
+\vspace{2mm}
+
+То есть $\displaystyle f(x) =  \frac{\hat{p}_j}{h} $, если $ x \in B_j$. 
+
+\end{itemize}
+
+  %----------------------------------------------------------
+\end{frame}
+%----------------------------------------------------------
+
+
+%----------------------------------------------------------
+\begin{frame}[plain]\frametitle{Оценка плотности}
+%----------------------------------------------------------
+
+Аргументируем формулу \[ \hat{f}_n(x) = \sum_{j=1}^n \frac{\hat{p}_j}{h} I(x\in B_j). \] 
+
+\vspace{5mm}
+
+Положим $p_j = \int_{B_j} f(u) du$. 
+
+\vspace{5mm}
+
+
+\textbf{Q:} Пусть $x \in B_j$. Чему равно $\mathbb{E} \left[\hat{f}_n(x)\right]$? 
+
+\pause 
+
+\vspace{5mm}
+
+\textbf{A:} По линейности матожидания \[\mathbb{E} \left[\hat{f}_n(x)\right] =\mathbb{E}  \left[\frac{\hat{p}_j}{h}\right] = \frac{p_j}{h}. \] 
+
+
+\vspace{3mm}
+
+Если $h$ мало. то \[ \frac{p_j}{h} = \frac{\int_{B_j} f(u) du}{h} \approx \frac{f(x)h}{h} = f(x). \] 
+
+
+
+
+  %----------------------------------------------------------
+\end{frame}
+%----------------------------------------------------------
+
+
+\subsection{Выбор ширины}
+
+
+
+\begin{frame}[plain]\frametitle{Выбор ширины} \tableofcontents[currentsubsection]\end{frame}
+
+
+
+%----------------------------------------------------------
+\begin{frame}[plain]\frametitle{Оптимальная ширина}
+%----------------------------------------------------------
+
+\begin{center}
+\Large Главный вопрос --- \textit{как подобрать оптимальную ширину $h$}?
+\end{center}
+
+\begin{figure}[h!]
+\center{\includegraphics[width=0.8 \textwidth]{pic/Hist1}}
+%\caption{\Large Таблица из главы 14 Лагутина} \label{Fig:}
+\end{figure}
+
+
+
+%----------------------------------------------------------
+\end{frame}
+%----------------------------------------------------------
+
+
+
+%----------------------------------------------------------
+\begin{frame}[plain]\frametitle{Risk management}
+%----------------------------------------------------------
+
+\begin{center}
+
+\large 
+
+\textbf{Q:} Как оценить ``оптимальность'' h?
+
+\vspace{5mm}
+
+\pause
+
+\textbf{A:}  Мы минимизируем риск $R(\hat{f}_n, f)$. 
+\end{center}
+
+
+\begin{figure}[h!]
+\center{\includegraphics[width=0.8 \textwidth]{pic/Risk}}
+\caption{\large Занятие по минимизации рисков} \label{Fig:}
+\end{figure}
+
+
+
+
+%----------------------------------------------------------
+\end{frame}
+%----------------------------------------------------------
+
+
+
+%----------------------------------------------------------
+\begin{frame}[plain]\frametitle{Risk, Bias and Variance}
+%----------------------------------------------------------
+
+Оценим риск $R$. 
+
+\vspace{5mm}
+
+Разложим плотность $f(x)$ в ряд Тейлора в каждой ячейке $B_j$. 
+
+\vspace{5mm}
+
+Фиксируем $x \in B_j$. Тогда для $u \in B_j$ \[f(u) \approx f(x) + (u-x) f'(x). \] 
+
+
+\vspace{3mm}
+
+
+\pause
+
+\begin{block}{Теорема} Пусть $\int (f'(u))^2 du < \infty$. Тогда \[ R(\hat{f}_n, f) \approx \frac{h^2}{12}\int (f'(u))^2 du + \frac{1}{nh}.\] \end{block}
+
+
+
+  %----------------------------------------------------------
+\end{frame}
+%----------------------------------------------------------
+
+
+%----------------------------------------------------------
+\begin{frame}[plain]\frametitle{Опускаем технические детали}
+%----------------------------------------------------------
+
+
+Выкладки можно найти в Главе 20 
+
+\vspace{5mm}
+
+\begin{thebibliography}{10}
+    
+  \beamertemplatebookbibitems
+  \bibitem{Wasserman} Wasserman L. 
+  \newblock{\em All of Statistics}.
+  \end{thebibliography}
+  
+  \vspace{5mm}
+  
+Мы опускаем подобную технику, т.к. это страница простеньких разложений в ряд Тейлора. 
+
+  \vspace{5mm}
+  
+  Можно полюбоваться на эту страницу на следующем слайде.
+  
+  \vspace{5mm}
+  
+  Хотя лучше её \textbf{пропустить}  $\smiley{}$.
+
+  
+  %----------------------------------------------------------
+\end{frame}
+%----------------------------------------------------------
+
+
+%----------------------------------------------------------
+\begin{frame}[plain]\frametitle{Вассерман. Глава 20}
+%----------------------------------------------------------
+
+
+\begin{figure}[h!]
+\center{\includegraphics[height=0.9\textheight]{pic/W1}}
+%\caption{\Large Таблица из главы 14 Лагутина} \label{Fig:}
+\end{figure}
+
+
+
+%----------------------------------------------------------
+\end{frame}
+%----------------------------------------------------------
+
+
+
+%----------------------------------------------------------
+\begin{frame}[plain]\frametitle{Риск}
+%----------------------------------------------------------
+
+
+
+\vspace{3mm}
+
+Итак, риск имеет вид \begin{figure}[h!]
+\center{\includegraphics[width=0.5\textwidth]{pic/RBV1}}
+%\caption{\Large Таблица из главы 14 Лагутина} \label{Fig:}
+\end{figure}
+
+
+\vspace{3mm}
+
+\textbf{Q:} При каком $h$ указанный риск минимален?
+
+ %----------------------------------------------------------
+\end{frame}
+%----------------------------------------------------------
+
+
+
+%----------------------------------------------------------
+\begin{frame}[plain]\frametitle{Оптимальная ширина в теории}
+%----------------------------------------------------------
+
+
+\vspace{5mm}
+
+\textbf{A:} Оптимальная ширина \[ h^* = \frac{1}{n^{1/3}} \left( \frac{6}{\int (f'(u))^2du}\right) ^{1/3} \sim {\color{red} \frac{1}{n^{1/3}}}.\] 
+
+\vspace{5mm}
+
+При такой ширине \[{\color{red} R(\hat{f}_n, f) \approx \frac{C}{n^{2/3}}. }\]  
+
+
+\vspace{5mm}
+
+
+\textbf{Q:} Можем ли мы \textit{на практике} вычислить $h^*$?  
+
+\pause
+
+\vspace{5mm}
+
+\textbf{A:} Нет, мы не знаем $f'(x)$. 
+
+
+
+
+%----------------------------------------------------------
+\end{frame}
+%----------------------------------------------------------
+
+
+
+
+
+
+
+%----------------------------------------------------------
+\begin{frame}[plain]\frametitle{CV}
+%----------------------------------------------------------
+
+
+\begin{center}
+\Large \textbf{Q:} Что же делать? В ML как находятся гиперпараметры?
+\end{center}
+
+\pause 
+
+\vspace{5mm}
+
+\begin{figure}[h!]
+\center{\includegraphics[width=0.8\textwidth]{pic/LOO}}
+%\caption{\Large Все ли ядра --- чистый изумруд?} \label{Fig:}
+\end{figure}
+
+%----------------------------------------------------------
+\end{frame}
+%----------------------------------------------------------
+
+
+
+%----------------------------------------------------------
+\begin{frame}[plain]\frametitle{Опускаем технические детали}
+%----------------------------------------------------------
+
+Без доказательства приведём следующие факты из  Главы 20 
+
+\vspace{5mm}
+
+\begin{thebibliography}{10}
+    
+  \beamertemplatebookbibitems
+  \bibitem{Wasserman} Wasserman L. 
+  \newblock{\em All of Statistics}.
+  \end{thebibliography}
+  
+  
+  %----------------------------------------------------------
+\end{frame}
+%----------------------------------------------------------
+
+
+%----------------------------------------------------------
+\begin{frame}[plain]\frametitle{Запутываем}
+%----------------------------------------------------------
+
+\textbf{{\color{red} Изменим лосс}}: раскроем скобки и отбросим последнее слагаемое-константу.
+
+   \begin{align*} L(\hat{f}_n, f) &= \int ( \hat{f}_n(x) - f(x))^2 dx = \\ &=\underbrace{\int ( \hat{f}_n(x))^2dx - 2\int \hat{f}_n(x)f(x)dx}_{J(h)} + {\color{red} \int ( f(x))^2dx} \end{align*}
+  
+  \vspace{5mm}
+  
+Теперь \textbf{риском} будем называть \[ R(h) = \mathbb{E} \left[J(h)\right]. \]
+  
+  
+  %----------------------------------------------------------
+\end{frame}
+%----------------------------------------------------------
+
+
+%----------------------------------------------------------
+\begin{frame}[plain]\frametitle{Кросс-валидационная оценка риска}
+%----------------------------------------------------------
+
+\textbf{На практике}:
+
+\vspace{5mm}
+
+\begin{enumerate}
+
+
+\item Лосс $J(h)$ оценивается через  {\color{blue} кросс-валидационную оценку риска} \[ \hat{J}(h) = \int ( \hat{f}_n(x))^2dx - \frac{2}{n} \sum_{i=1}^n \hat{f}_{-i}(X_i),\]  где $\hat{f}_{-i}$ --- гистограммная оценка с опущенным $i$-тым наблюдением. 
+
+
+\vspace{5mm}	
+
+\pause
+
+\item Важно --- есть {\color{red} удобная формула для вычислений} \[ \hat{J}(h) = \frac{2}{(n-1)h} - \frac{n+1}{n-1} \sum_{j=1}^m \hat{p}_j^2.\]
+
+\end{enumerate}
+
+
+  
+  
+  %----------------------------------------------------------
+\end{frame}
+%----------------------------------------------------------
+
+
+%----------------------------------------------------------
+\begin{frame}[plain]\frametitle{Перерыв}
+%----------------------------------------------------------
+
+
+\begin{center}
+\Huge Перерыв
+\end{center}
+%----------------------------------------------------------
+\end{frame}
+%----------------------------------------------------------
+
+
+
+\subsection{Доверительные интервалы}
+
+
+
+\begin{frame}[plain]\frametitle{Доверительные интервалы} \tableofcontents[currentsubsection]\end{frame}
+
+
+%----------------------------------------------------------
+\begin{frame}[plain]\frametitle{Доверительные полосы}
+%----------------------------------------------------------
+
+\begin{center}
+Также можно построить {\color{blue} доверительные полосы} 
+\end{center}
+
+  
+\begin{figure}[h!]
+\center{\includegraphics[height=0.8\textheight]{pic/Conf}}
+%\caption{\Large Все ли ядра --- чистый изумруд?} \label{Fig:}
+\end{figure}
+  
+  %----------------------------------------------------------
+\end{frame}
+%----------------------------------------------------------
+
+
+%----------------------------------------------------------
+\begin{frame}[plain]\frametitle{Нужно усреднить}
+%----------------------------------------------------------
+
+
+  
+\begin{figure}[h!]
+\center{\includegraphics[width=\textwidth]{pic/Conf2}}
+%\caption{\Large Все ли ядра --- чистый изумруд?} \label{Fig:}
+\end{figure}
+  %----------------------------------------------------------
+\end{frame}
+%----------------------------------------------------------
+
+
+%----------------------------------------------------------
+\begin{frame}[plain]\frametitle{Нужно усреднить}
+%----------------------------------------------------------
+
+\begin{itemize}
+
+\item ``Гистограммная'' версия функции $f(x)$: \[ \bar{f}_n(x) = \frac{p_j}{h}, \qquad p_j = \int_{B_j} f(u)du, \qquad \text{ для любого } x \in B_j.\] 
+
+\vspace{3mm}
+
+\item Пара функций $(\ell_n(x), u_n(x))$ --- это $1-\alpha$ {\color{blue} доверительная полоса}, если \[ \mathbb{P} \left( \ell_n(x) \leq \bar{f}(x) \leq u_n(x), \quad \text{ для всех }  x\right)  \geq 1-\alpha.\]
+
+\end{itemize}
+
+
+
+  %----------------------------------------------------------
+\end{frame}
+%----------------------------------------------------------
+
+%----------------------------------------------------------
+\begin{frame}[plain]\frametitle{Доверительные полосы}
+%----------------------------------------------------------
+
+Для справки приведём ответ из 
+
+\vspace{5mm}
+
+\begin{thebibliography}{10}
+    
+  \beamertemplatebookbibitems
+  \bibitem{Wasserman} Wasserman L. 
+  \newblock{\em All of Statistics}.
+  \end{thebibliography}
+  
+
+  %----------------------------------------------------------
+\end{frame}
+%----------------------------------------------------------
+
+%----------------------------------------------------------
+\begin{frame}[plain]\frametitle{Доверительные полосы}
+%----------------------------------------------------------
+
+\begin{block}{Теорема}
+Пусть $m =m(n)$ --- количество бинов. Условия на ширину: \[ m(n)\to 0, \qquad \frac{m(n) \log n}{n} \to 0 \quad \text{ при } n \to \infty\]
+Тогда {\color{blue} $1-\alpha$ доверительная полоса}: \[ \ell_n(x) = \left( \max\left\{ \sqrt{\hat{f}_n(x)} -c, 0 \right\} \right)^2, \qquad  u_n(x) = \left( \sqrt{\hat{f}_n(x)} +c \right)^2,\] где \[ c = \frac{z_{\alpha/2m}}{2} \sqrt{\frac{m}{n}}.\]
+
+
+\end{block}
+
+
+
+
+  %----------------------------------------------------------
+\end{frame}
+%----------------------------------------------------------
+
+
+%----------------------------------------------------------
+\begin{frame}[plain]\frametitle{Нужно смириться}
+%----------------------------------------------------------
+
+
+\begin{center}
+\large \textbf{Q:} Нас не смущает, что оценка для $\bar{f}(x)$ --- ``гистограммной'' версии $f(x)$?
+
+\pause 
+
+\vspace{5mm}
+
+\large \textbf{A:} Нет, от ошибки в аппроксимации $f(x) - \bar{f}(x)$ избавиться нельзя.
+\end{center}
+
+
+
+
+\begin{figure}[h!]
+\center{\includegraphics[width=0.8\textwidth]{pic/Deal}}
+\caption{\Large С этим нужно смириться} \label{Fig:}
+\end{figure}
+
+%----------------------------------------------------------
+\end{frame}
+%----------------------------------------------------------
+
+
+
+\section{Ядерное сглаживание}
+
+\begin{frame}[plain]\frametitle{Ядерное сглаживание} \tableofcontents[currentsection]\end{frame}
+
+%----------------------------------------------------------
+\begin{frame}[plain]\frametitle{Всё должно быть гладко}
+%----------------------------------------------------------
+
+
+\begin{center}
+
+\Large Наши  оценки плотности --- негладкие! Исправим это. 
+
+\vspace{5mm}
+
+ Аппроксимируем дельта-функции локальными ``шапочками''.
+
+\end{center}
+
+
+\begin{figure}[h!]
+\center{\includegraphics[width=\textwidth]{pic/Smooth}}
+%\caption{\Large Таблица из главы 14 Лагутина} \label{Fig:}
+\end{figure}
+
+
+
+%----------------------------------------------------------
+\end{frame}
+%----------------------------------------------------------
+
+
+
+
+
+
+%----------------------------------------------------------
+\begin{frame}[plain]\frametitle{Ядро}
+%----------------------------------------------------------
+
+{\color{blue} Ядром} $K(x)$ мы будем называть симметричную функцию плотности 
+
+\[ K(x) \geq 0, \qquad \int K(x) dx = 1, \qquad K(x) = K(-x).\]
+
+
+
+
+
+
+
+%----------------------------------------------------------
+\end{frame}
+%----------------------------------------------------------
+
+
+
+
+
+%----------------------------------------------------------
+\begin{frame}[plain]\frametitle{Ядро}
+%----------------------------------------------------------
+
+
+\begin{center}
+\Large Есть много разных ядер. Запоминать их не нужно. 
+\end{center}
+
+
+\begin{figure}[h!]
+\center{\includegraphics[width=0.7\textwidth]{pic/Kernel0}}
+%\caption{\Large Таблица из главы 14 Лагутина} \label{Fig:}
+\end{figure}
+
+
+
+
+%----------------------------------------------------------
+\end{frame}
+%----------------------------------------------------------
+
+
+
+%----------------------------------------------------------
+\begin{frame}[plain]\frametitle{Ядерная оценка плотности}
+%----------------------------------------------------------
+
+
+\begin{figure}[h!]
+\center{\includegraphics[height=0.5\textheight]{pic/KernelEst}}
+%\caption{\Large Таблица из главы 14 Лагутина} \label{Fig:}
+\end{figure}
+
+
+Пусть $X_1, \dots, X_n$ --- наблюдаемые данные. 
+
+
+\vspace{5mm}
+
+
+Фиксируем \textbf{ядро} K и \textbf{ширину полосы} h. 
+
+
+\vspace{5mm}
+
+
+{\color{blue} Ядерная оценка плотности}: \[ \hat{f}(x) = \frac{1}{n h} \sum_{i=1}^n K \left( \frac{x - X_i}{h}\right). \]
+
+
+
+%----------------------------------------------------------
+\end{frame}
+%----------------------------------------------------------
+
+
+
+\subsection{Выбор ядра}
+
+\begin{frame}[plain]\frametitle{Выбор ядра} \tableofcontents[currentsubsection]\end{frame}
+
+
+
+%----------------------------------------------------------
+\begin{frame}[plain]\frametitle{Поиск лучшего ядра}
+%----------------------------------------------------------
+
+
+\begin{center}
+\Large Естественный вопрос  --- как найти ``самое лучшее ядро'' \\ (и нужно ли это делать)?
+\end{center}
+
+
+\begin{figure}[h!]
+\center{\includegraphics[width=0.6\textwidth]{pic/Squi}}
+\caption{\Large Все ли ядра --- чистый изумруд?} \label{Fig:}
+\end{figure}
+
+
+
+  
+  
+  %----------------------------------------------------------
+\end{frame}
+%----------------------------------------------------------
+
+
+
+
+
+%----------------------------------------------------------
+\begin{frame}[plain]\frametitle{Оптимальность ядра Епанечникова}
+%----------------------------------------------------------
+
+
+\begin{center}
+\Large В Главе 22 Лагутина объясняется,  в каком смысле \\ {\color{red} ядро Епанечникова} является \textit{``оптимальным''}. 
+\end{center}
+
+\begin{thebibliography}{10}
+
+  
+    \vspace{3mm}
+     \beamertemplatebookbibitems
+  \bibitem{Lagutin}  М.\,Б.~Лагутин, 
+    \newblock {\em Наглядная математическая статистика}.
+    
+    
+
+  \end{thebibliography}
+  
+  \vspace{3mm}
+  
+\begin{center}
+\Large Это теоретический результат, не особо важный на практике.
+\end{center}
+
+
+
+  
+  
+  %----------------------------------------------------------
+\end{frame}
+%----------------------------------------------------------
+
+
+%----------------------------------------------------------
+\begin{frame}[plain]\frametitle{Все ядра схожи}
+%----------------------------------------------------------
+
+
+\begin{center}
+\Large В правом столбце таблицы --- эффективность ядер \\ по отношению к оптимальному ядру Епанечникова.
+\end{center}
+
+
+\begin{figure}[h!]
+\center{\includegraphics[width=\textwidth]{pic/OptEpan}}
+\caption{\Large Таблица из главы 22 Лагутина} \label{Fig:}
+\end{figure}
+
+  
+  %----------------------------------------------------------
+\end{frame}
+%----------------------------------------------------------
+
+%----------------------------------------------------------
+\begin{frame}[plain]\frametitle{Важна ширина ядра, а не его тип}
+%----------------------------------------------------------
+
+
+\begin{center}
+\Huge ``Народная мудрость'': 
+\end{center}
+
+\vspace{-2mm}
+
+
+\begin{figure}[h!]
+\center{\includegraphics[width=0.75\textwidth]{pic/YesNo}}
+%\caption{\Large Таблица из главы 14 Лагутина} \label{Fig:}
+\end{figure}
+
+  
+  %----------------------------------------------------------
+\end{frame}
+%----------------------------------------------------------
+
+
+
+
+%----------------------------------------------------------
+\begin{frame}[plain]\frametitle{Утверждения аналогичны}
+%----------------------------------------------------------
+
+
+Для ядерных оценок есть результаты, похожие на случай гистограмм.
+
+
+\vspace{5mm}
+
+Подробнее --- Глава 20
+
+
+\vspace{5mm}
+
+\begin{thebibliography}{10}
+
+     
+    
+  \beamertemplatebookbibitems
+  \bibitem{Wasserman} Wasserman L. 
+  \newblock{\em All of Statistics}.
+
+
+
+  \end{thebibliography}
+  
+  
+  \vspace{5mm}
+  
+  или Глава 22
+  
+  \vspace{5mm}
+
+  \begin{thebibliography}{10}
+
+
+     \beamertemplatebookbibitems
+  \bibitem{Lagutin}  М.\,Б.~Лагутин, 
+    \newblock {\em Наглядная математическая статистика}.
+    
+    
+
+  \end{thebibliography}
+  
+  
+  %----------------------------------------------------------
+\end{frame}
+%----------------------------------------------------------
+
+
+%----------------------------------------------------------
+\begin{frame}[plain]\frametitle{Теорема Колмогорова}
+%----------------------------------------------------------
+
+
+\begin{itemize}
+
+\item Оптимальная ширина окна порядка $\displaystyle \frac{1}{n^{1/5}}$. Риск \[R(f, \hat{f}_n) \approx  {\color{red}\frac{C}{n^{4/5}}}.\]  
+
+
+\pause
+
+\vspace{5mm}
+
+\item По {\color{blue} теореме Колмогорова} (для непр. $F(x)$)
+
+\[{\displaystyle {\sqrt {n}}\sup \limits _{x\in \mathbb {R} }\left|\hat{F}_{n}(x)-F(x)\right| \xrightarrow {d} K} \]
+
+ скорость сходимости эмпирической функции распределения порядка $\displaystyle {\color{red} \frac{1}{n}}$. 
+
+\vspace{5mm}
+
+\item \textbf{Q:} Почему ядерная оценка медленнее сходится?
+
+
+\pause
+
+\vspace{5mm}
+
+\textbf{A:} Она ``видит'' не все точки. (Зато гладкая. $\smiley{}$)
+
+
+\end{itemize}
+
+
+
+%----------------------------------------------------------
+\end{frame}
+%----------------------------------------------------------
+
+
+
+\section{Формула Надарая-Ватсона}
+
+
+
+\begin{frame}[plain]\frametitle{Формула Надарая-Ватсона} \tableofcontents[currentsection]\end{frame}
+
+
+
+%----------------------------------------------------------
+\begin{frame}[plain]\frametitle{Регрессия}
+%----------------------------------------------------------
+
+
+
+ \textbf{Регрессия}. Даны пары $(x_1, Y_1), \dots, (x_n, Y_n)$, где \[ Y_i = r(x_i) + \varepsilon_i, \qquad \text{ и } \qquad \mathbb{E} \varepsilon_i = 0.\] 
+ 
+ 
+ Мы ищем {\color{blue} регрессор} \[ r(x) = \mathbb{E} \left(Y \bigr| X=x \right)\] 
+ 
+\begin{figure}[h!]
+\center{\includegraphics[width=0.45\textwidth]{pic/OneProb}}
+%\caption{\Large Таблица из главы 14 Лагутина} \label{Fig:}
+\end{figure}
+
+ 
+%----------------------------------------------------------
+\end{frame}
+%----------------------------------------------------------
+
+
+%----------------------------------------------------------
+\begin{frame}[plain]\frametitle{Взвешенные средние}
+%----------------------------------------------------------
+
+Регрессор $r(x)$ --- функция от $Y_i$. 
+
+\vspace{5mm}
+
+\textbf{Q:} Логично, что чем $x_i$ ближе, тем вклад $Y_i$ должен быть больше?
+
+\pause
+
+\vspace{5mm}
+
+\textbf{A:} Поэтому многие оценки --- {\color{blue} взвешенные средние} \[ \sum_{i=1}^n \frac{w_i(x)}{\sum_j w_j(x)} Y_i.\] 
+
+
+ 
+ 
+%----------------------------------------------------------
+\end{frame}
+%----------------------------------------------------------
+
+
+%----------------------------------------------------------
+\begin{frame}[plain]\frametitle{Оценка Надарая--Ватсона}
+%----------------------------------------------------------
+
+\textbf{Q:} Что взять за $w_i(x)$? Мы уже сталкивались сегодня с локальными функциями?
+
+
+\vspace{5mm}
+
+\pause
+
+\textbf{A:} {\color{blue} Оценка Надарая--Ватсона} \[ \hat{r}(x) = \sum_{i=1}^n \frac{\displaystyle K\left( \frac{x-x_i}{h}\right)}{ \displaystyle  \sum_{j=1}^n K\left( \frac{x-x_i}{h}\right)} Y_i.\] 
+
+
+%----------------------------------------------------------
+\end{frame}
+%----------------------------------------------------------
+
+
+
+
+%----------------------------------------------------------
+\begin{frame}[plain]\frametitle{Оценки}
+%----------------------------------------------------------
+
+
+При должных условиях для {\color{blue} оценки Надарая-Ватсона} схожи с ядерными:
+
+\vspace{5mm}
+
+\begin{itemize}
+
+\item оптимальная ширина $\displaystyle \sim {\color{red} \frac{1}{n^{1/5}}}$.
+
+\vspace{5mm}
+
+\item риск $\displaystyle \sim {\color{red} \frac{1}{n^{4/5}}}$.
+
+\end{itemize}
+
+\vspace{5mm}
+
+\begin{thebibliography}{10}
+
+     
+    
+  \beamertemplatebookbibitems
+  \bibitem{Wasserman} Wasserman L. 
+  \newblock{\em All of Statistics}.
+
+  \vspace{3mm}
+
+     \beamertemplatebookbibitems
+  \bibitem{Lagutin}  М.\,Б.~Лагутин, 
+    \newblock {\em Наглядная математическая статистика}.
+    
+    
+
+  \end{thebibliography}
+  
+
+%----------------------------------------------------------
+\end{frame}
+%----------------------------------------------------------
+
+
+%----------------------------------------------------------
+\begin{frame}[plain]\frametitle{Итоги}
+%----------------------------------------------------------
+
+\begin{center}
+\noindent\fbox{%
+    \parbox{15em}{%
+
+
+\vspace{3mm}
+
+\Large 
+    \Huge \hspace{2mm} Подведём итоги
+    
+\vspace{3mm}    
+    }%
+}
+
+
+\end{center}
+
+
+\vspace{5mm}
+
+\begin{enumerate}
+
+\item При непараметрической регрессии главное --- подбор {\color{blue} ширины окна}.
+
+\vspace{5mm}
+
+\item При подборе ширины есть {\color{blue}Bias-Variance Tradeoff}.
+
+\vspace{5mm}
+
+\item Оценки сглаживаются при помощи ядер $K(x)$. Ширина ядра важна, тип - нет.
+
+\vspace{5mm}
+
+\item Есть формулы для доверительных интервалов. 
+
+\vspace{5mm}
+
+Нужно помнить --- они центрированы вокруг \textit{``усреднений''} $\bar{f}(x)$, а не $f(x)$!
+
+\end{enumerate}
+
+
+%----------------------------------------------------------
+\end{frame}
+%----------------------------------------------------------
+
+
+
+%----------------------------------------------------------
+\begin{frame}[plain]\frametitle{Перерыв}
+%----------------------------------------------------------
+
+
+\begin{center}
+\Huge Перерыв
+\end{center}
+%----------------------------------------------------------
+\end{frame}
+%----------------------------------------------------------
+
+
+
+\section{ML. Bias and Variance}
+
+
+
+\begin{frame}[plain]\frametitle{ML. Bias and Variance} \tableofcontents[currentsection]\end{frame}
+
+
+
+%----------------------------------------------------------
+\begin{frame}[plain]\frametitle{Смещение и дисперсия}
+%----------------------------------------------------------
+
+\begin{center}
+
+Хотим точную оценку $\hat{\theta} = \theta$. Возможны 2 проблемы:
+
+\vspace{5mm}
+
+\begin{enumerate}
+
+\item Большое {\color{blue} смещение} \[ \operatorname{Bias} = \mathbb{E}  \left[\hat{\theta}\right] - \theta. \]
+
+\vspace{5mm}
+
+\item Большая {\color{blue} дисперсия} \[ \mathbb{V} (\hat{\theta}) = \mathbb{E} \left[\hat{\theta} - \mathbb{E}\hat{\theta}\right]^2. \]
+
+\end{enumerate}
+
+\end{center}
+
+
+
+
+
+  %----------------------------------------------------------
+\end{frame}
+%----------------------------------------------------------
+
+
+
+%----------------------------------------------------------
+\begin{frame}[plain]\frametitle{Bias and Variance}
+%----------------------------------------------------------
+
+\begin{figure}[h!]
+\center{\includegraphics[width=0.8\textwidth]{pic/BiasMark}}
+%\caption{\Large Таблица из главы 14 Лагутина} \label{Fig:}
+\end{figure}
+
+
+
+
+  %----------------------------------------------------------
+\end{frame}
+%----------------------------------------------------------
+
+
+
+%----------------------------------------------------------
+\begin{frame}[plain]\frametitle{ML. Bias and Variance}
+%----------------------------------------------------------
+
+
+Bias-Variance Tradeoff повсюду в ML:
+
+\vspace{5mm}
+
+\begin{enumerate}
+
+
+\item \textbf{$L_1$ и $L_2$-регуляризация} линейных моделей.
+
+
+\vspace{2mm}
+
+Добавляется {\color{red} Bias}, уменьшается {\color{blue} Variance}. (Лекция 2)
+
+
+\vspace{5mm}
+
+
+\item \textbf{Feature selection}. 
+
+\vspace{2mm}
+
+Больше признаков уменьшает {\color{red} Bias} и увеличивает {\color{blue} Variance}. (Лекция 5)
+
+\pause
+
+\vspace{5mm}
+
+%\item \textbf{Dimension Reduction} упрощает модели и уменьшает {\color{blue} Variance}.
+
+\item \textbf{Метод k-ближайших соседей}. 
+
+\vspace{2mm}
+
+Большее $k$ увеличивает {\color{red} Bias}  и уменьшает {\color{blue} Variance}. (Далее)
+
+
+\vspace{5mm}
+
+\item \textbf{Решающие деревья}. 
+
+\vspace{2mm}
+
+Чем больше глубина дерева, тем больше {\color{blue} Variance}.  (Далее)
+
+\end{enumerate}
+
+
+  
+  %----------------------------------------------------------
+\end{frame}
+%----------------------------------------------------------
+
+
+%----------------------------------------------------------
+\begin{frame}[plain]\frametitle{KNN}
+%----------------------------------------------------------
+
+
+\begin{center}
+\large {\color{blue} Метод k-ближайших соседей} (KNN). 
+
+\vspace{5mm}
+
+\textbf{Классификация}: метка элемента --- самая частая у $k$ ближайших соседей.
+
+\vspace{5mm}
+
+\textbf{Регрессия}: предсказание --- среднее значение по $k$ ближайшим объектам.
+\end{center}
+
+
+\begin{figure}[h!]
+\center{\includegraphics[width=0.5\textwidth]{pic/KNN}}
+%\caption{\Large Таблица из главы 14 Лагутина} \label{Fig:}
+\end{figure}
+
+
+
+  %----------------------------------------------------------
+\end{frame}
+%----------------------------------------------------------
+
+
+%----------------------------------------------------------
+\begin{frame}[plain]\frametitle{KNN}
+%----------------------------------------------------------
+
+Для KNN-регрессии можно написать точную формулу Bias-Variance Tradeoff:
+
+\begin{figure}[h!]
+\center{\includegraphics[width=0.8\textwidth]{pic/KNNBV}}
+%\caption{\Large Таблица из главы 14 Лагутина} \label{Fig:}
+\end{figure}
+\vspace{5mm}
+
+\begin{thebibliography}{10}
+
+    
+  \beamertemplatebookbibitems
+  \bibitem{Wasserman} T.~Hastie; R.~Tibshirani; J.\,H.~Friedman, 
+  \newblock{\em The Elements of Statistical Learning}.
+\end{thebibliography}
+
+
+
+%----------------------------------------------------------
+\end{frame}
+%----------------------------------------------------------
+
+%----------------------------------------------------------
+\begin{frame}[plain]\frametitle{Decision Tree}
+%----------------------------------------------------------
+
+
+\begin{center}
+\Large {\color{blue} Решающее дерево} (Decision Tree). 
+
+\vspace{5mm}
+
+Известная схема принятия решений $\smiley{}$.
+
+\end{center}
+
+
+\begin{figure}[h!]
+\center{\includegraphics[width=0.8\textwidth]{pic/DecisionTree}}
+%\caption{\Large Таблица из главы 14 Лагутина} \label{Fig:}
+\end{figure}
+
+
+
+  %----------------------------------------------------------
+\end{frame}
+%----------------------------------------------------------
+
+
+%----------------------------------------------------------
+\begin{frame}[plain]\frametitle{Decision Tree}
+%----------------------------------------------------------
+
+
+\textbf{Q:} Что будет, если натравить О-О-ОЧЕНЬ большое дерево на датасет?
+
+\pause
+
+\vspace{5mm}
+
+Модель выучит каждое событие (каждому элементу --- по листу). 
+
+\vspace{5mm}
+
+
+Если теперь чуть-чуть поменять данные --- ответ резко изменится. 
+
+\vspace{5mm}
+
+
+Поэтому у глубоких деревьев больший {\color{blue} Variance}.
+
+
+
+
+
+
+  %----------------------------------------------------------
+\end{frame}
+%----------------------------------------------------------
+
+
+
+%----------------------------------------------------------
+\begin{frame}[plain]\frametitle{Нужно смириться}
+%----------------------------------------------------------
+
+\begin{center}
+\Huge Не всё коту Масленица.
+\end{center}
+
+
+\begin{figure}[h!]
+\center{\includegraphics[width=0.45\textwidth]{pic/Cat}}
+%\caption{\Large Таблица из главы 14 Лагутина} \label{Fig:}
+\end{figure}
+
+
+\pause
+
+\vspace{3mm}
+
+\begin{center}
+{\color{red} \Huge Или нет?}
+\end{center}
+
+  
+  %----------------------------------------------------------
+\end{frame}
+%----------------------------------------------------------
+
+
+
+
+
+\subsection{Bagging}
+
+\begin{frame}[plain]\frametitle{ Bagging} \tableofcontents[currentsubsection]\end{frame}
+
+
+
+%----------------------------------------------------------
+\begin{frame}[plain]\frametitle{Демократия нам поможет}
+%----------------------------------------------------------
+
+
+\begin{center}
+\Large Доверимся демократии! 
+
+\vspace{5mm}
+
+Парламентаризм --- решение принимается {\color{blue} большинством голосов}.
+\end{center}
+
+\begin{figure}[h!]
+\center{\includegraphics[width=0.8\textwidth]{pic/Democracy}}
+%\caption{\Large Таблица из главы 14 Лагутина} \label{Fig:}
+\end{figure}
+
+
+  
+  %----------------------------------------------------------
+\end{frame}
+%----------------------------------------------------------
+
+
+%----------------------------------------------------------
+\begin{frame}[plain]\frametitle{Нужно смириться}
+%----------------------------------------------------------
+
+
+\begin{center}
+\Large Как учит нас математика, {\color{blue} лес} --- это набор {\color{blue} деревьев.}
+
+\vspace{5mm}
+
+\textbf{Q:} Что эффективней?
+\end{center}
+
+\begin{figure}[h!]
+\center{\includegraphics[width=\textwidth]{pic/Forest}}
+%\caption{\Large Таблица из главы 14 Лагутина} \label{Fig:}
+\end{figure}
+
+
+  
+  %----------------------------------------------------------
+\end{frame}
+%----------------------------------------------------------
+
+%----------------------------------------------------------
+\begin{frame}[plain]\frametitle{Преимущество демократии}
+%----------------------------------------------------------
+
+\begin{figure}[h!]
+\center{\includegraphics[width=\textwidth]{pic/FTBetter}}
+%\caption{\Large Таблица из главы 14 Лагутина} \label{Fig:}
+\end{figure}
+
+
+\vspace{5mm}
+
+\begin{center}
+
+\Large \textbf{Q:} А почему мы усредняем ответы именно деревьев?
+  
+\end{center}  
+  
+  %----------------------------------------------------------
+\end{frame}
+%----------------------------------------------------------
+
+%----------------------------------------------------------
+\begin{frame}[plain]\frametitle{Bagging}
+%----------------------------------------------------------
+
+\begin{figure}[h!]
+\center{\includegraphics[width=\textwidth]{pic/Bag0}}
+%\caption{\Large Таблица из главы 14 Лагутина} \label{Fig:}
+\end{figure}
+
+
+%----------------------------------------------------------
+\end{frame}
+%----------------------------------------------------------
+
+
+
+%----------------------------------------------------------
+\begin{frame}[plain]\frametitle{Бэггинг. Дисперсия}
+%----------------------------------------------------------
+
+\textbf{Q:} Что происходит с дисперсией при бэггинге?
+
+\vspace{5mm}
+
+Простое соображение: пусть $X_1, \dots, X_n$ --- i.i.d. выборка. Чему равны \[\mathbb{E} \left( \frac{X_1 + \dots  X_n}{n} \right) = ? \qquad \mathbb{V} \left( \frac{X_1 + \dots X_n}{n} \right) =? \] 
+
+\pause
+
+\vspace{3mm}
+
+Матожидание усредняется, а \textbf{дисперсия уменьшается} \[\mathbb{E} \left( \frac{X_1 + \dots  X_n}{n} \right) = \mathbb{E} X_1, \qquad \mathbb{V} \left( \frac{X_1 + \dots  X_n}{n} \right) =  \frac{1}{n} \mathbb{V} X_1.\] 
+
+
+  %----------------------------------------------------------
+\end{frame}
+%----------------------------------------------------------
+
+
+%----------------------------------------------------------
+\begin{frame}[plain]\frametitle{Bagging decreases Variance}
+%----------------------------------------------------------
+
+\begin{center}
+\noindent\fbox{%
+    \parbox{30em}{%
+
+
+\vspace{3mm}
+
+    \Large \hspace{7mm} \textbf{Bagging} --- способ уменьшить {\color{blue} дисперсию} 
+    
+    \vspace{2mm}
+    
+    \hspace{27mm}  для ``сильных'' моделей (Low {\color{red} Bias}).
+    
+\vspace{3mm}    
+    }%
+}
+
+
+\end{center}
+
+\vspace{5mm}
+
+
+\begin{thebibliography}{10}    
+  \beamertemplatebookbibitems
+  \bibitem{Wasserman} T.~Hastie; R.~Tibshirani; J.\,H.~Friedman, 
+  \newblock{\em The Elements of Statistical Learning}.
+\end{thebibliography}
+
+\vspace{5mm}
+
+\textit{Замечание}. Способ уменьшить дисперсию для ``слабых'' моделей --- \textbf{бустинг}\footnote{Нейронки и градиентный бустинг --- сейчас самые эффективные модели.}.
+
+  
+  %----------------------------------------------------------
+\end{frame}
+%----------------------------------------------------------
+
+
+
+
+
+
+%----------------------------------------------------------
+\begin{frame}[plain]\frametitle{Мораль}
+%----------------------------------------------------------
+
+\begin{center}
+
+\Large Не недооценивайте силу демократии $\smiley{}$.
+
+
+\vspace{2mm}
+
+\Large {\color{red} И никогда не сдавайтесь!}
+
+\end{center}
+
+
+\begin{figure}[h!]
+\center{\includegraphics[height=0.75\textheight]{pic/GiveUp}}
+%\caption{\Large Таблица из главы 14 Лагутина} \label{Fig:}
+\end{figure}
+
+
+%----------------------------------------------------------
+\end{frame}
+%----------------------------------------------------------
+
+
+
+
+\end{document}
+

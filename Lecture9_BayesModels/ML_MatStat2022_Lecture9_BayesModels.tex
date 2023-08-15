@@ -1,0 +1,1637 @@
+\documentclass[9pt]{beamer}
+
+
+
+
+\usepackage{beamerthemesplit}
+\usetheme{Boadilla}
+\usecolortheme{orchid}
+
+
+
+
+
+ % \usepackage[cp866]{inputenc}                %%% Є®¤Ёа®ўЄ  DOS
+  \usepackage[cp1251]{inputenc}
+%  \usepackage[T2A]{fontenc}                %%% ???
+%\usepackage[english,russian]{babel}
+%\usepackage[russian]{babel}
+ \usepackage[OT1]{fontenc}
+%\usepackage[english]{babel}
+\usepackage[russian]{babel}
+
+\usepackage{amssymb,latexsym, amsmath, mathdots}
+
+\usepackage{amscd}
+\usepackage{multirow}
+\usepackage{comment}
+
+\usepackage{epstopdf}
+
+
+
+%\usepackage[table]{xcolor} %colored cells
+
+%\usepackage{tikz}
+%\usetikzlibrary{tikzmark} %arrows in tables
+
+
+\usepackage{mnsymbol} % udots in matrices
+
+
+ \usepackage{pgfpages}
+%\setbeameroption{show notes}
+%\setbeameroption{show notes on second screen=bottom}
+%% \setbeameroption{show notes on second screen}
+
+%\setbeamercolor{alerted text}{fg=red!80!black}
+
+
+% \setbeamercolor{alerted text}{fg=blue!50!green}
+% \setbeamercolor{fortheorem}{bg=blue!15!white}
+% \setbeamercolor{EMPF}{bg=blue!25!white}
+% \setbeamercolor{EMPF2}{bg=blue!35!white}
+
+%\setbeamersize{text margin left=5.mm, text margin right=5.mm}
+
+
+%---------------------------------------------------------------------------------------------------------------------------
+
+%\def\emphbox#1#2#3{\begin{beamercolorbox}[wd=#2, ht=#1, center, colsep=1.mm]{EMPF} #3 \end{beamercolorbox}}
+
+%---------------------------------------------------------------------------------------------------------------------------
+
+
+%\advance\leftskip-5.mm
+
+
+
+%***************************************************************************************************************************
+
+\theoremstyle{theorem}
+\newtheorem{mytheorem}[theorem]{Теорема}
+\newtheorem{mylemma}[theorem]{Лемма}
+\newtheorem{mycorollary}[theorem]{Следствие}
+
+\newtheorem{proposition}[theorem]{Предложение}
+\newtheorem{assertion}[theorem]{Утверждение}
+\newtheorem{remark}[theorem]{Замечание}
+\newtheorem{assumption}[theorem]{Предположение}
+
+\newtheorem{convention}[theorem]{Договорённость}
+\newtheorem{question}[theorem]{Вопрос}
+%\newtheorem{mydefinition}{mydefinition}
+
+\theoremstyle{definition}
+\newtheorem{mydefinition}[theorem]{Определение}
+\newtheorem{myexample}[theorem]{Пример}
+
+
+
+%***************************************************************************************************************************
+
+\chardef\No=194
+\newcommand{\bd}{{\rm bd}}
+\newcommand{\cl}{{\rm cl}}
+\newcommand{\ind}{{\rm ind}}
+\newcommand{\id}{{\rm id}}
+\newcommand{\inj}{{\sl in}}
+\newcommand{\pr}{{\rm pr}}
+\newcommand{\st}{{\rm St}}
+
+
+\DeclareMathOperator{\sgrad}{sgrad}
+
+\DeclareMathOperator{\cnt}{const}
+
+\DeclareMathOperator{\Aut}{Aut}
+
+
+\DeclareMathOperator{\sgn}{sgn}
+
+\DeclareMathOperator{\Int}{Int}
+
+
+\DeclareMathOperator{\tr}{tr}
+
+\DeclareMathOperator{\Mat}{Mat}
+
+
+
+
+
+
+
+%****************************************************************************
+\newcommand{\Ker}{\mathrm{Ker}\,\,}
+\newcommand{\Ann}{\mathrm{Ann}\,\,}
+
+\newcommand{\Imm}{\mathrm{Im}\,\,}
+
+\newcommand{\rk}{\mathrm{rk}\,\,}
+
+\newcommand{\const}{\mathrm{const}}
+
+
+
+\DeclareMathOperator{\Pen}{\mathcal{P}}
+
+
+\DeclareMathOperator{\Core}{K}
+
+
+\DeclareMathOperator{\BLG}{\operatorname{BLG}}
+
+\DeclareMathOperator{\AutBP}{\operatorname{Aut}(V, \mathcal{P})}
+
+
+\def\minus{\hbox{-}}   %Sign of minus in big matrices
+
+\usepackage{multirow}  %Columns spanning multiple rows
+
+\usepackage[normalem]{ulem} %underline that can break lines
+
+%\usepackage[normalem]{ulem}
+
+%****************************************************************************
+
+
+
+\title% [] (optional, only for long titles)
+{Прикладная статистика в машинном обучении \\ Лекция 9 \\ Байесовский взгляд на подбор моделей}
+%\subtitle{}
+\author [И. \,К.~Козлов] %(optional, for multiple authors)
+{И. \,К.~Козлов \\ {\footnotesize(\textit{Мехмат МГУ})}}
+
+
+\date % [](optional)
+{2022}
+%\subject{Mathematics}
+
+
+
+
+
+
+
+
+\usepackage{hyperref}
+\hypersetup{unicode=true}
+
+
+
+\begin{document}
+
+%\includeonlyframes{}
+\frame{\titlepage}
+
+
+
+%----------------------------------------------------------
+\begin{frame}[plain]\frametitle{Эволюция}
+%----------------------------------------------------------
+
+\begin{center}
+В прошлый раз мы совершили ``эволюцию сознания'', познав {\color{blue} формулу Байеса} \[ {\displaystyle p(\theta \mid x^n)={\frac { p( x^n \mid \theta)\, p(\theta)}{\int  p( x^n \mid \theta)\,p(\theta) d\theta}}}.\]
+\end{center}
+
+\begin{figure}[h!]
+\center{\includegraphics[width=0.7\textwidth]{pic/bayesevol}}
+%\caption{Парадокс Монти Холла} \label{Fig:}
+\end{figure}
+
+%----------------------------------------------------------
+\end{frame}
+%----------------------------------------------------------
+
+
+
+
+
+
+%----------------------------------------------------------
+\begin{frame}[plain]\frametitle{Краткое содержание предыдущих серий}
+%----------------------------------------------------------
+
+\begin{center}
+\Large Вспомним --- какая на прошлом занятии была \\ главная проблема с байесовским выводом?
+\end{center}
+
+
+\vspace{5mm}
+
+
+\begin{figure}[h!]
+\center{\includegraphics[width=0.4\textwidth]{pic/Prev}}
+%\caption{Парадокс Монти Холла} \label{Fig:}
+\end{figure}
+
+%----------------------------------------------------------
+\end{frame}
+%----------------------------------------------------------
+
+
+
+%----------------------------------------------------------
+\begin{frame}[plain]\frametitle{Сопряжённые распределения}
+%----------------------------------------------------------
+
+
+\begin{itemize}
+
+\item {\color{red} Проблема}. Может не считаться знаменатель в теореме Байеса \[ \int  p( x^n \mid \theta)\,p(\theta) d\theta.\]
+
+\vspace{2mm}
+
+\pause
+
+\item {\color{blue} Решение}. Рассматривать {\color{blue} сопряжённые} семейства распределений:
+
+
+\vspace{3mm}
+
+
+\begin{itemize}
+
+\item Априорное $p(\theta)$ --- из $\mathcal{A}$,
+
+\vspace{3mm}
+
+\item Функция правдоподобия $p(x^n \mid \theta)$--- из $\mathcal{B}$.
+
+\vspace{3mm}
+
+\item Апостериорное $p(\theta \mid x^n)$  --- тоже из $\mathcal{A}$.
+
+\end{itemize}
+
+
+\pause
+
+\vspace{4mm}
+
+\item \textbf{Вопрос:} Есть ли большое семейство распределений, для которого известно сопряжённое семейство, и легко производить байесовский вывод?
+
+
+\end{itemize}
+
+%----------------------------------------------------------
+\end{frame}
+%----------------------------------------------------------
+
+
+
+\section{Экспоненциальное семейство распределений}
+
+
+
+\begin{frame}[plain]\frametitle{Экспоненциальное семейство распределений} \tableofcontents[currentsection]\end{frame}
+
+
+
+%----------------------------------------------------------
+\begin{frame}[plain]\frametitle{Экспоненциальный класс}
+%----------------------------------------------------------
+
+
+\begin{center}
+\noindent\fbox{%
+    \parbox{17em}{%
+
+
+\vspace{3mm}
+
+
+
+    \Large \textbf{\hspace{3mm}\color{blue} Экспоненциальный класс}
+    
+\vspace{3mm}    
+    }%
+}
+
+\vspace{5mm}
+
+
+\end{center}
+
+
+
+Семейство распределений, чья плотность может быть представлена в виде: \[ f(x | \theta)  = \frac{h(x) }{g(\theta)} \operatorname{exp} \left( \theta^T u(x) \right), \] 
+
+\pause
+
+\begin{itemize}
+
+\item $h(x) \geq 0$, 
+
+\vspace{5mm}
+
+\item $ \theta^T u(x)$ означает $\theta_1 u_1(x) + \dots + \theta_k u_k(x)$,
+
+\vspace{5mm}
+
+\item Чтобы интеграл от плотности равнялся единице: \[ g(\theta) = \int h(x)  \operatorname{exp} \left( \theta^T u(x) \right) dx. \]  
+
+\end{itemize}
+
+
+
+%----------------------------------------------------------
+\end{frame}
+%----------------------------------------------------------
+
+
+
+
+%----------------------------------------------------------
+\begin{frame}[plain]\frametitle{Экспоненциальный класс}
+%----------------------------------------------------------
+  
+  
+\begin{figure}[h!]
+\center{\includegraphics[width=\textwidth]{pic/Exp}}
+%\caption{} \label{Fig:}
+\end{figure}
+
+
+%----------------------------------------------------------
+\end{frame}
+%----------------------------------------------------------
+
+
+%----------------------------------------------------------
+\begin{frame}[plain]\frametitle{Сопряжённые семейства}
+%----------------------------------------------------------
+
+
+\begin{center}
+\large \textit{Для экспоненциального класса легко строятся {\color{blue} сопряжённые семейства}.}
+\end{center} 
+
+
+\vspace{5mm}
+
+Рассмотрим экспонециальный класс:  \[ f(x | {\color{red} \theta})  = \frac{h(x) }{g({\color{red} \theta})} \operatorname{exp} \left( {\color{red} \theta}^T u(x) \right), \] 
+
+
+\pause 
+
+\vspace{5mm}
+
+Посмотрим на него, как на функцию от $\theta$:   \begin{equation} \label{Eq:1} \frac{C}{g({\color{red} \theta})^{\nu}} \exp(\text{Линейно по } {\color{red} \theta}).\end{equation}
+
+\vspace{5mm}
+
+\textbf{Замечание.} Семейство вида \eqref{Eq:1} сохраняется при умножении на $ f(x | {\color{red} \theta})$. Это и есть сопряжённое семейство.
+
+
+%----------------------------------------------------------
+\end{frame}
+%----------------------------------------------------------
+
+
+%----------------------------------------------------------
+\begin{frame}[plain]\frametitle{Сопряжённые семейства}
+%----------------------------------------------------------
+
+
+
+\begin{block}{}
+Для экспоненциального класса \[ f(x \mid {\color{red} \theta})  = \frac{h(x) }{g({\color{red} \theta})} \operatorname{exp} \left( {\color{red} \theta}^T u(x) \right) \] сопряжённым является семейство \[ g( {\color{red} \theta} \mid \chi, \nu) =  \frac{q(\chi, \nu)}{g({\color{red} \theta})^{\nu}}\exp({\color{red} \theta}^T \chi). \]\end{block}
+
+\pause
+
+\vspace{5mm}
+
+Находим \textbf{апостериорное распределение} --- произведение априорного на правдоподобия (т.е. на произведение вероятности выборки): \begin{align*} f(X \mid {\color{red} \theta}) g( {\color{red} \theta} \mid \chi, \nu)  = \prod_{i=1}^n f(x_i \mid {\color{red} \theta}) g( {\color{red} \theta} \mid \chi, \nu)  \propto \\ \propto \frac{1}{g({\color{red} \theta})^{\nu+n}} \exp({\color{red} \theta}^T \left[ \chi+ \sum_{i=1}^n u(x_i) \right]).\end{align*}
+
+
+%----------------------------------------------------------
+\end{frame}
+%----------------------------------------------------------
+
+
+%----------------------------------------------------------
+\begin{frame}[plain]\frametitle{Сопряжённые семейства}
+%----------------------------------------------------------
+
+\begin{center}
+\large \textit{Элементарно находится апостериорное распределение}.
+\end{center} 
+
+\begin{block}{}
+Параметры апостериорного семейства:
+\[ \nu' = \nu +n, \qquad \chi' = \chi+ \sum_{i=1}^n u(x_i) \]
+\end{block}
+
+\vspace{5mm}
+
+Да, весь байесовский вывод - в 1 строчку, пару функций сложить. 
+
+
+
+
+%----------------------------------------------------------
+\end{frame}
+%----------------------------------------------------------
+
+
+%----------------------------------------------------------
+\begin{frame}[plain]\frametitle{Сопряжённые семейства}
+%----------------------------------------------------------
+
+``Физический смысл'' параметров априорного распределения:
+
+\vspace{5mm}
+
+\begin{itemize}
+
+\item $\nu$ --- число наблюдений.
+
+\vspace{5mm}
+
+\item $\chi$ --- сумма {\color{blue} достаточных статистик} $u(x_i)$.
+
+\end{itemize}
+
+
+\vspace{5mm}
+
+Далее обсудим --- что такое достаточные статистики, и какие у них основные свойства.
+
+
+
+%----------------------------------------------------------
+\end{frame}
+%----------------------------------------------------------
+
+
+\section{Достаточные статистики}
+
+
+
+\begin{frame}[plain]\frametitle{Достаточные статистики} \tableofcontents[currentsection]\end{frame}
+
+
+%----------------------------------------------------------
+\begin{frame}[plain]\frametitle{Ужать информацию}
+%----------------------------------------------------------
+
+
+\begin{center}
+\Large Иногда хочется оставить только самое нужное,
+
+\vspace{2mm}
+
+ и ужать информацию \textit{покомпактней}.
+\end{center}
+
+\begin{figure}[h!]
+\center{\includegraphics[width=0.45\textwidth]{pic/CatBox2}}
+%\caption{} \label{Fig:}
+\end{figure}
+
+
+
+
+%----------------------------------------------------------
+\end{frame}
+%----------------------------------------------------------
+
+
+
+%----------------------------------------------------------
+\begin{frame}[plain]\frametitle{Достаточные статистики}
+%----------------------------------------------------------
+
+Пусть $X$ --- i.i.d. выборка из $F_{\theta}$.
+
+\vspace{5mm}
+
+{\color{blue} Достаточная статистика} ---  статистика ${\displaystyle T=\mathrm {T} (X)\;}$, которая содержит в себе всю информацию о параметре $\theta$, содержащуюся в выборке $X$.
+
+\vspace{5mm}
+
+Формально, ${\displaystyle T=\mathrm {T} (X)\;}$ --- достаточная статистика, если \[ {\displaystyle \mathbb {P} (X \,\, | \,\, \mathrm {T} (X)=t, \,\,\theta )=\mathbb {P} (X \,\, | \,\, \mathrm {T} (X)=t).}\]
+
+
+%----------------------------------------------------------
+\end{frame}
+%----------------------------------------------------------
+
+
+
+%----------------------------------------------------------
+\begin{frame}[plain]\frametitle{Достаточные статистики}
+%----------------------------------------------------------
+
+\textbf{Простейший пример} достаточной статистики --- вся выборка $X$.
+
+\vspace{5mm}
+
+Хочется хранить информацию покомпактней.  
+
+
+
+%----------------------------------------------------------
+\end{frame}
+%----------------------------------------------------------
+
+
+
+%----------------------------------------------------------
+\begin{frame}[plain]\frametitle{Достаточные статистики}
+%----------------------------------------------------------
+
+ \textbf{Пример-2}. Рассмотрим схему Бернулли (``монетка''). 
+
+\vspace{5mm}
+
+{\color{blue} Достаточная статистика}  $T$ --- число выпавших орлов. Если фиксировать $T=t$, то все варианты $X=x$ равновероятны. 
+
+\vspace{5mm}
+
+
+Вероятности $P(X = x \mid T=t)$ {\color{red} не зависят} от вероятности выпадения орла $\theta$.
+
+\vspace{5mm}
+
+\begin{figure}[h!]
+\center{\includegraphics[width=0.6\textwidth]{pic/2Coins}}
+%\caption{} \label{Fig:}
+\end{figure}
+
+
+%----------------------------------------------------------
+\end{frame}
+%----------------------------------------------------------
+
+
+
+%----------------------------------------------------------
+\begin{frame}[plain]\frametitle{Достаточные статистики}
+%----------------------------------------------------------
+
+
+Пусть $f(x |\theta)$ --- плотность распределения. 
+
+\vspace{5mm}
+
+Простой критерий для достаточных статистик.
+
+
+\vspace{5mm}
+
+\begin{block}{Теорема факторизации Фишера}
+$T(x)$ --- достаточная статистика $\Leftrightarrow$ существует разложение \[  f(x \,\, | \,\, \theta) =h(x)\,q(\theta, T(x)).\] \end{block}
+
+
+\vspace{5mm}
+
+Грубо говоря, \textit{всё, что в плотности зависит от $\theta$, встречается вместе с $T(x)$}.
+
+\vspace{5mm}
+
+Докажем теорему факторизации на семинаре.
+
+
+
+%----------------------------------------------------------
+\end{frame}
+%----------------------------------------------------------
+
+
+
+%----------------------------------------------------------
+\begin{frame}[plain]\frametitle{Достаточные статистики}
+%----------------------------------------------------------
+
+
+\textbf{Напрашивающийся пример}. Плотность для экспоненциального класса \[ f(x \mid {\color{red} \theta})  =h(x) \cdot \frac{1 }{g({\color{red} \theta})} \operatorname{exp} \left( {\color{red} \theta}^T u(x) \right) \] имеет требуемый вид \[  f(x \,\, | \,\, {\color{red} \theta}) =h(x) \cdot \,q({\color{red} \theta}, T(x)).\] 
+
+\vspace{5mm}
+
+Достаточная статистика $T(x) = u(x)$.
+
+
+
+%----------------------------------------------------------
+\end{frame}
+%----------------------------------------------------------
+
+
+
+%----------------------------------------------------------
+\begin{frame}[plain]\frametitle{Достаточные статистики}
+%----------------------------------------------------------
+
+У экспоненциального класса \textbf{конечное число} $k$ достаточных статистик \[ u_1(X), \quad \dots, \quad u_k(X).\]
+
+
+Оказывается, ``другого такого класса не найти'':
+
+\pause
+
+\begin{block}{} Среди гладких семейств распределений $f(x;\theta)$ с фиксированным носителем \[ \left\{ x: f(x;\theta) > 0\right\}\] \textbf{только у экспоненциальных семейств} существуют непрерывные $k$-мерные достаточные статистики.
+
+\end{block}
+
+\vspace{5mm}
+
+Подробнее --- см. Глава 10, $\S 3$, Теорема 2
+
+
+\begin{thebibliography}{10}
+
+  
+     \beamertemplatebookbibitems
+  \bibitem{Lagutin}  М.\,Б.~Лагутин, 
+    \newblock {\em Наглядная математическая статистика}.
+    
+    
+
+  \end{thebibliography}
+  
+  
+%----------------------------------------------------------
+\end{frame}
+%----------------------------------------------------------
+
+
+
+\subsection{Теорема Рао--Блэквелла--Колмогорова}
+
+
+
+\begin{frame}[plain]\frametitle{Теорема Рао--Блэквелла--Колмогорова} \tableofcontents[currentsubsection]\end{frame}
+
+
+
+%----------------------------------------------------------
+\begin{frame}[plain]\frametitle{Теорема Рао--Блэквелла--Колмогорова}
+%----------------------------------------------------------
+
+
+\begin{center}
+\textit{Достаточные статистики делают несмещённые оценки лучше}. 
+\end{center}
+
+
+\begin{itemize} 
+
+\item Пусть $T$ --- достаточная статистика;
+
+\vspace{5mm}
+
+\item $\hat{\theta}$ --- несмещённая оценка на $\theta$ и $\mathbb{V} \hat{\theta} < \infty$. 
+
+\end{itemize}
+
+\vspace{5mm}
+
+\pause
+
+\begin{block}{Теорема Рао--Блэквелла--Колмогорова}
+Оценка \[ \hat{\theta}_T = \mathbb{E} \left( \hat{\theta} \mid T\right)\]
+
+
+\begin{itemize}
+
+\item  будет  несмещённой оценкой \[ \mathbb{E} \hat{\theta}_T = \theta,\] 
+
+\item с неб\'ольшей дисперсией \[ \mathbb{V} \hat{\theta}_T  \leq \mathbb{V} \hat{\theta}.\]
+
+\end{itemize}
+\end{block}
+
+
+
+%----------------------------------------------------------
+\end{frame}
+%----------------------------------------------------------
+
+
+%----------------------------------------------------------
+\begin{frame}[plain]\frametitle{Теорема Рао--Блэквелла--Колмогорова}
+%----------------------------------------------------------
+
+\textbf{Доказательство}.
+
+\vspace{5mm}
+
+
+\begin{itemize}
+
+\item Оценка  --- это функция от выборки $x_1, \dots, x_n$. Она не должна зависеть от $\theta$.
+
+
+\vspace{5mm}
+
+
+\textit{Проверим, что $\hat{\theta}_T = \mathbb{E} \left( \hat{\theta} \mid T\right)$ не зависит от $\theta$}.
+
+\vspace{5mm}
+
+
+\pause 
+
+Действительно, по определению условного матожидания \[ \mathbb{E} \left( \hat{\theta} \mid T\right) =  \int \hat{\theta}(x) p(x \mid T=t, {\color{red} \theta}) dx.\] 
+
+Поскольку $T$ --- достаточная статистика, $ p(x \mid T=t, {\color{red} \theta}) = p(x \mid T=t)$. 
+
+\vspace{2mm}
+
+Поэтому интеграл (и $\hat{\theta}_T$) не зависит от $\theta$.
+
+\end{itemize}
+
+
+
+
+%----------------------------------------------------------
+\end{frame}
+%----------------------------------------------------------
+
+
+%----------------------------------------------------------
+\begin{frame}[plain]\frametitle{Теорема Рао--Блэквелла--Колмогорова}
+%----------------------------------------------------------
+
+
+\begin{itemize}
+
+\item \textit{Докажем несмещённость  \[ \mathbb{E} \hat{\theta}_T = \theta.\]  }
+
+
+
+\textbf{Q:} Мы встречались с выражением вида $\mathbb{E} (\mathbb{E} (X \mid Y))$?
+
+
+\pause 
+
+\vspace{5mm}
+
+\textbf{A:} Вспоминаем: ``матожидание убирает условие''. Используем несмещённость $\hat{\theta}$:
+
+\[ \mathbb{E} \hat{\theta}_T  = \mathbb{E} \left[ \mathbb{E} \left(\hat{\theta} \mid T \right) \right] = \mathbb{E} \hat{\theta} = \theta.\]
+
+\end{itemize}
+
+
+
+
+%----------------------------------------------------------
+\end{frame}
+%----------------------------------------------------------
+
+
+
+%----------------------------------------------------------
+\begin{frame}[plain]\frametitle{Теорема Рао--Блэквелла--Колмогорова}
+%----------------------------------------------------------
+
+
+\begin{itemize}
+
+\item \textit{Дисперсия не увеличивается \[ \mathbb{V} \hat{\theta} \geq \mathbb{V} \hat{\theta}_T.\]  }
+
+\textbf{Q:} Мы встречались с выражением вида $\mathbb{V} (\mathbb{E} (X \mid Y))$?
+
+
+\pause 
+
+\vspace{5mm}
+
+\textbf{A:} Да, утверждение следует из закона полной дисперсии  \[\mathbb{V} (\mathbb{E} [X\mid Y]) = \displaystyle \mathbb{V} (X) - \mathbb{E} [\mathbb{V} (X\mid Y)].\]
+
+\end{itemize}
+
+\vspace{2mm}
+
+\textbf{Теорема Рао--Блэквелла--Колмогорова доказана}.
+
+
+%----------------------------------------------------------
+\end{frame}
+%----------------------------------------------------------
+
+
+
+%----------------------------------------------------------
+\begin{frame}[plain]\frametitle{Перерыв}
+%----------------------------------------------------------
+
+
+\begin{center}
+\Huge Перерыв
+\end{center}
+
+
+%----------------------------------------------------------
+\end{frame}
+%----------------------------------------------------------
+
+
+%----------------------------------------------------------
+\begin{frame}[plain]\frametitle{Байес в ML}
+%----------------------------------------------------------
+
+Во 2ой части лекции поговорим про Байес в ML:
+
+\vspace{5mm}
+
+\begin{enumerate}
+
+\item Формулировка и схема решения ML-задач на байесовском языке. 
+
+\vspace{5mm}
+
+\item {\color{blue} Принцип максимума обоснованности}. 
+
+
+Объясним как сравнивать модели = перебирать гиперпараметры.
+
+\end{enumerate}
+
+
+
+%----------------------------------------------------------
+\end{frame}
+%----------------------------------------------------------
+
+
+
+\section{Байесовский подход к ML}
+
+\begin{frame}[plain]\frametitle{Байесовский подход к ML} \tableofcontents[currentsection]\end{frame}
+
+
+
+%----------------------------------------------------------
+\begin{frame}[plain]\frametitle{ML-модели}
+%----------------------------------------------------------
+
+
+ML-модели ---  по сути отображения \[ \operatorname{Data} \xrightarrow{F_\theta}  \operatorname{Target}.\]
+
+\vspace{3mm}
+
+
+
+Скажем, по картинке предсказываем метку класса 
+\begin{figure}[h!]
+\center{\includegraphics[width=0.5\textwidth]{pic/CatDog}}
+%\caption{Парадокс Монти Холла} \label{Fig:}
+\end{figure}
+
+  %----------------------------------------------------------
+\end{frame}
+%----------------------------------------------------------
+
+%----------------------------------------------------------
+\begin{frame}[plain]\frametitle{Вероятностные модели}
+%----------------------------------------------------------
+
+\begin{center}
+\large \textbf{Вероятностный подход к ML}
+\end{center}
+
+\vspace{2mm}
+
+Мы рассматриваем {\color{blue} вероятностные модели} --- совместные распределения на интересующие нас переменные. 
+
+\vspace{5mm}
+
+Будет 3 группы переменных $X, T, \theta$:
+
+\vspace{2mm}
+
+\begin{itemize}
+
+\item $X$ --- наблюдаемые переменные (Data).
+
+\vspace{3mm}
+
+\item $T$ --- это целевые переменные (Target).
+
+\vspace{3mm}
+
+\item $\theta$ --- параметры модели. %, отвечающие за вероятностную взаимосвязь между $X$ и $T$.
+
+\end{itemize}
+
+
+  %----------------------------------------------------------
+\end{frame}
+%----------------------------------------------------------
+
+%----------------------------------------------------------
+\begin{frame}[plain]\frametitle{2 типа моделей}
+%----------------------------------------------------------
+
+\begin{center}
+\Large В курсе встречается 2 типа моделей. \\
+
+\vspace{5mm}
+
+Ниже обсудим дискриминативные модели, для генеративных рассуждения аналогичны.
+\end{center}
+
+\begin{figure}[h!]
+\center{\includegraphics[width=0.9\textwidth]{Pic/2Models}}
+%\caption{\Large Мы с ними уже сталкивались} \label{Fig:}
+\end{figure}
+
+
+  %----------------------------------------------------------
+\end{frame}
+%----------------------------------------------------------
+
+
+%----------------------------------------------------------
+\begin{frame}[plain]\frametitle{2 типа моделей}
+%----------------------------------------------------------
+
+
+
+
+\begin{figure}[h!]
+\center{\includegraphics[width=0.75\textwidth]{Pic/GenDis}}
+\caption{\Large Мы с ними уже сталкивались} \label{Fig:}
+\end{figure}
+
+
+%----------------------------------------------------------
+\end{frame}
+%----------------------------------------------------------
+
+
+%----------------------------------------------------------
+\begin{frame}[plain]\frametitle{2 типа моделей}
+%----------------------------------------------------------
+
+
+Как обычно, при работе с ML-моделями, данные поделены на {\color{red} Train} и {\color{blue} Test}.
+
+\vspace{5mm}
+
+\begin{itemize}
+
+\item Обучаем модель на {\color{red} Train} (т.е. на $X_{tr}, T_{tr}$). 
+
+\vspace{5mm}
+
+\item Затем предсказываем ответы для {\color{blue} Test} (по $x_{test}$ угадываем $t_{test}$).
+
+\end{itemize}
+
+\vspace{5mm}
+
+
+
+\begin{figure}[h!]
+\center{\includegraphics[width=0.75\textwidth]{Pic/TrainT}}
+%\caption{\Large Мы с ними уже сталкивались} \label{Fig:}
+\end{figure}
+
+
+%----------------------------------------------------------
+\end{frame}
+%----------------------------------------------------------
+
+
+\subsection{Этап обучения}
+
+\begin{frame}[plain]\frametitle{Этап обучения} \tableofcontents[currentsubsection]\end{frame}
+
+
+%\subsection{Классический }
+
+%\begin{frame}[plain]\frametitle{Дискриминативные модели} \tableofcontents[currentsection]\end{frame}
+
+
+%----------------------------------------------------------
+\begin{frame}[plain]\frametitle{Дискриминативные модели. Классика}
+%----------------------------------------------------------
+
+
+\begin{center}
+\large \textbf{Классический подход}.
+\end{center}
+
+\vspace{3mm}
+
+Дискриминативная модель --- это задание {\color{blue} функции правдоподобия} \[p(t \mid x, \theta).\]
+
+\vspace{3mm}
+
+\textit{Если знаем данные $x$ и параметры модели $\theta$, то можем найти метку $t$}.
+
+\vspace{3mm}
+
+\pause
+
+
+\textbf{Q:} Как найти параметры модели $\theta$?
+
+\pause
+
+\vspace{3mm} 
+
+\textbf{A:} Например, {\color{blue} оценкой максимума правдоподобия}: 
+\[{\displaystyle {\hat {\theta }}_{\mathrm {ML } }=\mathop {\rm {argmax}} \limits _{\theta \in \Theta }p(T_{tr}\mid X_{tr}, \theta )} = \mathop {\rm {argmax}} \limits _{\theta \in \Theta } \prod_{i = 1}^N p(t_{i}\mid x_{i}, \theta ) \]
+
+
+
+
+  %----------------------------------------------------------
+\end{frame}
+%----------------------------------------------------------
+
+%----------------------------------------------------------
+\begin{frame}[plain]\frametitle{Дискриминативные модели. Байес}
+%----------------------------------------------------------
+
+\begin{center}
+\large \textbf{Байесовский подход}.
+\end{center}
+
+\vspace{3mm}
+
+\begin{itemize}
+
+\item Известна  {\color{blue} функция правдоподобия} $p(t \mid x, \theta)$.
+
+\vspace{3mm}
+
+\item Задаём {\color{blue} априорное распределение} $p(\theta)$.
+
+\end{itemize}
+
+\vspace{3mm}
+
+\textbf{Q:} Что дальше делают байесиане?
+
+\vspace{3mm}
+
+\pause
+
+\vspace{3mm}
+
+\textbf{A:} Ну конечно, {\color{red} байесовский вывод} на неизвестные параметры: \[ p(\theta \mid X_{tr}, T_{tr}) = \frac{p(T_{tr} \mid X_{tr}, \theta ) p(\theta)}{\int p(T_{tr} \mid X_{tr}, \theta ) p(\theta) d \theta}. \]
+
+
+  %----------------------------------------------------------
+\end{frame}
+%----------------------------------------------------------
+
+%----------------------------------------------------------
+\begin{frame}[plain]\frametitle{Немезида аналитиков}
+%----------------------------------------------------------
+
+
+\[ p(\theta \mid X_{tr}, T_{tr}) = \frac{p(T_{tr} \mid X_{tr}, \theta ) p(\theta)}{{\color{red} \int p(T_{tr} \mid X_{tr}, \theta ) p(\theta) d \theta} }. \]
+
+
+
+\begin{center}
+\large А вот и он --- \textit{архивраг всех аналитических байесиан} --- неберущийся интеграл.
+\end{center}
+
+
+
+\begin{figure}[h!]
+\center{\includegraphics[width=0.75\textwidth]{Pic/Integrals}}
+%\caption{\Large Мы с ними уже сталкивались} \label{Fig:}
+\end{figure}
+
+  %----------------------------------------------------------
+\end{frame}
+%----------------------------------------------------------
+
+
+
+%----------------------------------------------------------
+\begin{frame}[plain]\frametitle{Worst Case Scenario}
+%----------------------------------------------------------
+
+
+\large Рассмотрим худший случай --- интеграл не считается.
+
+\vspace{3mm}
+
+\textit{Мы знаем распределение с точностью до константы}  \[ p(\theta \mid X_{tr}, T_{tr}) = \frac{p(T_{tr} \mid X_{tr}, \theta ) p(\theta)}{Z}. \]
+
+
+\vspace{3mm}
+
+\textbf{Q:} Что можно сделать? (Что не меняется у функции при умножении на константу?)
+
+
+\begin{figure}[h!]
+\center{\includegraphics[width=0.45\textwidth]{Pic/Worst}}
+%\caption{\Large Мы с ними уже сталкивались} \label{Fig:}
+\end{figure}
+
+
+
+  %----------------------------------------------------------
+\end{frame}
+%----------------------------------------------------------
+
+
+%----------------------------------------------------------
+\begin{frame}[plain]\frametitle{MAP-оценка}
+%----------------------------------------------------------
+
+\begin{center}
+\textit{При умножении на константу мода не меняется}.
+\end{center}
+
+\vspace{5mm}
+
+{\color{blue} MAP}-оценка (Maximum a posteriori) --- это \textbf{апостериорный максимум}: \[ \theta_{MP} = \arg \max_{\theta}  p(\theta \mid X_{tr}, T_{tr})\]
+
+\begin{figure}[h!]
+\center{\includegraphics[width=0.45\textwidth]{Pic/MAP}}
+%\caption{\Large Мы с ними уже сталкивались} \label{Fig:}
+\end{figure}
+
+  %----------------------------------------------------------
+\end{frame}
+%----------------------------------------------------------
+
+
+%----------------------------------------------------------
+\begin{frame}[plain]\frametitle{MAP-оценка}
+%----------------------------------------------------------
+
+\textit{Замечание}. MAP-оценка --- это поправка MLE $\theta_{ML}$:  \begin{align*} \theta_{MP} &= \arg \max_{\theta}  p(T_{tr} \mid X_{tr}, \theta ) p(\theta) = \\ &=  \arg \max_{\theta} \left[ \ln p(T_{tr} \mid X_{tr}, \theta ) + \ln p(\theta) \right]. \end{align*}
+ 
+
+
+
+
+  %----------------------------------------------------------
+\end{frame}
+%----------------------------------------------------------
+
+
+
+\subsection{Этап тестирования}
+
+\begin{frame}[plain]\frametitle{Этап тестирования} \tableofcontents[currentsubsection]\end{frame}
+
+
+
+
+%----------------------------------------------------------
+\begin{frame}[plain]\frametitle{Тестирование. Классика}
+%----------------------------------------------------------
+
+
+\begin{center}
+\large \textbf{Классический подход}.
+\end{center}
+
+
+\vspace{3mm}
+
+\begin{itemize}
+
+
+\item Выбраны параметры модели $\theta_{ML}$.
+
+\vspace{3mm}
+
+\item Дан объект  $x_{test}$. 
+\vspace{3mm}
+
+\item Нужно оценить неизвестное $t_{test}$.
+
+\end{itemize}
+
+\pause
+
+
+\begin{center}
+Всё просто --- предсказываем $p(t_{test} \mid x_{test}, \theta_{ML})$. 
+\end{center}
+
+
+\begin{figure}[h!]
+\center{\includegraphics[width=0.65\textwidth]{Pic/CD2}}
+%\caption{\Large Мы с ними уже сталкивались} \label{Fig:}
+\end{figure}
+
+
+  %----------------------------------------------------------
+\end{frame}
+%----------------------------------------------------------
+
+%----------------------------------------------------------
+\begin{frame}[plain]\frametitle{Тестирование. Байес}
+%----------------------------------------------------------
+
+\begin{center}
+\large \textbf{Байесовский подход}.
+\end{center}
+
+\vspace{3mm}
+
+Наша цель --- вычислить вероятность \[  p(t_{test} \mid x_{test}, X_{tr}, T_{tr}).\]
+
+\vspace{2mm}
+
+\begin{itemize}
+
+\item Видели обучающую выборку $X_{tr}, T_{tr}$, знаем объект $x_{test}$.
+
+\vspace{3mm}
+
+\item Хотим знать вероятности меток $t_{test}$.
+
+\end{itemize}
+
+\vspace{3mm}
+
+\textbf{Q:} Как это сделать? Какие распределения мы знаем?
+
+  %----------------------------------------------------------
+\end{frame}
+%----------------------------------------------------------
+
+%----------------------------------------------------------
+\begin{frame}[plain]\frametitle{Тестирование. Байес}
+%----------------------------------------------------------
+
+Известны:
+
+\vspace{3mm} 
+
+\begin{itemize}
+
+\item апостериорное распределение на параметры модели: \[ p(\theta \mid X_{tr}, T_{tr})\]
+
+\vspace{2mm}
+
+\item функция правдоподобия \[ p(t_{test} \mid x_{test}, \theta)\]
+
+\end{itemize}
+
+\vspace{3mm}
+
+\textbf{Q:} Как вычислить  $p(t_{test} \mid x_{test}, X_{tr}, T_{tr})$?
+
+
+\pause
+
+\vspace{3mm}
+
+
+\begin{block}{} В байесовском случае усредняем предсказания моделей по апостериорному распределению на параметр: \[ p(t_{test} \mid x_{test}, X_{tr}, T_{tr}) = \int p(t_{test} \mid x_{test}, \theta) p(\theta \mid X_{tr}, T_{tr})d\theta.\] 
+\end{block} 
+
+  %----------------------------------------------------------
+\end{frame}
+%----------------------------------------------------------
+
+%----------------------------------------------------------
+\begin{frame}[plain]\frametitle{Метод Монте-Карло}
+%----------------------------------------------------------
+
+\textbf{Замечание}. Даже если распределение известно с точностью до константы, из него можно {\color{blue} сэмплировать}.
+
+
+\vspace{5mm}
+
+Предсказание модели можно оценить {\color{blue} методом Монте-Карло} (см. Лекцию 3):
+
+\[ p(t_{test} \mid x_{test}, X_{tr}, T_{tr}) = \int p(t_{test} \mid x_{test}, \theta) p(\theta \mid X_{tr}, T_{tr})d\theta \approx \frac{1}{K} \sum_{k = 1}^K  p(t_{test} \mid x_{test}, \theta_k),\]  
+
+\vspace{2mm}
+
+где $\theta_k \sim  p(\theta \mid X_{tr}, T_{tr})$, т.е. сгенерирована из апостериорного распределения. 
+
+  %----------------------------------------------------------
+\end{frame}
+%----------------------------------------------------------
+
+
+
+
+
+
+
+\section{Принцип максимума обоснованности}
+
+
+
+\begin{frame}[plain]\frametitle{Принцип максимума обоснованности} \tableofcontents[currentsection]\end{frame}
+
+
+
+
+%----------------------------------------------------------
+\begin{frame}[plain]\frametitle{Выбор моделей}
+%----------------------------------------------------------
+
+Очень кратко обсудим байесовский способ отбора моделей. 
+
+
+\vspace{5mm}
+
+Подробнее --- см. Главу 3.4.
+
+\vspace{5mm}
+
+\begin{thebibliography}{10}
+
+
+  \beamertemplatebookbibitems
+    
+    \bibitem{Bishop}  Bishop C.M. 
+    
+    \newblock{\em Pattern Recognition and Machine Learning}.
+    
+
+
+  \end{thebibliography}
+  
+  
+  %----------------------------------------------------------
+\end{frame}
+%----------------------------------------------------------
+
+
+
+
+%----------------------------------------------------------
+\begin{frame}[plain]\frametitle{Выбор модели}
+%----------------------------------------------------------
+
+Что нам дано?
+
+\vspace{5mm}
+
+Есть несколько моделей (занумеруем их $\mathcal{M} =1 , \dots, M$).
+
+\vspace{5mm}
+
+У каждой из них --- свои параметры $w$. 
+
+\vspace{5mm}
+
+\begin{figure}[h!]
+\center{\includegraphics[width=0.9\textwidth]{pic/Models}}
+%\caption{Парадокс Монти Холла} \label{Fig:}
+\end{figure}
+
+
+  
+  %----------------------------------------------------------
+\end{frame}
+%----------------------------------------------------------
+
+
+
+
+%----------------------------------------------------------
+\begin{frame}[plain]\frametitle{Выбор модели}
+%----------------------------------------------------------
+
+
+Нам даны:
+
+
+\vspace{5mm}
+
+\begin{itemize}
+
+\item Модели $\mathcal{M}$.
+
+\vspace{5mm}
+
+\item Обучающая выборка $(X_{tr}, Y_{tr})$. 
+
+\end{itemize}
+
+\vspace{5mm}
+
+\textbf{Q:} Какую  модель выбрал бы ``байесовский человек''?
+
+\pause
+
+\vspace{5mm}
+
+\textbf{A:} Наиболее вероятную при таких данных $ \arg \max \mathbb{P} \left(\mathcal{M} \mid Y_{tr}, X_{tr} \right)$.
+
+
+  %----------------------------------------------------------
+\end{frame}
+%----------------------------------------------------------
+
+
+
+
+%----------------------------------------------------------
+\begin{frame}[plain]\frametitle{Принцип наибольшей обоснованности}
+%----------------------------------------------------------
+
+\begin{center}
+\Large {\color{blue} Теорема Байеса} --- универсальное решение всех проблем.
+\end{center}
+
+\vspace{5mm}
+
+Поступаем ``по-байесовски'':
+
+\vspace{5mm}
+
+\begin{itemize}
+
+\item Вводим априорное распределение на модели $\mathbb{P}(\mathcal{M})$.
+ 
+ \vspace{5mm}
+
+\item По формуле Байеса \[ \mathbb{P} \left(\mathcal{M} \mid Y_{tr}, X_{tr} \right) = \frac{\mathbb{P} \left(Y_{tr} \mid X_{tr}, \mathcal{M} \right) \mathbb{P}(\mathcal{M})}{\mathbb{P} \left(Y_{tr} \mid  X_{tr} \right) } .\]
+
+\vspace{2mm}
+
+\item \textbf{Q:} Если нам нужна конкретная модель, а не распределение --- какую брать?
+
+\end{itemize}
+
+  %----------------------------------------------------------
+\end{frame}
+%----------------------------------------------------------
+
+
+
+%----------------------------------------------------------
+\begin{frame}[plain]\frametitle{Принцип наибольшей обоснованности}
+%----------------------------------------------------------
+
+
+\begin{center}
+\textbf{\Large Максимум обоснованности}.
+\end{center}
+
+\begin{itemize}
+
+\item Если нужна точка --- берём MAP-оценку \[\mathcal{M}_{MP} = \arg \max_{\mathcal{M} } \mathbb{P} \left(Y_{tr} \mid X_{tr}, \mathcal{M} \right) \mathbb{P}(\mathcal{M}).\]
+
+\vspace{2mm}
+
+\item Первое слагаемое $\mathbb{P} \left(Y_{tr} \mid X_{tr}, \mathcal{M} \right)$ называется {\color{blue} обоснованностью} (evidence).
+
+\vspace{5mm}
+
+
+\item Если для нас модели равновероятны, то получается {\color{blue} принцип максимума обоснованности}. 
+\[ \mathcal{M}_{ME} = \arg \max_{\mathcal{M} } \mathbb{P} \left(Y_{tr} \mid X_{tr}, \mathcal{M} \right).\]
+
+\end{itemize}
+
+  %----------------------------------------------------------
+\end{frame}
+%----------------------------------------------------------
+
+
+
+%----------------------------------------------------------
+\begin{frame}[plain]\frametitle{Принцип наибольшей обоснованности}
+%----------------------------------------------------------
+
+У модели $\mathcal{M}$ параметры $w$.
+
+\vspace{5mm}
+
+Мы умеем считать вероятности при фиксированных параметрах $\mathbb{P} \left(Y_{tr} \mid X_{tr}, w\right)$.
+
+\vspace{5mm}
+
+\textbf{Q:}  Как посчитать обоснованность модели $\mathbb{P} \left(Y_{tr} \mid X_{tr}, \mathcal{M} \right)$?
+
+\vspace{5mm}
+
+\textbf{A:} Нужно усреднить предсказание по распределению на параметры: \[ \mathbb{P} \left(Y_{tr} \mid X_{tr}, \mathcal{M} \right) = \int \mathbb{P} \left(Y_{tr} \mid X_{tr}, w\right) \mathbb{P} \left(w \mid \mathcal{M} \right)   dw \]
+
+
+
+  %----------------------------------------------------------
+\end{frame}
+%----------------------------------------------------------
+
+
+
+%----------------------------------------------------------
+\begin{frame}[plain]\frametitle{Принцип наибольшей обоснованности}
+%----------------------------------------------------------
+
+\begin{center}
+\Large Подведём итоги.
+\end{center}
+
+\vspace{5mm}
+
+
+\begin{block}{Принцип максимума обоснованности}
+\begin{align*} \mathcal{M}_{ME} &= \arg \max_{\mathcal{M} } \mathbb{P} \left(Y_{tr} \mid X_{tr}, \mathcal{M} \right) \\\mathbb{P} \left(Y_{tr} \mid X_{tr}, \mathcal{M} \right) &= \int \mathbb{P} \left(Y_{tr} \mid X_{tr}, w\right) \mathbb{P} \left(w \mid \mathcal{M} \right)   dw.  \end{align*}
+\end{block}
+
+
+  %----------------------------------------------------------
+\end{frame}
+%----------------------------------------------------------
+
+
+
+%----------------------------------------------------------
+\begin{frame}[plain]\frametitle{Принцип наибольшей обоснованности}
+%----------------------------------------------------------
+
+
+В целом, если обозначить данные за $D$, то метод максимизирует $\mathbb{P}(D \mid \mathcal{M})$. 
+
+\vspace{5mm}
+
+Метод предпочитает модели, которые \textit{``дают ответы на меньшее число вопросов, но более уверенно''}.
+
+\vspace{5mm}
+
+\begin{figure}[h!]
+\center{\includegraphics[width=0.65\textwidth]{pic/MD}}
+%\caption{Парадокс Монти Холла} \label{Fig:}
+\end{figure}
+
+  %----------------------------------------------------------
+\end{frame}
+%----------------------------------------------------------
+
+
+
+%----------------------------------------------------------
+\begin{frame}[plain]\frametitle{Принцип наибольшей обоснованности}
+%----------------------------------------------------------
+
+\textbf{Простой пример} ``наиболее обоснованной модели''.
+
+\vspace{5mm}
+
+Рассмотрим {\color{blue} 3 кубика --- с 4, 6 и 8 гранями}. {\color{red} Выпало 5.} 
+
+\vspace{5mm}
+
+ \textbf{Q:} Какая модель наиболее обоснованна?
+
+\vspace{5mm}
+
+\pause
+
+\textbf{A:} Кубик с 6 гранями --- у него наибольшая вероятность $\mathbb{P}(Data \mid \mathcal{M} ) = \frac{1}{6}$.
+
+
+\begin{figure}[h!]
+\center{\includegraphics[width=0.5\textwidth]{pic/Dices}}
+%\caption{Парадокс Монти Холла} \label{Fig:}
+\end{figure}
+
+  %----------------------------------------------------------
+\end{frame}
+%----------------------------------------------------------
+
+
+
+
+%----------------------------------------------------------
+\begin{frame}[plain]\frametitle{Всё чудесатее и чудесатее!}
+%----------------------------------------------------------
+
+
+\begin{center}
+\large Сегодня мы взглянули на ML ``по-байесовски''. Чудно!
+
+\vspace{2mm}
+
+А может ли эта абстрактная теория применяться на практике?
+
+\vspace{2mm}
+
+Конкретный пример --- RVM --- обсудим на следующем занятии.
+
+\end{center}
+
+\begin{figure}[h!]
+\center{\includegraphics[height=0.7\textheight]{pic/CC2}}
+%\caption{Парадокс Монти Холла} \label{Fig:}
+\end{figure}
+
+%----------------------------------------------------------
+\end{frame}
+%----------------------------------------------------------
+
+
+\end{document}
+
+

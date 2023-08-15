@@ -1,0 +1,1433 @@
+\documentclass[9pt]{beamer}
+
+
+
+
+\usepackage{beamerthemesplit}
+\usetheme{Boadilla}
+\usecolortheme{orchid}
+
+
+
+
+
+ % \usepackage[cp866]{inputenc}                %%% Є®¤Ёа®ўЄ  DOS
+  \usepackage[cp1251]{inputenc}
+%  \usepackage[T2A]{fontenc}                %%% ???
+%\usepackage[english,russian]{babel}
+%\usepackage[russian]{babel}
+ \usepackage[OT1]{fontenc}
+%\usepackage[english]{babel}
+\usepackage[russian]{babel}
+
+\usepackage{amssymb,latexsym, amsmath, mathdots}
+
+\usepackage{amscd}
+\usepackage{multirow}
+\usepackage{comment}
+
+\usepackage{epstopdf}
+
+
+
+%\usepackage[table]{xcolor} %colored cells
+
+%\usepackage{tikz}
+%\usetikzlibrary{tikzmark} %arrows in tables
+
+
+\usepackage{mnsymbol} % udots in matrices
+
+
+ \usepackage{pgfpages}
+%\setbeameroption{show notes}
+%\setbeameroption{show notes on second screen=bottom}
+%% \setbeameroption{show notes on second screen}
+
+%\setbeamercolor{alerted text}{fg=red!80!black}
+
+
+% \setbeamercolor{alerted text}{fg=blue!50!green}
+% \setbeamercolor{fortheorem}{bg=blue!15!white}
+% \setbeamercolor{EMPF}{bg=blue!25!white}
+% \setbeamercolor{EMPF2}{bg=blue!35!white}
+
+%\setbeamersize{text margin left=5.mm, text margin right=5.mm}
+
+
+%---------------------------------------------------------------------------------------------------------------------------
+
+%\def\emphbox#1#2#3{\begin{beamercolorbox}[wd=#2, ht=#1, center, colsep=1.mm]{EMPF} #3 \end{beamercolorbox}}
+
+%---------------------------------------------------------------------------------------------------------------------------
+
+
+%\advance\leftskip-5.mm
+
+
+
+%***************************************************************************************************************************
+
+\theoremstyle{theorem}
+\newtheorem{mytheorem}[theorem]{Теорема}
+\newtheorem{mylemma}[theorem]{Лемма}
+\newtheorem{mycorollary}[theorem]{Следствие}
+
+\newtheorem{proposition}[theorem]{Предложение}
+\newtheorem{assertion}[theorem]{Утверждение}
+\newtheorem{remark}[theorem]{Замечание}
+\newtheorem{assumption}[theorem]{Предположение}
+
+\newtheorem{convention}[theorem]{Договорённость}
+\newtheorem{question}[theorem]{Вопрос}
+%\newtheorem{mydefinition}{mydefinition}
+
+\theoremstyle{definition}
+\newtheorem{mydefinition}[theorem]{Определение}
+\newtheorem{myexample}[theorem]{Пример}
+
+
+
+%***************************************************************************************************************************
+
+\chardef\No=194
+\newcommand{\bd}{{\rm bd}}
+\newcommand{\cl}{{\rm cl}}
+\newcommand{\ind}{{\rm ind}}
+\newcommand{\id}{{\rm id}}
+\newcommand{\inj}{{\sl in}}
+\newcommand{\pr}{{\rm pr}}
+\newcommand{\st}{{\rm St}}
+
+
+\DeclareMathOperator{\sgrad}{sgrad}
+
+\DeclareMathOperator{\cnt}{const}
+
+\DeclareMathOperator{\Aut}{Aut}
+
+
+\DeclareMathOperator{\sgn}{sgn}
+
+\DeclareMathOperator{\Int}{Int}
+
+
+\DeclareMathOperator{\tr}{tr}
+
+\DeclareMathOperator{\Mat}{Mat}
+
+
+
+
+
+
+
+%****************************************************************************
+\newcommand{\Ker}{\mathrm{Ker}\,\,}
+\newcommand{\Ann}{\mathrm{Ann}\,\,}
+
+\newcommand{\Imm}{\mathrm{Im}\,\,}
+
+\newcommand{\rk}{\mathrm{rk}\,\,}
+
+\newcommand{\const}{\mathrm{const}}
+
+
+
+\DeclareMathOperator{\Pen}{\mathcal{P}}
+
+
+\DeclareMathOperator{\Core}{K}
+
+
+\DeclareMathOperator{\BLG}{\operatorname{BLG}}
+
+\DeclareMathOperator{\AutBP}{\operatorname{Aut}(V, \mathcal{P})}
+
+
+\def\minus{\hbox{-}}   %Sign of minus in big matrices
+
+\usepackage{multirow}  %Columns spanning multiple rows
+
+\usepackage[normalem]{ulem} %underline that can break lines
+
+%\usepackage[normalem]{ulem}
+
+\usepackage{wasysym} %smilies
+
+%****************************************************************************
+
+
+
+\title% [] (optional, only for long titles)
+{Прикладная статистика в машинном обучении \\ Семинар 7\\ $A/B$ тестирование}
+%\subtitle{}
+\author [И. \,К.~Козлов] %(optional, for multiple authors)
+{И. \,К.~Козлов \\ {\footnotesize(\textit{Мехмат МГУ})}}
+
+
+\date % [](optional)
+{2022}
+%\subject{Mathematics}
+
+
+
+
+
+
+
+\usepackage{hyperref}
+%\hypersetup{unicode=true}
+\hypersetup{
+  colorlinks=true,
+  linkcolor=green!70!black, %blue!50!red,
+  urlcolor=green!70!black,
+  unicode=true
+}
+
+\begin{document}
+
+%\includeonlyframes{}
+\frame{\titlepage}
+
+
+
+
+
+
+%----------------------------------------------------------
+\begin{frame}[plain]\frametitle{$A/A$-тестирование}
+%----------------------------------------------------------
+
+\begin{center}
+\Large \textbf{Q:} Зачем нужно $A/A$-тестирование?
+
+\vspace{5mm}
+
+Пользователям в двух бакетах показывают тот же продукт.
+\end{center} 
+
+\begin{figure}[h!]
+\center{\includegraphics[width=0.45\textwidth]{pic/AA}}
+\caption{\Large Если нет разницы ... } \label{Fig:}
+\end{figure}
+
+
+
+%----------------------------------------------------------
+\end{frame}
+%----------------------------------------------------------
+
+%----------------------------------------------------------
+\begin{frame}[plain]\frametitle{$A/A$-тестирование}
+%----------------------------------------------------------
+
+
+\textbf{A:} $A/A$-тестирование  позволяет проверить, что \textit{сэмплирование правильно работает}.
+
+\vspace{5mm}
+
+Заодно это может дать бейзлайн --- насколько могут варьироваться метрики.
+
+
+
+
+%----------------------------------------------------------
+\end{frame}
+%----------------------------------------------------------
+%----------------------------------------------------------
+\begin{frame}[plain]\frametitle{Shoot yourself in the foot}
+%----------------------------------------------------------
+
+\begin{center}
+\Large Обсудим теперь пару способов ``выстрелить себе в ногу''.
+\end{center}
+
+\begin{figure}[h!]
+\center{\includegraphics[width=0.3\textwidth]{pic/Shoot}}
+%\caption{\Large Дело одной трубки} \label{Fig:}
+\end{figure}
+
+%----------------------------------------------------------
+\end{frame}
+%----------------------------------------------------------
+
+
+\section{Парадокс Берксона}
+
+
+
+\begin{frame}[plain]\frametitle{Парадокс Берксона} \tableofcontents[currentsection]\end{frame}
+
+%----------------------------------------------------------
+\begin{frame}[plain]\frametitle{Курение спасает жизнь?}
+%----------------------------------------------------------
+
+Следующий пример взят из 
+
+\vspace{5mm}
+
+\hyperlink{https://www.eecs.qmul.ac.uk/~norman/papers/colliders_smoking_web.pdf}{Why most studies into COVID19 risk factors may be producing
+flawed conclusions - and how to fix the problem}
+
+\vspace{5mm}
+
+
+В больницах (медперсонал и больных) тестировали на COVID-19. 
+
+\vspace{5mm}
+
+
+Было установлено: 
+
+\vspace{5mm}
+
+
+\begin{center}
+\Large \textit{Курение уменьшает вероятность заболеть COVID-19}!
+\end{center}
+
+
+
+%----------------------------------------------------------
+\end{frame}
+%----------------------------------------------------------
+
+
+
+%----------------------------------------------------------
+\begin{frame}[plain]\frametitle{Где же разгадка?}
+%----------------------------------------------------------
+
+\begin{center}
+\Large \textbf{Q:} В чём ошибка? Где подвох?
+\end{center}
+
+\vspace{5mm}
+
+\begin{figure}[h!]
+\center{\includegraphics[width=0.45\textwidth]{pic/Smoke}}
+\caption{\Large Дело одной трубки} \label{Fig:}
+\end{figure}
+
+
+%----------------------------------------------------------
+\end{frame}
+%----------------------------------------------------------
+
+
+%----------------------------------------------------------
+\begin{frame}[plain]\frametitle{Где же разгадка?}
+%----------------------------------------------------------
+
+\begin{center}
+\large \textbf{A:} Выборка не случайная --- ничего не знаем про тех, кто не попадал в больницу.
+\end{center}
+
+\vspace{5mm}
+
+\begin{figure}[h!]
+\center{\includegraphics[width=0.8\textwidth]{pic/Berkson}}
+\caption{\Large {\color{blue} Парадокс Берксона}} \label{Fig:}
+\end{figure}
+
+
+%----------------------------------------------------------
+\end{frame}
+%----------------------------------------------------------
+
+
+
+%----------------------------------------------------------
+\begin{frame}[plain]\frametitle{Убославливание на коллайдер}
+%----------------------------------------------------------
+
+\begin{figure}[h!]
+\center{\includegraphics[width=0.5\textwidth]{pic/Condition}}
+%\caption{\Large Дело одной трубки} \label{Fig:}
+\end{figure}
+
+\vspace{5mm}
+
+\large Вообще 2 независимых события $A$ и $B$ могут становиться зависимыми, если произошло некоторое третье событие $C$.
+
+\vspace{5mm}
+
+Событие $C$, зависящее и от $A$,  и от $B$ называют {\color{blue} коллайдером}.
+
+%----------------------------------------------------------
+\end{frame}
+%----------------------------------------------------------
+
+%----------------------------------------------------------
+\begin{frame}[plain]\frametitle{Наглядный пример}
+%----------------------------------------------------------
+
+
+
+\begin{figure}[h!]
+\center{\includegraphics[width=0.5\textwidth]{pic/Late}}
+%\caption{\Large Дело одной трубки} \label{Fig:}
+\end{figure}
+
+
+\begin{itemize}
+
+\item События ``друга похитили инопланетяне'' и ``мои часы спешат'' явно независимы. 
+
+\vspace{2mm}
+
+\item Друг опаздывает. 
+
+\vspace{2mm}
+
+Смотрим --- часы спешат $\Rightarrow$ вероятность похищения инопланетянами меньше. 
+
+\vspace{2mm}
+
+\textit{События стали зависимы}.
+
+\end{itemize}
+
+
+
+%----------------------------------------------------------
+\end{frame}
+%----------------------------------------------------------
+
+
+%----------------------------------------------------------
+\begin{frame}[plain]\frametitle{Мораль}
+%----------------------------------------------------------
+
+
+\begin{center}
+\LARGE Мораль:
+\end{center}
+
+
+\begin{center}
+\noindent\fbox{%
+    \parbox{21em}{%
+
+
+\vspace{3mm}
+
+\LARGE \hspace{3mm} {\color{blue} Выборка должна быть случайной}.
+    
+\vspace{3mm}    
+    }%
+}
+
+
+\end{center}
+
+
+%----------------------------------------------------------
+\end{frame}
+%----------------------------------------------------------
+
+
+
+%----------------------------------------------------------
+\begin{frame}[plain]\frametitle{Где же разгадка?}
+%----------------------------------------------------------
+
+\begin{center}
+\Large Этот парадокс в жизни повсюду --- в каждой ``ошибке выжившего''.
+\end{center}
+
+\vspace{5mm}
+
+\begin{figure}[h!]
+\center{\includegraphics[width=0.5\textwidth]{pic/Survive}}
+%\caption{\Large Дело одной трубки} \label{Fig:}
+\end{figure}
+
+
+%----------------------------------------------------------
+\end{frame}
+%----------------------------------------------------------
+
+
+
+\section{Парадокс Симпсона}
+
+
+
+\begin{frame}[plain]\frametitle{Парадокс Симпсона} \tableofcontents[currentsection]\end{frame}
+
+
+%----------------------------------------------------------
+\begin{frame}[plain]\frametitle{Парадокс Симпсона}
+%----------------------------------------------------------
+
+
+\begin{center}
+\LARGE {\color{blue} Парадокс Симпсона}
+\end{center}
+
+\begin{figure}[h!]
+\center{\includegraphics[width=0.75\textwidth]{pic/Homer}}
+\caption{\LARGE Не тот Симпсон} \label{Fig:}
+\end{figure}
+
+
+
+
+%----------------------------------------------------------
+\end{frame}
+%----------------------------------------------------------
+
+%----------------------------------------------------------
+\begin{frame}[plain]\frametitle{Парадокс Симпсона}
+%----------------------------------------------------------
+
+\begin{center}
+\Large Данные о поступлении на факультеты одного американского ВУЗа. 
+
+\vspace{2mm}
+
+Скандал! Дискриминация!
+\end{center}
+
+
+\vspace{5mm}
+
+\begin{figure}[h!]
+\center{\includegraphics[width=0.5\textwidth]{pic/Uni2}}
+%\caption{\LARGE Не тот Симпсон} \label{Fig:}
+\end{figure}
+
+\vspace{5mm}
+
+\begin{center}
+\Large Q: Можно ли сказать, что мужчин явно дискриминирут?
+\end{center}
+
+%----------------------------------------------------------
+\end{frame}
+%----------------------------------------------------------
+
+
+%----------------------------------------------------------
+\begin{frame}[plain]\frametitle{Парадокс Симпсона}
+%----------------------------------------------------------
+
+\begin{center}
+\large По всему ВУЗу целиком --- динамика обратная! Парадокс!
+\end{center}
+
+
+\begin{figure}[h!]
+\center{\includegraphics[width=0.75\textwidth]{pic/Uni1}}
+%\caption{\LARGE Не тот Симпсон} \label{Fig:}
+\end{figure}
+
+
+%----------------------------------------------------------
+\end{frame}
+%----------------------------------------------------------
+
+
+
+
+%----------------------------------------------------------
+\begin{frame}[plain]\frametitle{Парадокс Симпсона}
+%----------------------------------------------------------
+
+
+За парадоксом скрывается \textbf{простая арифметика}.
+
+\vspace{5mm}
+
+
+Может быть так, что \[ \frac{a_1}{b_1} < \frac{a_2}{b_2}, \qquad  \frac{c_1}{d_1} < \frac{c_2}{d_2},\] но при этом 
+\[ \frac{a_1+c_1}{b_1+d_1} > \frac{a_2 + c_2}{b_2 + d_2}.\] 
+
+\vspace{5mm}
+
+Наглядно --- на следующем слайде.
+
+
+
+%----------------------------------------------------------
+\end{frame}
+%----------------------------------------------------------
+
+%----------------------------------------------------------
+\begin{frame}[plain]\frametitle{Парадокс Симпсона}
+%----------------------------------------------------------
+
+\begin{center}
+\large \textbf{Геометрическое объяснение}. 
+
+\vspace{2mm}
+
+Отношение $\displaystyle \frac{p}{q}$ --- это коэффициент наклона вектора $(q, p)$.
+\end{center}
+
+
+
+\begin{figure}[h!]
+\center{\includegraphics[width=0.45\textwidth]{pic/SimpsonV}}
+%\caption{\LARGE Не тот Симпсон} \label{Fig:}
+\end{figure}
+
+\vspace{5mm}
+
+
+\begin{center}
+\large {\color{red} Красные} векторы $1, 2$ менее наклонены, чем {\color{blue} синие}. 
+
+\vspace{2mm}
+
+А сумма {\color{red} красных} ''$+$''  --- более пологая, чем сумма  {\color{blue} синих}. 
+\end{center}
+
+%----------------------------------------------------------
+\end{frame}
+%----------------------------------------------------------
+
+
+%----------------------------------------------------------
+\begin{frame}[plain]\frametitle{Парадокс Симпсона}
+%----------------------------------------------------------
+
+
+\begin{center}
+Парадокс Симпсона часто изображают подобными картинками:
+\end{center}
+
+\begin{figure}[h!]
+\center{\includegraphics[width=0.75\textwidth]{pic/SimpParad}}
+%\caption{\LARGE Не тот Симпсон} \label{Fig:}
+\end{figure}
+
+
+
+%----------------------------------------------------------
+\end{frame}
+%----------------------------------------------------------
+
+
+%----------------------------------------------------------
+\begin{frame}[plain]\frametitle{Парадокс Симпсона}
+%----------------------------------------------------------
+
+\begin{center}
+\textbf{На практике}. Сэмплирование в группах может быть перекошено. 
+
+\vspace{2mm}
+
+{\color{red} Разные размеры тестовой и контрольной группы --- зло!}
+
+\vspace{2mm}
+
+\begin{figure}[h!]
+\center{\includegraphics[width=0.85\textwidth]{pic/S2}}
+%\caption{\LARGE Не тот Симпсон} \label{Fig:}
+\end{figure}
+
+\vspace{2mm}
+
+Пример: мужчинам меньше выписывают лекарство. 
+
+Тогда наблюдаемый эффект может больше быть с связан с ``бытием мужчиной''.
+
+\vspace{2mm}
+
+{\color{blue} Группы разного размера следует перезвешивать.}
+
+\end{center}
+
+
+
+
+%----------------------------------------------------------
+\end{frame}
+%----------------------------------------------------------
+
+
+
+%----------------------------------------------------------
+\begin{frame}[plain]\frametitle{Спутывающие переменные}
+%----------------------------------------------------------
+
+
+
+\begin{figure}[h!]
+\center{\includegraphics[width=0.5\textwidth]{pic/Confounding}}
+%\caption{\Large Дело одной трубки} \label{Fig:}
+\end{figure}
+
+\vspace{5mm}
+
+Если $Z$ влияет на $X$ и $Y$, то $Z$ --- {\color{blue} спутывающая переменная} (конфаундер).
+
+\vspace{5mm}
+
+Парадокс Симпсона возникает из-за наличия таких переменных.
+
+
+
+%----------------------------------------------------------
+\end{frame}
+%----------------------------------------------------------
+
+%----------------------------------------------------------
+\begin{frame}[plain]\frametitle{Спутывающие переменные}
+%----------------------------------------------------------
+
+\begin{center}
+Что делать, если мы хотим доказать влияние $X$ на $Y$?
+\end{center}
+
+\vspace{5mm}
+
+
+\begin{center}
+\noindent\fbox{%
+    \parbox{28em}{%
+
+
+\vspace{3mm}
+
+\Large \hspace{3mm} {\color{blue} Нужно избавляться от спутывающих переменных}.
+    
+\vspace{3mm}    
+    }%
+}
+
+
+\end{center}
+
+\vspace{5mm}
+
+\begin{center}
+Можно делать выборки более однородными (по возрасту, полу, региону и т.д.)
+\end{center}
+
+%----------------------------------------------------------
+\end{frame}
+%----------------------------------------------------------
+
+
+\subsection{Парадокс Симпсона в АБ}
+
+
+
+\begin{frame}[plain]\frametitle{Парадокс Симпсона в АБ} \tableofcontents[currentsubsection]\end{frame}
+
+
+
+%----------------------------------------------------------
+\begin{frame}[plain]\frametitle{Одинаковый размер}
+%----------------------------------------------------------
+
+\begin{center}
+Чему научил нас парадокс Симпсона?
+\end{center}
+
+\vspace{5mm}
+
+
+
+\begin{center}
+\noindent\fbox{%
+    \parbox{28em}{%
+
+
+\vspace{3mm}
+
+\Large \hspace{2mm} {\color{blue} Пилот и контроль разного размера --- плохая идея}.
+    
+\vspace{3mm}    
+    }%
+}
+
+
+\end{center}
+
+
+%----------------------------------------------------------
+\end{frame}
+%----------------------------------------------------------
+
+
+%----------------------------------------------------------
+\begin{frame}[plain]\frametitle{Постепенный запуск}
+%----------------------------------------------------------
+
+
+\begin{center}
+
+\Large Пилотная группа --- это перемены сервиса. 
+
+\vspace{2mm}
+
+\textbf{Q:} {\color{red} Цена эксперимента}. 
+
+
+\vspace{2mm}
+
+Мы не боимся испугать пользователей и потерять деньги?
+
+\vspace{2mm}
+
+Стоит ли ставить эксперимент на $50\%$ пользователей?
+\end{center}
+
+
+\begin{figure}[h!]
+\center{\includegraphics[width=0.5\textwidth]{pic/New}}
+%\caption{\Large Осторожно! Грядут страшные формулы!} \label{Fig:}
+\end{figure}
+
+
+%----------------------------------------------------------
+\end{frame}
+%----------------------------------------------------------
+
+
+
+%----------------------------------------------------------
+\begin{frame}[plain]\frametitle{Постепенный запуск}
+%----------------------------------------------------------
+
+
+
+\begin{figure}[h!]
+\center{\includegraphics[width=\textwidth]{pic/Tmp2}}
+%\caption{\Large Осторожно! Грядут страшные формулы!} \label{Fig:}
+\end{figure}
+
+%----------------------------------------------------------
+\end{frame}
+%----------------------------------------------------------
+
+
+
+
+%----------------------------------------------------------
+\begin{frame}[plain]\frametitle{Парадокс Симпсона}
+%----------------------------------------------------------
+
+
+
+\begin{figure}[h!]
+\center{\includegraphics[width=\textwidth]{pic/Tmp3}}
+%\caption{\Large Осторожно! Грядут страшные формулы!} \label{Fig:}
+\end{figure}
+
+%----------------------------------------------------------
+\end{frame}
+%----------------------------------------------------------
+
+
+
+
+%----------------------------------------------------------
+\begin{frame}[plain]\frametitle{Перерыв}
+%----------------------------------------------------------
+
+
+\begin{center}
+\Huge Перерыв
+\end{center}
+
+
+%----------------------------------------------------------
+\end{frame}
+%----------------------------------------------------------
+
+
+
+
+\section{Тест Стьюдента}
+
+\begin{frame}[plain]\frametitle{Тест Стьюдента} \tableofcontents[currentsection]\end{frame}
+
+
+
+
+%----------------------------------------------------------
+\begin{frame}[plain]\frametitle{Тест Стьюдента}
+%----------------------------------------------------------
+
+
+\begin{center}
+\Huge Тест Студентов) 
+\end{center}
+
+\vspace{5mm} 
+
+\begin{center}
+\Huge Популярные у студентов напитки?
+\end{center}
+
+
+
+%----------------------------------------------------------
+\end{frame}
+%----------------------------------------------------------
+
+
+
+
+
+%----------------------------------------------------------
+\begin{frame}[plain]\frametitle{Тест Стьюдента}
+%----------------------------------------------------------
+
+
+\begin{figure}[h!]
+\center{\includegraphics[height=0.7\textheight]{pic/Guinness}}
+\caption{\Large Тест Стьюдента} \label{Fig:}
+\end{figure}
+
+
+
+%----------------------------------------------------------
+\end{frame}
+%----------------------------------------------------------
+
+
+
+
+%----------------------------------------------------------
+\begin{frame}[plain]\frametitle{Уильям Сили Госсет}
+%----------------------------------------------------------
+
+
+
+
+
+\begin{figure}[h!]
+\center{\includegraphics[width=0.9\textwidth]{pic/Gosset}}
+\caption{\Large Уильям Госсет. Был ``под NDA''} \label{Fig:}
+\end{figure}
+
+
+
+%----------------------------------------------------------
+\end{frame}
+%----------------------------------------------------------
+
+
+
+
+%----------------------------------------------------------
+\begin{frame}[plain]\frametitle{Распределение Стьюдента}
+%----------------------------------------------------------
+
+\textbf{Ключевая идея}. Как появляется распределение Стьюдента?
+
+\vspace{5mm}
+
+\begin{itemize}
+
+\item  
+Пусть $ {\textstyle X_{1},\ldots ,X_{n}}$ --- i.i.d. из $\mathcal{N}(\mu, \sigma^2)$. 
+
+
+\vspace{5mm}
+
+\item Выборочные среднее и несмещённая дисперсия: \[{\displaystyle {\bar {X}}={\frac {1}{n}}\sum _{i=1}^{n}X_{i}}, \qquad {\displaystyle S^{2}={\frac {1}{n-1}}\sum _{i=1}^{n}(X_{i}-{\bar {X}})^{2}} \] 
+
+
+\vspace{2mm}
+
+\pause
+
+\item Тогда $\displaystyle \frac{\bar{X} - \mu}{\sigma/\sqrt{n}}$ имеет стандартное нормальное распределение. 
+
+\pause
+
+
+\vspace{5mm}
+
+
+\item А величина, которую можно посчитать на практике (зная $\mu$) \[ \frac{\bar{X} - \mu}{S /\sqrt{n}}\] имеет {\color{blue} распределение Стьюдента} с $n-1$ степенью свободы. 
+
+
+\end{itemize}
+
+
+
+%----------------------------------------------------------
+\end{frame}
+%----------------------------------------------------------
+
+
+
+
+
+
+
+%----------------------------------------------------------
+\begin{frame}[plain]\frametitle{Распределение Стьюдента}
+%----------------------------------------------------------
+
+\textbf{Неожиданный факт!} В формуле 
+\[ \frac{\bar{X} - \mu}{S /\sqrt{n}}\]{\color{red} числитель и знаменатель независимы!}
+
+\pause 
+
+\vspace{5mm}
+
+\textbf{Доказательство}. 
+
+\vspace{5mm}
+
+\begin{itemize}
+
+\item  Числитель --- функция от $\bar{X}$, а знаменатель --- от ${\textstyle X_{i}-{\overline {X}}} $.
+
+\vspace{5mm}
+
+\pause
+
+\item  ${\textstyle {\overline {X}}}$ и ${\textstyle X_{i}-{\overline {X}}}$ --- линейные комбинации $X_1, \dots, X_n$, они нормально распределены.
+
+\vspace{5mm}
+
+\pause
+
+\item $ {\textstyle \operatorname {cov} ({\overline {X}},\,X_{i}-{\overline {X}})=0,}$ значит ${\textstyle {\overline {X}}}$ и ${\textstyle X_{i}-{\overline {X}}}$ (а следовательно и числитель с знаменателем) независимы. 
+
+\end{itemize}
+
+
+%----------------------------------------------------------
+\end{frame}
+%----------------------------------------------------------
+
+
+
+
+%----------------------------------------------------------
+\begin{frame}[plain]\frametitle{Распределение Стьюдента}
+%----------------------------------------------------------
+
+Чуть более общий вид случайно величины с {\color{blue} t-распределением Стьюдента с $\nu$ степенями свободы}: \[{\displaystyle T={\frac {Z}{\sqrt {V/\nu }}}=Z{\sqrt {\frac {\nu }{V}}},} \] 
+
+\vspace{5mm}
+
+\begin{itemize}
+
+\item $Z$ --- это стандартное нормальное ($\mu=0, \sigma=1$),
+
+\vspace{5mm}
+
+\item $V$ имеет $\chi^2$-распределение с $\nu$ степенями свободы,
+
+\vspace{5mm}
+
+\item $Z$ и $V$ независимы.
+
+\end{itemize}
+
+
+%----------------------------------------------------------
+\end{frame}
+%----------------------------------------------------------
+
+
+
+
+%----------------------------------------------------------
+\begin{frame}[plain]\frametitle{Распределение Стьюдента}
+%----------------------------------------------------------
+
+
+\begin{center}
+Распределение Стьюдента по форме похоже на нормальное, но имеет более тяжёлые хвосты.
+
+\vspace{5mm}
+
+Распределение Стьюдента с 1 степенью свободы = распределение Коши.
+
+\end{center}
+
+
+\begin{figure}[h!]
+\center{\includegraphics[width=\textwidth]{pic/Tails}}
+%\caption{\Large Осторожно! Грядут страшные формулы!} \label{Fig:}
+\end{figure}
+
+
+%----------------------------------------------------------
+\end{frame}
+%----------------------------------------------------------
+
+
+
+
+%----------------------------------------------------------
+\begin{frame}[plain]\frametitle{Одновыборочный t-критерий}
+%----------------------------------------------------------
+
+
+Есть ряд известных {\color{blue} тестов Стьюдента} про \textit{матожидания нормальных величин}. 
+
+\vspace{5mm}
+
+{\color{blue} Одновыборочный t-критерий}.
+
+\vspace{5mm}
+
+
+Даны $ {\textstyle X_{1},\ldots ,X_{n}}$ --- i.i.d. из $\mathcal{N}(\mu, \sigma^2)$ (не знаем параметры).
+
+\vspace{5mm}
+
+\textbf{Q:}  Как составить тест  $H_0: \mathbb{E} X = \mu_0$?
+
+\vspace{5mm}
+
+\pause 
+
+\textbf{A:} Правильно, использовать статистику \[ {\displaystyle t={\frac {{\bar {x}}-\mu _{0}}{s/{\sqrt {n}}}}}\]
+
+
+%----------------------------------------------------------
+\end{frame}
+%----------------------------------------------------------
+
+
+
+
+%----------------------------------------------------------
+\begin{frame}[plain]\frametitle{Двувыборочный t-критерий}
+%----------------------------------------------------------
+
+Также есть {\color{blue} двухвыборочный t-критерий} равенства матожиданий двух выборок \[ H_0: \mathbb{E} X_1 = \mathbb{E} X_2, \qquad H_1: \mathbb{E} X_1 \not = \mathbb{E} X_2.\]
+
+\vspace{5mm}
+
+Формально, тест Стьюдента работает, если 
+\vspace{5mm}
+
+\begin{itemize}
+
+\item Выборки одного размера $n_1 = n_2$. 
+
+\vspace{5mm}
+
+\item Дисперсии равны $\sigma_1 = \sigma_2$.
+
+\vspace{5mm}
+
+\item Выборки независимы.
+
+\end{itemize}
+
+
+
+%----------------------------------------------------------
+\end{frame}
+%----------------------------------------------------------
+
+
+
+
+%----------------------------------------------------------
+\begin{frame}[plain]\frametitle{Двувыборочный t-критерий}
+%----------------------------------------------------------
+
+На практике эти условия на тест Стьюдента не выполняются.
+
+\vspace{5mm}
+
+Точного решения нет (Behrens–Fisher problem).
+
+\vspace{5mm}
+
+В качестве приближения используют $t$-тест Уэлча --- небольшое обобщение теста Стьюдента.
+
+
+%----------------------------------------------------------
+\end{frame}
+%----------------------------------------------------------
+
+
+
+
+%----------------------------------------------------------
+\begin{frame}[plain]\frametitle{Warning!}
+%----------------------------------------------------------
+
+
+
+\begin{figure}[h!]
+\center{\includegraphics[height=0.5\textheight]{pic/Scared}}
+\caption{\Large Осторожно! Грядут страшные формулы!} \label{Fig:}
+\end{figure}
+
+
+
+%----------------------------------------------------------
+\end{frame}
+%----------------------------------------------------------
+
+
+
+%----------------------------------------------------------
+\begin{frame}[plain]\frametitle{Welch's t-test}
+%----------------------------------------------------------
+
+
+{\color{blue} t-тест} \sout{Стьюдента} {\color{blue} Уэлча}
+
+\vspace{5mm}
+
+\begin{itemize}
+
+\item t-статистика: \[{\displaystyle t= {\frac {{\overline {X}}_{1}-{\overline {X}}_{2}}{\sqrt { \frac{ s_{1}^{2}}{n_1}+\frac{s_{2}^{2} }{n_2}}}} = {\frac {{\overline {X}}_{1}-{\overline {X}}_{2}}{\sqrt { \operatorname{se}_1^2 + \operatorname{se}_2^2}} } \,}\]  \vspace{2mm} 
+
+Пока не страшно)
+
+\pause
+
+\vspace{5mm} 
+
+\item Количество степеней свободы \[ \nu \approx {\displaystyle {\frac {\left({\frac {s_{1}^{2}}{n_{1}}}+{\frac {s_{2}^{2}}{n_{2}}}\right)^{2}}{{\frac {\left(s_{1}^{2}/n_{1}\right)^{2}}{n_{1}-1}}+{\frac {\left(s_{2}^{2}/n_{2}\right)^{2}}{n_{2}-1}}}}.}\]
+
+\end{itemize}
+
+
+\vspace{5mm}
+
+Информация собрана воедина на следующем слайде.
+
+
+%----------------------------------------------------------
+\end{frame}
+%----------------------------------------------------------
+
+
+%----------------------------------------------------------
+\begin{frame}[plain]\frametitle{Welch's t-test}
+%----------------------------------------------------------
+
+
+\begin{figure}[h!]
+\center{\includegraphics[width=0.9\textwidth]{pic/welch}}
+%\caption{\Large Осторожно! Грядут страшные формулы!} \label{Fig:}
+\end{figure}
+
+
+
+%----------------------------------------------------------
+\end{frame}
+%----------------------------------------------------------
+
+
+
+\section{Критерий Манна-Уитни}
+
+\begin{frame}[plain]\frametitle{Критерий Манна-Уитни} \tableofcontents[currentsection]\end{frame}
+
+%----------------------------------------------------------
+\begin{frame}[plain]\frametitle{Критерий Манна-Уитни}
+%----------------------------------------------------------
+
+\begin{center}
+
+\Large  {\color{blue} U-критерий Манна-Уитни. }
+
+\vspace{5mm}
+
+Объясняем на котиках) 
+
+\vspace{5mm}
+
+Равны ли у двух выборок средние значения?
+
+\end{center}
+
+
+
+\begin{figure}[h!]
+\center{\includegraphics[width=0.5\textwidth]{pic/MWEq}}
+%\caption{\Large Осторожно! Грядут страшные формулы!} \label{Fig:}
+\end{figure}
+
+
+%----------------------------------------------------------
+\end{frame}
+%----------------------------------------------------------
+
+%----------------------------------------------------------
+\begin{frame}[plain]\frametitle{Критерий Манна-Уитни}
+%----------------------------------------------------------
+
+\begin{center}
+\Large Шаг 1. Упорядочиваем выборки.
+\end{center}
+
+
+
+
+
+\begin{figure}[h!]
+\center{\includegraphics[width=0.9\textwidth]{pic/MWStep1}}
+%\caption{\Large Осторожно! Грядут страшные формулы!} \label{Fig:}
+\end{figure}
+
+
+%----------------------------------------------------------
+\end{frame}
+%----------------------------------------------------------
+
+
+
+%----------------------------------------------------------
+\begin{frame}[plain]\frametitle{Критерий Манна-Уитни}
+%----------------------------------------------------------
+
+\begin{center}
+\Large  Шаг 2. Считаем суммы рангов  $R_1$ и $R_2$.
+\end{center}
+
+
+
+
+
+\begin{figure}[h!]
+\center{\includegraphics[height=0.6\textheight]{pic/MWStep2}}
+%\caption{\Large Осторожно! Грядут страшные формулы!} \label{Fig:}
+\end{figure}
+
+
+%----------------------------------------------------------
+\end{frame}
+%----------------------------------------------------------
+
+
+%----------------------------------------------------------
+\begin{frame}[plain]\frametitle{Критерий Манна-Уитни}
+%----------------------------------------------------------
+
+\begin{center}
+\Large  Шаг 3. Считаем:
+\vspace{1mm}
+
+
+ \[ {\displaystyle U_{1}=R_{1}-{n_{1}(n_{1}+1) \over 2}\,\!}, \qquad {\displaystyle U_{2}=R_{2}-{n_{2}(n_{2}+1) \over 2}\,\!}\]  
+
+\vspace{3mm}
+
+Берём $ U = \min (U_1, U_2)$.
+
+\vspace{5mm}
+
+Должно быть $U_1 + U_2 = n_1 n_2$. Если нет --- $\frownie$.
+
+
+\end{center}
+
+%----------------------------------------------------------
+\end{frame}
+%----------------------------------------------------------
+
+
+
+
+%----------------------------------------------------------
+\begin{frame}[plain]\frametitle{Критерий Манна-Уитни}
+%----------------------------------------------------------
+
+\begin{center}
+\Large  Шаг 4. Сравниваем $U$ с табличным значением. 
+\end{center}
+
+\vspace{5mm}
+
+
+\begin{center}
+\textit{Замечание}. При достаточно больших сэмплах ($n_1, n_2 \geq 20$) 
+
+$U$ близко к нормальному распределению.
+\end{center}
+
+
+%----------------------------------------------------------
+\end{frame}
+%----------------------------------------------------------
+
+
+%----------------------------------------------------------
+\begin{frame}[plain]\frametitle{Критерий Манна-Уитни}
+%----------------------------------------------------------
+
+
+Формально, статистику Манна-Уитни $U$ можно определить как 
+
+\[{\displaystyle U=\sum _{i=1}^{n}\sum _{j=1}^{m}S(X_{i},Y_{j}),}, \qquad {\displaystyle S(X,Y)={\begin{cases}1,&{\text{if }}X>Y,\\{\tfrac {1}{2}},&{\text{if }}Y=X,\\0,&{\text{if }}X<Y.\end{cases}}}.\]
+
+
+
+%----------------------------------------------------------
+\end{frame}
+%----------------------------------------------------------
+
+
+%----------------------------------------------------------
+\begin{frame}[plain]\frametitle{Критерий Манна-Уитни}
+%----------------------------------------------------------
+
+
+\textbf{Q:} Где в ML мы сталкивались с долей перестановок для 2ух классовой классификации?
+
+\pause
+
+\vspace{5mm}
+
+\textbf{A:} {\color{blue} Площадь под ROC-кривой} (ROC AUC).%\footnote{AUC =Area Under Curve}
+
+
+
+\begin{figure}[h!]
+\center{\includegraphics[height=0.6\textheight]{pic/AUC}}
+%\caption{\Large Осторожно! Грядут страшные формулы!} \label{Fig:}
+\end{figure}
+
+
+
+%----------------------------------------------------------
+\end{frame}
+%----------------------------------------------------------
+
+
+
+
+%----------------------------------------------------------
+\begin{frame}[plain]\frametitle{ROC AUC}
+%----------------------------------------------------------
+
+
+\begin{itemize}
+
+\item Если быть точным: \[ \operatorname{AUC} = \frac{U}{n_1 n_2},\] где $U$ --- Манна-Уитни.
+
+\vspace{5mm}
+
+\item Про ROC AUC можно прочитать в 
+
+\vspace{5mm}
+
+{\color{blue} \href{https://dyakonov.org/2017/07/28/auc-roc-площадь-под-кривой-ошибок/comment-page-1/}{https://dyakonov.org/2017/07/28/auc-roc-площадь-под-кривой-ошибок/comment-page-1/} }
+
+\end{itemize}
+
+
+%----------------------------------------------------------
+\end{frame}
+%----------------------------------------------------------
+
+
+\end{document}
+
+

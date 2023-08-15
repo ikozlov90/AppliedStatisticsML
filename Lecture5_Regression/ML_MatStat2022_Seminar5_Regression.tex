@@ -1,0 +1,737 @@
+\documentclass[9pt]{beamer}
+
+
+
+
+\usepackage{beamerthemesplit}
+\usetheme{Boadilla}
+\usecolortheme{orchid}
+
+
+
+
+
+ % \usepackage[cp866]{inputenc}                %%% Є®¤Ёа®ўЄ  DOS
+  \usepackage[cp1251]{inputenc}
+%  \usepackage[T2A]{fontenc}                %%% ???
+%\usepackage[english,russian]{babel}
+%\usepackage[russian]{babel}
+ \usepackage[OT1]{fontenc}
+%\usepackage[english]{babel}
+\usepackage[russian]{babel}
+
+\usepackage{amssymb,latexsym, amsmath, mathdots}
+
+\usepackage{amscd}
+\usepackage{multirow}
+\usepackage{comment}
+
+\usepackage{epstopdf}
+
+
+
+%\usepackage[table]{xcolor} %colored cells
+
+%\usepackage{tikz}
+%\usetikzlibrary{tikzmark} %arrows in tables
+
+
+\usepackage{mnsymbol} % udots in matrices
+
+
+ \usepackage{pgfpages}
+%\setbeameroption{show notes}
+%\setbeameroption{show notes on second screen=bottom}
+%% \setbeameroption{show notes on second screen}
+
+%\setbeamercolor{alerted text}{fg=red!80!black}
+
+
+% \setbeamercolor{alerted text}{fg=blue!50!green}
+% \setbeamercolor{fortheorem}{bg=blue!15!white}
+% \setbeamercolor{EMPF}{bg=blue!25!white}
+% \setbeamercolor{EMPF2}{bg=blue!35!white}
+
+%\setbeamersize{text margin left=5.mm, text margin right=5.mm}
+
+
+%---------------------------------------------------------------------------------------------------------------------------
+
+%\def\emphbox#1#2#3{\begin{beamercolorbox}[wd=#2, ht=#1, center, colsep=1.mm]{EMPF} #3 \end{beamercolorbox}}
+
+%---------------------------------------------------------------------------------------------------------------------------
+
+
+%\advance\leftskip-5.mm
+
+
+
+%***************************************************************************************************************************
+
+\theoremstyle{theorem}
+\newtheorem{mytheorem}[theorem]{Теорема}
+\newtheorem{mylemma}[theorem]{Лемма}
+\newtheorem{mycorollary}[theorem]{Следствие}
+
+\newtheorem{proposition}[theorem]{Предложение}
+\newtheorem{assertion}[theorem]{Утверждение}
+\newtheorem{remark}[theorem]{Замечание}
+\newtheorem{assumption}[theorem]{Предположение}
+
+\newtheorem{convention}[theorem]{Договорённость}
+\newtheorem{question}[theorem]{Вопрос}
+%\newtheorem{mydefinition}{mydefinition}
+
+\theoremstyle{definition}
+\newtheorem{mydefinition}[theorem]{Определение}
+\newtheorem{myexample}[theorem]{Пример}
+
+
+
+%***************************************************************************************************************************
+
+\chardef\No=194
+\newcommand{\bd}{{\rm bd}}
+\newcommand{\cl}{{\rm cl}}
+\newcommand{\ind}{{\rm ind}}
+\newcommand{\id}{{\rm id}}
+\newcommand{\inj}{{\sl in}}
+\newcommand{\pr}{{\rm pr}}
+\newcommand{\st}{{\rm St}}
+
+
+\DeclareMathOperator{\sgrad}{sgrad}
+
+\DeclareMathOperator{\cnt}{const}
+
+\DeclareMathOperator{\Aut}{Aut}
+
+
+\DeclareMathOperator{\sgn}{sgn}
+
+\DeclareMathOperator{\Int}{Int}
+
+
+\DeclareMathOperator{\tr}{tr}
+
+\DeclareMathOperator{\Mat}{Mat}
+
+
+
+
+
+
+
+%****************************************************************************
+\newcommand{\Ker}{\mathrm{Ker}\,\,}
+\newcommand{\Ann}{\mathrm{Ann}\,\,}
+
+\newcommand{\Imm}{\mathrm{Im}\,\,}
+
+\newcommand{\rk}{\mathrm{rk}\,\,}
+
+\newcommand{\const}{\mathrm{const}}
+
+
+
+\DeclareMathOperator{\Pen}{\mathcal{P}}
+
+
+\DeclareMathOperator{\Core}{K}
+
+
+\DeclareMathOperator{\BLG}{\operatorname{BLG}}
+
+\DeclareMathOperator{\AutBP}{\operatorname{Aut}(V, \mathcal{P})}
+
+
+\def\minus{\hbox{-}}   %Sign of minus in big matrices
+
+\usepackage{multirow}  %Columns spanning multiple rows
+
+\usepackage[normalem]{ulem} %underline that can break lines
+
+%\usepackage[normalem]{ulem}
+
+%****************************************************************************
+
+
+
+\title% [] (optional, only for long titles)
+{Прикладная статистика в машинном обучении \\ Семинар 5 \\ Регрессионный анализ}
+%\subtitle{}
+\author [И. \,К.~Козлов] %(optional, for multiple authors)
+{И. \,К.~Козлов \\ {\footnotesize(\textit{Мехмат МГУ})}}
+
+
+\date % [](optional)
+{2022}
+%\subject{Mathematics}
+
+
+
+
+
+
+
+
+\usepackage{hyperref}
+\hypersetup{unicode=true}
+
+
+
+\begin{document}
+
+%\includeonlyframes{}
+\frame{\titlepage}
+
+
+
+
+
+
+\section{Нелинейная регрессия}
+
+
+
+\begin{frame}[plain]\frametitle{Нелинейная регрессия} \tableofcontents[currentsection]\end{frame}
+
+
+
+
+%----------------------------------------------------------
+\begin{frame}[plain]\frametitle{Нелинейная регрессия}
+%----------------------------------------------------------
+
+
+Почему мы аппроксимируем функцию только линейными? \[ {\displaystyle y_{i}=\beta _{0}+\beta _{1}x_{i1}+\cdots +\beta _{m}x_{im}+\varepsilon _{i}}\]
+
+
+\vspace{3mm}
+
+Простейшее обобщение --- аппроксимировать линейной комбинацией функций \[ {\displaystyle y_{i}=\beta _{0}+f_1(x) \beta _{1}+\cdots +f_m(x) \beta _{m}+\varepsilon _{i}}\]
+
+
+
+  %----------------------------------------------------------
+\end{frame}
+%----------------------------------------------------------
+
+%----------------------------------------------------------
+\begin{frame}[plain]\frametitle{Подгонка полинома}
+%----------------------------------------------------------
+
+
+\textbf{Подгонка полинома}.
+
+\vspace{5mm}
+
+Мы хотим приблизить точки $(x_i, y_i)$ полиномом степени $m-1$:
+\[y_i = \beta_0 +  x_i \beta_1 + x_i^2 \beta_2+ \dots + x_i^{m-1} \beta_{m-1}.  \] 
+\vspace{2mm}
+
+Какая будет матрица $X$?
+
+\vspace{5mm}
+
+\pause
+
+\textbf{A:} Матрица Вандермонда \[\left(\begin{matrix}1&x_{1}&\ldots &x_{1}^{{n-1}}\\1&x_{2}&\ldots &x_{2}^{{n-1}}\\\vdots &\vdots &\ddots &\vdots \\1&x_{n}&\ldots &x_{n}^{{n-1}}\\\end{matrix}\right). \]
+  %----------------------------------------------------------
+\end{frame}
+%----------------------------------------------------------
+
+
+
+\section{PCA}
+
+\begin{frame}[plain]\frametitle{PCA} \tableofcontents[currentsection]\end{frame}
+
+
+%----------------------------------------------------------
+\begin{frame}[plain]\frametitle{Главные оси}
+%----------------------------------------------------------
+
+\textbf{Q:} К какому виду можно привести симметричную билинейную форму \[ B(u,v)=B(v,u), \qquad B(u+v,w)=B(u,w)+B(v,w), \qquad B(\lambda v,w)=\lambda B(v,w)\] в евклидовом пространстве $\mathbb{R}^n$?
+
+
+
+%----------------------------------------------------------
+\end{frame}
+%----------------------------------------------------------
+
+%----------------------------------------------------------
+\begin{frame}[plain]\frametitle{Главные оси}
+%----------------------------------------------------------
+
+
+
+
+\vspace{5mm}
+
+
+\begin{itemize}
+
+\item $B$ --- симметричная билинейная форма,
+
+\vspace{5mm}
+
+\item $Q$ --- скалярное произведение (=симметричная положительно определённая билинейная форма),
+
+\end{itemize}
+
+\vspace{5mm}
+
+{\color{red} Приведение пары форм к главным осям}:
+
+\[ B = {\begin{bmatrix}\lambda_{1}&&  &\\&\lambda_{2}&&\\&&\ddots & \\&& &\lambda_{n}\end{bmatrix}}  \qquad  Q ={\begin{bmatrix}1 &&  &\\&1&&\\&&\ddots & \\&& &1\end{bmatrix}}  \]
+
+
+%----------------------------------------------------------
+\end{frame}
+%----------------------------------------------------------
+
+
+%----------------------------------------------------------
+\begin{frame}[plain]\frametitle{Главные оси}
+%----------------------------------------------------------
+
+\textbf{Q:} Какой известный объект в Статистике --- симметричная билинейная форма?
+
+\pause
+
+\vspace{5mm}
+
+\textbf{A:} Матрица ковариации \[ \operatorname {Cov} [X_{i},X_{j}]=\mathbb {E} [(X_{i}-\mathbb  {E} [X_{i}])(X_{j}-\mathbb {E} [X_{j}])]\]
+
+\begin{figure}[h!]
+\center{\includegraphics[width=0.5\textwidth]{pic/CovMat}}
+%\caption{} \label{Fig:}
+\end{figure}
+
+
+%----------------------------------------------------------
+\end{frame}
+%----------------------------------------------------------
+
+%----------------------------------------------------------
+\begin{frame}[plain]\frametitle{Главные оси}
+%----------------------------------------------------------
+
+\begin{figure}[h!]
+\center{\includegraphics[width=\textwidth]{pic/PCA1}}
+%\caption{} \label{Fig:}
+\end{figure}
+
+
+%----------------------------------------------------------
+\end{frame}
+%----------------------------------------------------------
+
+
+
+%----------------------------------------------------------
+\begin{frame}[plain]\frametitle{SVD}
+%----------------------------------------------------------
+
+Одномерная регрессия --- подгонка прямой под облако точек. 
+
+\begin{figure}[h!]
+\center{\includegraphics[width=0.65\textwidth]{pic/Regr1D}}
+%\caption{} \label{Fig:}
+\end{figure}
+
+
+
+\textbf{Q:} Эта прямая --- первая главная компонента в PCA или нет?
+
+
+  %----------------------------------------------------------
+\end{frame}
+%----------------------------------------------------------
+
+
+%----------------------------------------------------------
+\begin{frame}[plain]\frametitle{Дилемма смещения-дисперсия}
+%----------------------------------------------------------
+
+\begin{center}
+\Large Разница между одномерной регрессией и PCA:
+\end{center}
+
+
+
+\begin{figure}[h!]
+\center{\includegraphics[width=\textwidth]{pic/PCAnotRegr}}
+\caption{PCA vs Linear Regression} \label{Fig:}
+\end{figure}
+
+
+
+  %----------------------------------------------------------
+\end{frame}
+%----------------------------------------------------------
+
+\section{Доверительные интервалы}
+
+\begin{frame}[plain]\frametitle{Доверительные интервалы} \tableofcontents[currentsection]\end{frame}
+
+
+
+%----------------------------------------------------------
+\begin{frame}[plain]\frametitle{Доверительные интервалы}
+%----------------------------------------------------------
+
+\begin{center}
+\Large Насколько хороши предсказания регрессия? \\
+Построим доверительные интервалы. 
+\end{center}
+
+
+\begin{figure}[h!]
+\center{\includegraphics[width=0.8\textwidth]{pic/ConfReg}}
+\caption{\Large Доверительный интервал для регрессии} \label{Fig:}
+\end{figure}
+
+%----------------------------------------------------------
+\end{frame}
+%----------------------------------------------------------
+
+
+
+%----------------------------------------------------------
+\begin{frame}[plain]\frametitle{ Гауссовский шум}
+%----------------------------------------------------------
+
+
+{\color{red} Гауссовский шум}.
+
+\vspace{5mm}
+
+Далее будем считать, что шум \[ \varepsilon = \left(\varepsilon_1, \dots, \varepsilon_n\right)\] имеет нормальное распределение. 
+
+
+
+ %----------------------------------------------------------
+\end{frame}
+%----------------------------------------------------------
+
+
+
+
+\subsection{Оценки ошибок}
+
+\begin{frame}[plain]\frametitle{Оценки ошибок} \tableofcontents[currentsubsection]\end{frame}
+
+
+
+
+%----------------------------------------------------------
+\begin{frame}[plain]\frametitle{Нейронки --- o дивный новый мир}
+%----------------------------------------------------------
+
+Начнём с оценок для {\color{red} дисперсии ошибок $\sigma^2$. }
+
+\vspace{5mm}
+
+\begin{block}{Теорема}  Несмещённая оценка для $\sigma^2$ --- это \[ \hat{\sigma}^2 = \frac{1}{n-m} \operatorname{RSS} = \frac{1}{n-m} \sum_{i=1}^n \hat{\varepsilon}_i^2.\]
+
+\vspace{2mm}
+
+\pause
+
+Более того, 
+
+\vspace{5mm}
+
+\begin{enumerate}
+
+\item $\operatorname{RSS}$ независит от оценки $\hat{\beta}$;
+
+\vspace{5mm}
+
+\item $\displaystyle \frac{1}{\sigma^2}\operatorname{RSS} \sim \chi^2_{n-m}$.
+
+
+\end{enumerate}
+
+\end{block}
+
+%----------------------------------------------------------
+\end{frame}
+%----------------------------------------------------------
+
+
+%----------------------------------------------------------
+\begin{frame}[plain]\frametitle{Несмещённость}
+%----------------------------------------------------------
+
+\begin{itemize}
+
+\item \textbf{Шаг 0}. \textit{Для распределения хи-квадрат $R_k \sim \chi^2_k$ матожидание $\mathbb{E} (R_k) = k$. }
+\vspace{5mm}
+
+
+По определению \[ R_k \sim  \chi^2_{k} \quad \Leftrightarrow \quad  R_k = Z_1^2 + \dots + Z_k^2, \quad Z_j \sim \mathcal{N}(0, 1). \] Поэтому \[ \mathbb{E}( R_k) = \sum_j \mathbb{E}\left( Z_j^2\right) = k \mathbb{V} \left(Z_j\right) = k.\] 
+
+
+\end{itemize}
+
+%----------------------------------------------------------
+\end{frame}
+%----------------------------------------------------------
+
+
+%----------------------------------------------------------
+\begin{frame}[plain]\frametitle{Несмещённость}
+%----------------------------------------------------------
+
+\begin{itemize}
+
+\item \textbf{Шаг 1}. \textit{Из $\displaystyle \frac{1}{\sigma^2}\operatorname{RSS} \sim \chi^2_{n-m}$ вытекает несмещённость $\displaystyle \hat{\sigma}^2 = \frac{1}{n-m} \operatorname{RSS}$.}
+
+\vspace{5mm}
+
+\pause
+Согласно Шагу 0: \[ \displaystyle \mathbb{E} \left(\frac{1}{\sigma^2}\operatorname{RSS}\right) = n-m  \quad \Rightarrow \quad \mathbb{E}( \hat{\sigma}^2) = \sigma^2. \] 
+
+\end{itemize}
+
+%----------------------------------------------------------
+\end{frame}
+%----------------------------------------------------------
+
+
+
+
+%----------------------------------------------------------
+\begin{frame}[plain]\frametitle{Проекция нормального распределения}
+%----------------------------------------------------------
+
+
+Вспомним свойство {\color{blue} многомерного нормального распределения.}
+
+\vspace{3mm}
+
+\begin{itemize}
+\item Пусть случайный вектор $\xi \sim \mathcal{N}(0, \sigma^2 I_n)$.
+
+\vspace{5mm}
+
+\item $L_1$ и $L_2$ --- ортогональные подпространства в $\mathbb{R}^n$.  
+
+\end{itemize}
+
+
+
+\begin{figure}[h!]
+\center{\includegraphics[width=0.5\textwidth]{pic/OrthogProj}}
+%\caption{\Large Доверительный интервал для регрессии} \label{Fig:}
+\end{figure}
+
+\begin{block}{Лемма 1}
+\begin{enumerate}
+
+\item Проекции $\Pi_{L_1} \xi$ и $\Pi_{L_2} \xi$ независимы и нормально распределены.
+
+\vspace{3mm}
+
+\item $\displaystyle \frac{1}{\sigma^2} \left\| \Pi_{L_i} \xi\right\|^2  \sim \chi^2_{\dim L_i}$.
+
+\end{enumerate}
+\end{block} 
+
+
+%----------------------------------------------------------
+\end{frame}
+%----------------------------------------------------------
+
+
+%----------------------------------------------------------
+\begin{frame}[plain]\frametitle{Распределение ошибок}
+%----------------------------------------------------------
+
+
+\begin{itemize}
+
+\item \textbf{Шаг 2}. \textit{ $\displaystyle \frac{1}{\sigma^2}\operatorname{RSS} \sim \chi^2_{n-m}$.}
+
+\vspace{5mm}
+
+\pause
+
+
+Обозначим $L = L(X)$. 
+
+\begin{figure}[h!]
+\center{\includegraphics[width=0.35\textwidth]{pic/Regr3}}
+%\caption{Итоговая оценка} \label{Fig:}
+\end{figure}
+
+
+\vspace{5mm}
+
+
+Вектор остатков --- это проекция на $L^{\perp}$: \[\hat{\varepsilon} = \Pi_{L^{\perp}} Y. \]
+
+\end{itemize}
+
+%----------------------------------------------------------
+\end{frame}
+%----------------------------------------------------------
+
+
+
+
+
+%----------------------------------------------------------
+\begin{frame}[plain]\frametitle{Распределение ошибок}
+%----------------------------------------------------------
+
+
+
+По условию $Y = X\beta + \varepsilon$. Вектор $X \in L$, поэтому \[\hat{\varepsilon}  = \Pi_{L^{\perp} }Y = \Pi_{L^{\perp}} \varepsilon.\] 
+
+По Лемме 1 \[\displaystyle \frac{1}{\sigma^2}\operatorname{RSS} =  \frac{1}{\sigma^2} \left\| \hat{\varepsilon}\right\|^2  \sim \chi^2_{n-m}.\]
+
+\vspace{5mm}
+
+
+\textbf{Шаг 2 доказан}.
+
+%----------------------------------------------------------
+\end{frame}
+%----------------------------------------------------------
+
+
+
+
+
+%----------------------------------------------------------
+\begin{frame}[plain]\frametitle{Независимость}
+%----------------------------------------------------------
+
+\begin{itemize}
+
+\item \textbf{Шаг 3}.   \textit{$\operatorname{RSS}$ независит от оценки $\hat{\beta}$}.
+
+\vspace{5mm}
+
+Есть два разложения $Y$: \[Y = X \hat{\beta} + \hat{\varepsilon} = X \beta + \varepsilon.\]
+
+\vspace{3mm}
+
+
+Рассмотрим проекции $Y$ на $L$ и $L^{\perp}$. \begin{gather*} \Pi_{L^{\perp}} Y =  \hat{\varepsilon}  = \Pi_{L^{\perp}} \varepsilon. \\
+ \Pi_{L} Y =  X \hat{\beta}  =  X \beta   +    \Pi_{L}\varepsilon. \end{gather*}
+
+По Лемме 1 они независимы.  Получаем, что \[\hat{\beta} =  \beta   +   (X^T X)^{-1} \Pi_{L}\varepsilon.\] $\hat{\beta}$ и $\hat{\varepsilon}  = \Pi_{L^{\perp}} \varepsilon$ независимы как функции от независимых случайных величин.
+
+\end{itemize}
+
+
+%{\color{red} Убрать}.
+
+%----------------------------------------------------------
+\end{frame}
+%----------------------------------------------------------
+
+
+
+
+
+\subsection{Оценки предсказаний}
+
+\begin{frame}[plain]\frametitle{Оценки предсказаний} \tableofcontents[currentsubsection]\end{frame}
+
+
+
+%----------------------------------------------------------
+\begin{frame}[plain]\frametitle{Оценки предсказаний}
+%----------------------------------------------------------
+
+Пусть мы построили модель регрессии \[ \hat{r}(x) = \hat{\beta}_0 + x \hat{\beta}_1\] по данным $(x_1, Y_1), \dots (x_n, Y_n)$.
+
+
+\vspace{5mm}
+
+Попробуем предсказать значение $Y$ в новой точке $X = x_*$.
+
+
+%----------------------------------------------------------
+\end{frame}
+%----------------------------------------------------------
+
+
+%----------------------------------------------------------
+\begin{frame}[plain]\frametitle{Оценки предсказаний}
+%----------------------------------------------------------
+
+\begin{itemize}
+
+\item Предсказанное значение \[ \hat{Y}_* = \hat{\beta}_0 +  x_* \hat{\beta}_1\]
+
+
+\vspace{5mm}
+
+
+\item  Истинное значение \[ Y_* = \beta_0 +  x_*\beta_1 {\color{red} + \varepsilon}.\]
+
+
+\end{itemize}
+
+\vspace{5mm}
+
+\textbf{Q:} Равны ли дисперсии $\mathbb{V}(\hat{Y}_*)$ и $\mathbb{V}(Y)$?
+
+\pause
+
+\vspace{5mm}
+
+\textbf{A:} Нет, не учитывается шум $\varepsilon$: \[ \mathbb{V} (Y) = \mathbb{V}(\hat{Y}_*) + \sigma^2.\]
+
+%----------------------------------------------------------
+\end{frame}
+%----------------------------------------------------------
+
+
+
+%----------------------------------------------------------
+\begin{frame}[plain]\frametitle{Доверительные интервалы}
+%----------------------------------------------------------
+
+
+\begin{figure}[h!]
+\center{\includegraphics[width=\textwidth]{pic/True2}}
+%\caption{\Large Доверительный интервал для регрессии} \label{Fig:}
+\end{figure}
+
+%----------------------------------------------------------
+\end{frame}
+%----------------------------------------------------------
+
+
+%----------------------------------------------------------
+\begin{frame}[plain]\frametitle{Оценки предсказаний}
+%----------------------------------------------------------
+
+
+\begin{center}
+Отсюда возникает поправка в доверительном интервале:
+
+\end{center}
+
+\begin{figure}[h!]
+\center{\includegraphics[width=0.9\textwidth]{pic/PredictionInterval}}
+%\caption{Итоговая оценка} \label{Fig:}
+\end{figure}
+
+%----------------------------------------------------------
+\end{frame}
+%----------------------------------------------------------
+
+
+
+\end{document}
+
+
